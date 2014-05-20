@@ -4,7 +4,7 @@ namespace SystemEx
 {
 	public class ActionContainer
 	{
-		Delegate action;
+		public Delegate action { get; protected set; }
 		public Type[] args;
 
 		public ActionContainer(Delegate action, params Type[] args)
