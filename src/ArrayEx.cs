@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SystemEx
 {
@@ -48,6 +49,20 @@ namespace SystemEx
 			}
 
 			return result;
-		}		
+		}
+
+		public static Dictionary<K, V> ToDictionary<I, K, V>(this Tuple<K, V>[] array)
+		{
+			Dictionary<K, V> r = new Dictionary<K, V>();
+			r.Insert(array);
+			return r;
+		}
+
+		public static Dictionary<K, V> ToDictionary<I, K, V>(this I[] array, Func<I, Tuple<K, V>> t)
+		{
+			Dictionary<K, V> r = new Dictionary<K, V>();
+			r.Insert(t, array);
+			return r;
+		}
 	}
 }
