@@ -53,6 +53,7 @@
     <Compile Include="src\AsyncWait.cs" />
     <Compile Include="src\DictionaryEx.cs" />
     <Compile Include="src\LambdaComparer.cs" />
+    <Compile Include="src\ListEx.cs" />
     <Compile Include="src\MarshalEx.cs" />
     <Compile Include="src\StructStream.cs" />
     <Compile Include="src\Tuple.cs" />

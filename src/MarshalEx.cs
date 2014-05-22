@@ -26,5 +26,13 @@ namespace SystemEx
 			pdata.Free();
 			return data;
 		}
+
+		public static byte[] StructureToBytes<T>(T o, ref byte[] data)
+		{
+			GCHandle pdata = GCHandle.Alloc(data, GCHandleType.Pinned);
+			Marshal.StructureToPtr(o, pdata.AddrOfPinnedObject(), false);
+			pdata.Free();
+			return data;
+		}
 	}
 }
