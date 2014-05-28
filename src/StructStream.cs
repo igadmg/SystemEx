@@ -1,34 +1,36 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace SystemEx
 {
 	public class StructStream : IDisposable
 	{
-		byte[] data_;
+		MemoryStream stream;
+        BinaryFormatter bf = new BinaryFormatter();
 
-		GCHandle handle;
-		IntPtr dataPtr;
-
+        public StructStream()
+        {
+            stream = new MemoryStream(512);
+        }
 
 		public StructStream(byte[] data)
 		{
-			data_ = data;
-
-			handle = GCHandle.Alloc(data_, GCHandleType.Pinned);
-			dataPtr = handle.AddrOfPinnedObject();
+            SystemEx.logger.Log("new stream of {0} bytes", data.Length);
+			stream = new MemoryStream(data);
 		}
 
 		public void Dispose()
 		{
-			handle.Free();
+			stream.Dispose();
 		}
 		
 
 		public T Read<T>() where T : struct
 		{
-			T r = (T) Marshal.PtrToStructure(dataPtr, typeof(T));
-			Skip<T>();
+            object o = bf.Deserialize(stream);
+            T r = (T) o;
 			return r;
 		}
 
@@ -40,14 +42,26 @@ namespace SystemEx
 			return r;
 		}
 
+        public StructStream Write<T>(T o) where T : struct
+        {
+            bf.Serialize(stream, o);
+            SystemEx.logger.Log("write {0} of {1} bytes", typeof(T).Name, stream.Length);
+            return this;
+        }
+
 		public void Skip<T>()
 		{
-			Skip<T>(1);
+            Skip<T>(1);
 		}
 
 		public void Skip<T>(int count)
 		{
-			dataPtr = new IntPtr(dataPtr.ToInt64() + count * Marshal.SizeOf(typeof(T)));
+			stream.Position += count * Marshal.SizeOf(typeof(T));
 		}
+
+        public byte[] ToArray()
+        {
+            return stream.ToArray();
+        }
 	}
 }

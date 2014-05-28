@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace SystemEx
 {
@@ -19,8 +21,8 @@ namespace SystemEx
 		}
 
 		public static byte[] StructureToBytes<T>(T o)
-		{
-			byte[] data = new byte[MarshalEx.SizeOf<T>()];
+        {
+            byte[] data = new byte[MarshalEx.SizeOf<T>()];
 			GCHandle pdata = GCHandle.Alloc(data, GCHandleType.Pinned);
 			Marshal.StructureToPtr(o, pdata.AddrOfPinnedObject(), false);
 			pdata.Free();

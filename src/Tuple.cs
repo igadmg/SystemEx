@@ -16,7 +16,8 @@ namespace System
 		public static Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Create<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7 item7, T8 item8, T9 item9, T10 item10) { return new Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10); }
 	}
 
-	public class Tuple<T1, T2>
+    [Serializable]
+    public class Tuple<T1, T2>
 	{
 		public T1 Item1;
 		public T2 Item2;
@@ -34,7 +35,8 @@ namespace System
 		}
 	}
 
-	public class Tuple<T1, T2, T3>
+    [Serializable]
+    public class Tuple<T1, T2, T3>
 	{
 		public T1 Item1;
 		public T2 Item2;
@@ -54,7 +56,8 @@ namespace System
 		}
 	}
 
-	public class Tuple<T1, T2, T3, T4>
+    [Serializable]
+    public class Tuple<T1, T2, T3, T4>
 	{
 		public T1 Item1;
 		public T2 Item2;
@@ -76,7 +79,8 @@ namespace System
 		}
 	}
 
-	public class Tuple<T1, T2, T3, T4, T5>
+    [Serializable]
+    public class Tuple<T1, T2, T3, T4, T5>
 	{
 		public T1 Item1;
 		public T2 Item2;
@@ -100,7 +104,8 @@ namespace System
 		}
 	}
 
-	public class Tuple<T1, T2, T3, T4, T5, T6>
+    [Serializable]
+    public class Tuple<T1, T2, T3, T4, T5, T6>
 	{
 		public T1 Item1;
 		public T2 Item2;
@@ -126,7 +131,8 @@ namespace System
 		}
 	}
 
-	public class Tuple<T1, T2, T3, T4, T5, T6, T7>
+    [Serializable]
+    public class Tuple<T1, T2, T3, T4, T5, T6, T7>
 	{
 		public T1 Item1;
 		public T2 Item2;
@@ -154,7 +160,8 @@ namespace System
 		}
 	}
 
-	public class Tuple<T1, T2, T3, T4, T5, T6, T7, T8>
+    [Serializable]
+    public class Tuple<T1, T2, T3, T4, T5, T6, T7, T8>
 	{
 		public T1 Item1;
 		public T2 Item2;
@@ -184,7 +191,8 @@ namespace System
 		}
 	}
 
-	public class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>
+    [Serializable]
+    public class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>
 	{
 		public T1 Item1;
 		public T2 Item2;
@@ -216,7 +224,8 @@ namespace System
 		}
 	}
 
-	public class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
+    [Serializable]
+    public class Tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
 	{
 		public T1 Item1;
 		public T2 Item2;
