@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\Func.cs" />
     <Compile Include="src\Action.cs" />
     <Compile Include="src\ActionContainer.cs" />
     <Compile Include="src\ArrayEx.cs" />
