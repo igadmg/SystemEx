@@ -6,7 +6,7 @@ namespace SystemEx
 {
 	public static class TypeEx
 	{
-		public static bool HaveAttribute<A>(this MemberInfo mi) where A : Attribute
+		public static bool HasAttribute<A>(this MemberInfo mi) where A : Attribute
 		{
 			foreach (var attribute in mi.GetCustomAttributes(true)) {
 				if (attribute.GetType() == typeof(A)) {
@@ -37,7 +37,7 @@ namespace SystemEx
 		public static IEnumerable<FieldInfo> GetFields<A>(this Type t) where A : Attribute
 		{
 			foreach (var field in t.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)) {
-				if (field.HaveAttribute<A>())
+				if (field.HasAttribute<A>())
 					yield return field;
 			}
 			yield break;
@@ -68,7 +68,7 @@ namespace SystemEx
 		public static IEnumerable<MethodInfo> GetMethods<A>(this Type t) where A : Attribute
 		{
 			foreach (var method in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)) {
-				if (method.HaveAttribute<A>())
+				if (method.HasAttribute<A>())
 					yield return method;
 			}
 			yield break;
