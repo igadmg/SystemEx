@@ -17,7 +17,6 @@ namespace SystemEx
 
 		public BinaryStructStream(byte[] data)
 		{
-            SystemEx.logger.Log("new stream of {0} bytes", data.Length);
 			stream = new MemoryStream(data);
 		}
 
