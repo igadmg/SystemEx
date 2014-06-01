@@ -16,11 +16,12 @@ namespace SystemEx
 		static BitConverterEx()
 		{
 			foreach (var m in typeof(BitConverter).GetMethods(BindingFlags.Static | BindingFlags.Public)) {
+				var method = m;
 				if (m.Name == "GetBytes") {
-					bytesByType.Add(m.GetParameters()[0].ParameterType, (object o) => (byte[])m.Invoke(null, new object[] { o }));
+					bytesByType.Add(m.GetParameters()[0].ParameterType, (object o) => (byte[])method.Invoke(null, new object[] { o }));
 				}
-				else if (m.Name.StartsWith("To") && m.GetParameters().Length == 2) {
-					typeByType.Add(m.ReturnType, (byte[] value, int startIndex) => m.Invoke(null, new object[] { value, startIndex }));
+				else if (m.Name.StartsWith("To") && m.GetParameters().Length == 2 && !m.Name.StartsWith("ToString")) {
+					typeByType.Add(m.ReturnType, (byte[] value, int startIndex) => method.Invoke(null, new object[] { value, startIndex }));
 				}
 			}
 
