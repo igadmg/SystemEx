@@ -6,6 +6,37 @@ namespace SystemEx
 {
 	public static class TypeEx
 	{
+		public static string SharpName(this Type type)
+		{
+			if (!type.IsGenericType)
+				return type.FullName;
+
+			string generic = "";
+			foreach (var t in type.GetGenericArguments())
+				generic += t.SharpName() + ", ";
+			generic = generic.TrimEnd(',', ' ');
+
+			string type_name = type.Name;
+			var ti = type_name.LastIndexOf('`');
+			if (ti < 0) {
+				var dt = type.DeclaringType;
+				while (dt != null) {
+					var tn = dt.Namespace + "." + dt.Name;
+					ti = tn.LastIndexOf('`');
+					if (!(ti < 0)) {
+						type_name = string.Format("{0}<{1}>", tn.Substring(0, ti), generic) + "." + type_name;
+					}
+
+					dt = dt.DeclaringType;
+				}
+			}
+			else {
+				type_name = string.Format("{0}<{1}>", type.Namespace + "." + type_name.Substring(0, ti), generic);
+			}
+
+			return type_name;
+		}
+
 		public static bool HasAttribute<A>(this MemberInfo mi) where A : Attribute
 		{
 			foreach (var attribute in mi.GetCustomAttributes(true)) {
@@ -72,6 +103,16 @@ namespace SystemEx
 					yield return method;
 			}
 			yield break;
+		}
+
+		public static bool HasInterface(this Type type, Type iface)
+		{
+			return type.GetInterface(iface.Name) != null;
+		}
+
+		public static bool HasInterface<I>(this Type type)
+		{
+			return type.HasInterface(typeof(I));
 		}
 	}
 }

@@ -38,7 +38,13 @@ namespace SystemEx
 
 			using (MemoryStream bytes = new MemoryStream(128)) {
 				foreach (var field in o.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)) {
-					bytes.Write(bytesByType[field.FieldType](field.GetValue(o)));
+					if (field.FieldType.IsEnum) {
+						var enum_type = Enum.GetUnderlyingType(field.FieldType);
+						bytes.Write(bytesByType[enum_type](Convert.ChangeType(field.GetValue(o), enum_type)));
+					}
+					else {
+						bytes.Write(bytesByType[field.FieldType](field.GetValue(o)));
+					}
 				}
 				return bytes.ToArray();
 			}

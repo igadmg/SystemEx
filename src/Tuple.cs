@@ -29,6 +29,19 @@ namespace System
 			Item2 = item2;
 		}
 
+		public override int GetHashCode()
+		{
+			return Item1.GetHashCode() ^ Item2.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			var t = obj as Tuple<T1, T2>;
+			return t != null
+				? object.Equals(Item1, t.Item1) && object.Equals(Item2, t.Item2)
+				: base.Equals(obj);
+		}
+
 		public override string ToString()
 		{
 			return string.Format("[Tuple][{0},{1}]", Item1, Item2);
@@ -48,6 +61,19 @@ namespace System
 			Item1 = item1;
 			Item2 = item2;
 			Item3 = item3;
+		}
+
+		public override int GetHashCode()
+		{
+			return Item1.GetHashCode() ^ Item2.GetHashCode() ^ Item3.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			var t = obj as Tuple<T1, T2, T3>;
+			return t != null
+				? object.Equals(Item1, t.Item1) && object.Equals(Item2, t.Item2) && object.Equals(Item3, t.Item3)
+				: base.Equals(obj);
 		}
 
 		public override string ToString()
@@ -71,6 +97,19 @@ namespace System
 			Item2 = item2;
 			Item3 = item3;
 			Item4 = item4;
+		}
+		
+		public override int GetHashCode()
+		{
+			return Item1.GetHashCode() ^ Item2.GetHashCode() ^ Item3.GetHashCode() ^ Item4.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			var t = obj as Tuple<T1, T2, T3, T4>;
+			return t != null
+				? object.Equals(Item1, t.Item1) && object.Equals(Item2, t.Item2) && object.Equals(Item3, t.Item3) && object.Equals(Item4, t.Item4)
+				: base.Equals(obj);
 		}
 
 		public override string ToString()
