@@ -61,6 +61,8 @@
     <Compile Include="src\ListEx.cs" />
     <Compile Include="src\MarshalEx.cs" />
     <Compile Include="src\MemoryStreamEx.cs" />
+    <Compile Include="src\StreamEx.cs" />
+    <Compile Include="src\StringEx.cs" />
     <Compile Include="src\StructStream.cs" />
     <Compile Include="src\Tuple.cs" />
     <Compile Include="src\TypeEx.cs" />
