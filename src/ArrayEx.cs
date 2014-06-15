@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace SystemEx
 {
@@ -63,6 +64,11 @@ namespace SystemEx
 			Dictionary<K, V> r = new Dictionary<K, V>();
 			r.Insert(t, array);
 			return r;
+		}
+
+		public static Stream ToStream(this byte[] array)
+		{
+			return new MemoryStream(array);
 		}
 	}
 }
