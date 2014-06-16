@@ -25,5 +25,7 @@ namespace SystemEx
 		public static FuncContainer f<R, T1, T2, T3, T4, T5, T6, T7, T8>(Func<T1, T2, T3, T4, T5, T6, T7, T8, R> lambda) { return new FuncContainer((Delegate)lambda, typeof(R), typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6), typeof(T7), typeof(T8)); }
 		public static FuncContainer f<R, T1, T2, T3, T4, T5, T6, T7, T8, T9>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, R> lambda) { return new FuncContainer((Delegate)lambda, typeof(R), typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6), typeof(T7), typeof(T8), typeof(T9)); }
 		public static FuncContainer f<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> lambda) { return new FuncContainer((Delegate)lambda, typeof(R), typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5), typeof(T6), typeof(T7), typeof(T8), typeof(T9), typeof(T10)); }
+
+		public static T lc<T>(T o) { return o; }
 	}
 }

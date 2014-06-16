@@ -5,17 +5,22 @@ using System.Text;
 
 namespace SystemEx
 {
-    public interface ILogger
-    {
-        void Log(string message, params object[] args);
-    }
-
-    public static partial class SystemEx
+    public static class LoggerEx
     {
         public static ILogger logger = new ConsoleLogger();
+
+		public static void Log(string message, params object[] args)
+		{
+			logger.Log(message, args);
+		}
     }
 
-    public class ConsoleLogger : ILogger
+	public interface ILogger
+	{
+		void Log(string message, params object[] args);
+	}
+
+	public class ConsoleLogger : ILogger
     {
         public void Log(string message, params object[] args)
         {

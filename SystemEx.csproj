@@ -56,7 +56,7 @@
     <Compile Include="src\AsyncWait.cs" />
     <Compile Include="src\DictionaryEx.cs" />
     <Compile Include="src\FuncContainer.cs" />
-    <Compile Include="src\ILogger.cs" />
+    <Compile Include="src\LoggerEx.cs" />
     <Compile Include="src\LambdaComparer.cs" />
     <Compile Include="src\ListEx.cs" />
     <Compile Include="src\MarshalEx.cs" />
@@ -67,6 +67,7 @@
     <Compile Include="src\Tuple.cs" />
     <Compile Include="src\TypeEx.cs" />
     <Compile Include="src\UdpClient.cs" />
+    <Compile Include="src\Watch.cs" />
     <Compile Include="src\_.cs" />
   </ItemGroup>
   <ItemGroup>
