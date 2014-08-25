@@ -9,6 +9,11 @@ namespace SystemEx
     {
         public static ILogger logger = new ConsoleLogger();
 
+		public static void Init(ILogger logger)
+		{
+			LoggerEx.logger = logger;
+		}
+
 		public static void Log(string message, params object[] args)
 		{
 			logger.Log(message, args);

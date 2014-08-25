@@ -56,6 +56,7 @@ namespace SystemEx
 		{
 			dt_ = dt;
 			autoreset_ = autoreset;
+			Reset();
 		}
 
 		public Stopwatch Reset()
