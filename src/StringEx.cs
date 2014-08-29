@@ -11,5 +11,12 @@ namespace SystemEx
 		{
 			return string.Format(s, args);
 		}
+
+		public static char at(this string s, int i)
+		{
+			if (i < 0)
+				return s[s.Length + i];
+			return s[i];
+		}
 	}
 }

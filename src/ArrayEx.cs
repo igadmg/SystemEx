@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace SystemEx
 {
@@ -69,6 +70,11 @@ namespace SystemEx
 		public static Stream ToStream(this byte[] array)
 		{
 			return new MemoryStream(array);
+		}
+
+		public static string GetString(this byte[] array)
+		{
+			return Encoding.UTF8.GetString(array);
 		}
 	}
 }
