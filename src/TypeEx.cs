@@ -101,6 +101,15 @@ namespace SystemEx
 			yield break;
 		}
 
+		public static IEnumerable<MethodInfo> GetMethods(this Type t, string name)
+		{
+			foreach (var method in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)) {
+				if (method.Name == name)
+					yield return method;
+			}
+			yield break;
+		}
+
 		/// <summary>
 		/// Lists all private methods with attribute A.
 		/// </summary>
