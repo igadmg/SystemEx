@@ -52,6 +52,8 @@ namespace SystemEx
 		private float t_;
 		private bool autoreset_;
 
+		public float dt { get { return dt_; } set { dt_ = value; } }
+
 		public Stopwatch(float dt, bool autoreset)
 		{
 			dt_ = dt;
