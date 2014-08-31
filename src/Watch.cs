@@ -67,6 +67,12 @@ namespace SystemEx
 			return this;
 		}
 
+		public Stopwatch Reset(float dt)
+		{
+			dt_ = dt;
+			return Reset();
+		}
+
 		public static implicit operator bool(Stopwatch sw)
 		{
 			var r = (clock - sw.t_) > sw.dt_;
