@@ -125,6 +125,16 @@ namespace SystemEx
 			yield break;
 		}
 
+		public static IEnumerable<Tuple<MethodInfo, A>> GetMethodsAndAttributes<A>(this Type t) where A : Attribute
+		{
+			foreach (var method in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)) {
+				A a = method.GetAttribute<A>();
+				if (a != null)
+					yield return new Tuple<MethodInfo, A>(method, a);
+			}
+			yield break;
+		}
+
 		public static bool HasInterface(this Type type, Type iface)
 		{
 			return type.GetInterface(iface.Name) != null;
