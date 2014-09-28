@@ -19,6 +19,18 @@ namespace SystemEx
 			return Array.IndexOf(array, value) != -1;
 		}
 
+		public static bool Compare<T, U>(this T[] array, U[] array2, Func<T, U, bool> cmp)
+		{
+			if (array.Length != array2.Length)
+				return false;
+
+			for (int i = 0; i < array.Length; i++)
+				if (!cmp(array[i], array2[i]))
+					return false;
+
+			return true;
+		}
+
 		public static T[] ForEach<T>(this T[] array, Action<T> action)
 		{
 			Array.ForEach(array, action);

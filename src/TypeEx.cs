@@ -135,6 +135,26 @@ namespace SystemEx
 			yield break;
 		}
 
+		public static MethodInfo GetMethod(this Type t, string name, params Type[] arguments)
+		{
+			bool isGeneric = false;
+			int i = name.IndexOf('`');
+			if (i > 0) {
+				isGeneric = true;
+				name = name.Substring(0, i);
+			}
+
+			foreach (var method in t.GetMethods(name)) {
+				if (method.IsGenericMethod != isGeneric)
+					continue;
+
+				if (method.GetParameters().Compare(arguments, (ParameterInfo a, Type b) => a.ParameterType == b))
+					return method;
+			}
+
+			return null;
+		}
+
 		public static bool HasInterface(this Type type, Type iface)
 		{
 			return type.GetInterface(iface.Name) != null;

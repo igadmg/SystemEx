@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{FEF7743B-E307-455D-B5DC-60F440EC5064}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>SystemEx.Xamarin</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)src\_.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\Action.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\ActionContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\ArrayEx.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\AssemblyEx.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\AsyncWait.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\BinaryStructStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\BitConverterEx.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\DictionaryEx.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\Func.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\FuncContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\LambdaComparer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\ListEx.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\LoggerEx.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\MarshalEx.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\MemoryStreamEx.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\StreamEx.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\StringEx.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\StructStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\Tuple.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\TypeEx.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\UdpClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)src\Watch.cs" />
+  </ItemGroup>
+</Project>
