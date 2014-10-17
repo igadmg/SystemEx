@@ -18,5 +18,10 @@ namespace SystemEx
 				return s[s.Length + i];
 			return s[i];
 		}
+
+		public static string Join(this IEnumerable<string> s, string separator)
+		{
+			return string.Join(separator, s);
+		}
 	}
 }
