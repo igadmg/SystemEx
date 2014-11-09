@@ -19,9 +19,14 @@ namespace SystemEx
 			return s[i];
 		}
 
-		public static string Join(this IEnumerable<string> s, string separator)
+		public static string Join(this string[] s, string separator)
 		{
 			return string.Join(separator, s);
+		}
+
+		public static string Join(this IEnumerable<string> s, string separator)
+		{
+			return string.Join(separator, s.ToArray());
 		}
 	}
 }
