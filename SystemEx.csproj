@@ -67,6 +67,7 @@
     <Compile Include="src\StringEx.cs" />
     <Compile Include="src\StructStream.cs" />
     <Compile Include="src\Tuple.cs" />
+    <Compile Include="src\TupleEx.cs" />
     <Compile Include="src\TypeEx.cs" />
     <Compile Include="src\UdpClient.cs" />
     <Compile Include="src\Watch.cs" />
