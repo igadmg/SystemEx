@@ -157,7 +157,15 @@ namespace SystemEx
 
 		public static bool HasInterface(this Type type, Type iface)
 		{
-			return type.GetInterface(iface.Name) != null;
+			if (!iface.IsGenericType)
+				return type.GetInterface(iface.Name) != null;
+
+			foreach (var itype in type.GetInterfaces()) {
+				if (itype.IsGenericType && itype.GetGenericTypeDefinition() == iface)
+					return true;
+			}
+
+			return false;
 		}
 
 		public static bool HasInterface<I>(this Type type)
