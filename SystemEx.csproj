@@ -50,6 +50,7 @@
     <Compile Include="src\AssemblyEx.cs" />
     <Compile Include="src\BinaryStructStream.cs" />
     <Compile Include="src\BitConverterEx.cs" />
+    <Compile Include="src\EnumerableEx.cs" />
     <Compile Include="src\Func.cs" />
     <Compile Include="src\Action.cs" />
     <Compile Include="src\ActionContainer.cs" />

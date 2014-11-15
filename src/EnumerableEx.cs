@@ -1,10 +1,19 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace SystemEx
 {
 	public static class EnumerableEx
 	{
+		public static IEnumerable<T> convert<T>(this IEnumerable e)
+		{
+			foreach (object o in e)
+				yield return (T)o;
+
+			yield break;
+		}
+
 		public static IEnumerable<U> transform<T, U>(this IEnumerable<T> e, Func<T, U> trf)
 		{
 			foreach (var i in e)
