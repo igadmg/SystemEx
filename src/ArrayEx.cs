@@ -63,6 +63,16 @@ namespace SystemEx
 			return result;
 		}
 
+		public static T[] Skip<T>(this T[] array, int count)
+		{
+			if (count < array.Length) {
+				T[] result = new T[array.Length - count];
+				Array.Copy(array, count, result, 0, result.Length);
+				return result;
+			}
+			return new T[] {};
+		}
+
 		public static T[] Parse<T>(string value)
 		{
 			string[] tokens = value.Split(new Char[] { ':' });
