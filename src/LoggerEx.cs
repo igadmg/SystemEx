@@ -18,11 +18,23 @@ namespace SystemEx
 		{
 			logger.Log(message, args);
 		}
+
+		public static void LogWarning(string message, params object[] args)
+		{
+			logger.LogWarning(message, args);
+		}
+
+		public static void LogError(string message, params object[] args)
+		{
+			logger.LogError(message, args);
+		}
     }
 
 	public interface ILogger
 	{
 		void Log(string message, params object[] args);
+		void LogWarning(string message, params object[] args);
+		void LogError(string message, params object[] args);
 	}
 
 	public class ConsoleLogger : ILogger
@@ -31,5 +43,15 @@ namespace SystemEx
         {
             Console.WriteLine("Log: {0}", string.Format(message, args));
         }
+
+		public void LogWarning(string message, params object[] args)
+		{
+			Console.WriteLine("Warning: {0}", string.Format(message, args));
+		}
+
+		public void LogError(string message, params object[] args)
+		{
+			Console.WriteLine("Error: {0}", string.Format(message, args));
+		}
     }
 }
