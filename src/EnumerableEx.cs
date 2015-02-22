@@ -29,6 +29,20 @@ namespace SystemEx
 
 			yield break;
 		}
+
+		public static T max<T>(this IEnumerable<T> source, Func<T, float> selector)
+		{
+			float maxv = float.MinValue;
+			T r = default(T);
+			foreach (var i in source) {
+				float v = selector(i);
+				if (v > maxv) {
+					maxv = v;
+					r = i;
+				}
+			}
+			return r;
+		}
 	}
 }
 
