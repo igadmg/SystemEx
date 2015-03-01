@@ -1,0 +1,26 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly Name="System.Core" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Runtime.InteropServices" #>
+<#@ import namespace="System.Text" #>
+<#
+// This file defines direct integer conversion API portion of Unpackaging
+var __calls = 10;
+#>namespace System
+{
+#if NET35
+<#
+for (int __i = 5; __i < __calls; __i++)
+{
+#>
+	public delegate TResult Func<<#= String.Join(", ", Enumerable.Range(1, __i).Select(i => String.Format(CultureInfo.InvariantCulture, "T{0}", i))) #>, TResult>(<#= String.Join(", ", Enumerable.Range(1, __i).Select(i => String.Format(CultureInfo.InvariantCulture, "T{0} arg{0}", i))) #>);
+<#
+}
+#>
+#endif
+}

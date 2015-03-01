@@ -14,6 +14,7 @@ namespace SystemEx
 			yield break;
 		}
 
+		[Obsolete("Use Linq .Select instead.")]
 		public static IEnumerable<U> transform<T, U>(this IEnumerable<T> e, Func<T, U> trf)
 		{
 			foreach (var i in e)

@@ -1,0 +1,46 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly Name="System.Core" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Runtime.InteropServices" #>
+<#@ import namespace="System.Text" #>
+<#
+// This file defines direct integer conversion API portion of Unpackaging
+var __calls = 10;
+#>
+using System;
+
+
+namespace SystemEx
+{
+	public class _
+	{
+<#
+for (int __i = 1; __i < __calls; __i++)
+{
+#>
+		public static ActionContainer a<<#= String.Join(", ", Enumerable.Range(1, __i).Select(i => String.Format(CultureInfo.InvariantCulture, "T{0}", i))) #>>(Action<<#= String.Join(", ", Enumerable.Range(1, __i).Select(i => String.Format(CultureInfo.InvariantCulture, "T{0}", i))) #>> lambda) { return new ActionContainer((Delegate)lambda, <#= String.Join(", ", Enumerable.Range(1, __i).Select(i => String.Format(CultureInfo.InvariantCulture, "typeof(T{0})", i))) #>); }
+<#
+}
+#>
+
+<#
+for (int __i = 1; __i < __calls; __i++)
+{
+#>
+		public static FuncContainer f<<#= String.Join(", ", Enumerable.Range(1, __i).Select(i => String.Format(CultureInfo.InvariantCulture, "T{0}", i))) #>, R>(Func<<#= String.Join(", ", Enumerable.Range(1, __i).Select(i => String.Format(CultureInfo.InvariantCulture, "T{0}", i))) #>, R> lambda) { return new FuncContainer((Delegate)lambda, typeof(R), <#= String.Join(", ", Enumerable.Range(1, __i).Select(i => String.Format(CultureInfo.InvariantCulture, "typeof(T{0})", i))) #>); }
+<#
+}
+#>
+
+		public static T if_<T>(bool b, Func<T> yes, Func<T> no)
+		{
+			if (b) return yes();
+			else return no();
+		}
+	}
+}

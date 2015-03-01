@@ -50,5 +50,14 @@ namespace SystemEx
 
 			return d;
 		}
+
+		public static V Get<K, V>(this Dictionary<K, V> d, K key)
+		{
+			V v;
+			if (d.TryGetValue(key, out v))
+				return v;
+
+			return default(V);
+		}
 	}
 }
