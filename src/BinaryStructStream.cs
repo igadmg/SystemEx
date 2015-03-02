@@ -44,7 +44,7 @@ namespace SystemEx
         public BinaryStructStream Write<T>(T o) where T : struct
         {
             bf.Serialize(stream, o);
-            LoggerEx.Log("write {0} of {1} bytes", typeof(T).Name, stream.Length);
+            Log.Info("write {0} of {1} bytes", typeof(T).Name, stream.Length);
             return this;
         }
 

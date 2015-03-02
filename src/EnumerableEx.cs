@@ -31,17 +31,39 @@ namespace SystemEx
 			yield break;
 		}
 
-		public static T max<T>(this IEnumerable<T> source, Func<T, float> selector)
+		public static T max<T, V>(this IEnumerable<T> e, Func<T, V> transformFn)
 		{
-			float maxv = float.MinValue;
+			var mo = MathOperations.Get<V>();
+
+			V maxv = mo.min;
 			T r = default(T);
-			foreach (var i in source) {
-				float v = selector(i);
-				if (v > maxv) {
+
+			foreach (var i in e) {
+				V v = transformFn(i);
+				if (mo.gt(v, maxv)) {
 					maxv = v;
 					r = i;
 				}
 			}
+
+			return r;
+		}
+
+		public static T min<T, V>(this IEnumerable<T> e, Func<T, V> transformFn)
+		{
+			var mo = MathOperations.Get<V>();
+
+			V minv = mo.max;
+			T r = default(T);
+
+			foreach (var i in e) {
+				V cv = transformFn(i);
+				if (mo.lt(cv, minv)) {
+					minv = cv;
+					r = i;
+				}
+			}
+
 			return r;
 		}
 	}

@@ -5,53 +5,53 @@ using System.Text;
 
 namespace SystemEx
 {
-    public static class LoggerEx
+    public static class Log
     {
         public static ILogger logger = new ConsoleLogger();
 
 		public static void Init(ILogger logger)
 		{
-			LoggerEx.logger = logger;
+			Log.logger = logger;
 		}
 
-		public static void Log(string message, params object[] args)
+		public static void Info(string message, params object[] args)
 		{
-			logger.Log(message, args);
+			logger.Info(message, args);
 		}
 
-		public static void LogWarning(string message, params object[] args)
+		public static void Warning(string message, params object[] args)
 		{
-			logger.LogWarning(message, args);
+			logger.Warning(message, args);
 		}
 
-		public static void LogError(string message, params object[] args)
+		public static void Error(string message, params object[] args)
 		{
-			logger.LogError(message, args);
+			logger.Error(message, args);
 		}
     }
 
 	public interface ILogger
 	{
-		void Log(string message, params object[] args);
-		void LogWarning(string message, params object[] args);
-		void LogError(string message, params object[] args);
+		void Info(string message, params object[] args);
+		void Warning(string message, params object[] args);
+		void Error(string message, params object[] args);
 	}
 
 	public class ConsoleLogger : ILogger
     {
-        public void Log(string message, params object[] args)
+        public void Info(string message, params object[] args)
         {
-            Console.WriteLine("Log: {0}", string.Format(message, args));
+			Console.WriteLine("Log: {0}", message.format(args));
         }
 
-		public void LogWarning(string message, params object[] args)
+		public void Warning(string message, params object[] args)
 		{
-			Console.WriteLine("Warning: {0}", string.Format(message, args));
+			Console.WriteLine("Warning: {0}", message.format(args));
 		}
 
-		public void LogError(string message, params object[] args)
+		public void Error(string message, params object[] args)
 		{
-			Console.WriteLine("Error: {0}", string.Format(message, args));
+			Console.WriteLine("Error: {0}", message.format(args));
 		}
     }
 }

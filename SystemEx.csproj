@@ -71,6 +71,7 @@
     <Compile Include="src\LambdaComparer.cs" />
     <Compile Include="src\ListEx.cs" />
     <Compile Include="src\MarshalEx.cs" />
+    <Compile Include="src\MathOperations.cs" />
     <Compile Include="src\MemoryStreamEx.cs" />
     <Compile Include="src\ObjectEx.cs" />
     <Compile Include="src\StreamEx.cs" />

@@ -7,6 +7,28 @@ namespace SystemEx
 {
 	public static class ArrayEx
 	{
+		public static T at<T>(this T[] a, int index)
+		{
+			if (index < 0)
+				return a[a.Length + index];
+			return a[index];
+		}
+
+		public static T at<T>(this IList<T> a, int index)
+		{
+			if (index < 0)
+				return a[a.Count + index];
+			return a[index];
+		}
+
+		public static IList<T> Swap<T>(this IList<T> l, int a, int b)
+		{
+			T tmp = l[a];
+			l[a] = l[b];
+			l[b] = tmp;
+			return l;
+		}
+
 		public static T[] Initialize<T>(this T[] array, T value)
 		{
 			for (int i = 0; i < array.Length; i++)
@@ -53,7 +75,17 @@ namespace SystemEx
 			return array;
 		}
 
-		public static T[] Concat<T>(T value, T[] array)
+		public static T[] Concat<T>(this T[] array, T value)
+		{
+			T[] result = new T[array.Length + 1];
+
+			Array.Copy(array, 0, result, 0, array.Length);
+			result[result.Length - 1] = value;
+
+			return result;
+		}
+
+		public static T[] Concat<T>(this T value, T[] array)
 		{
 			T[] result = new T[array.Length + 1];
 
@@ -70,7 +102,7 @@ namespace SystemEx
 				Array.Copy(array, count, result, 0, result.Length);
 				return result;
 			}
-			return new T[] {};
+			return new T[] { };
 		}
 
 		public static T[] Parse<T>(string value)

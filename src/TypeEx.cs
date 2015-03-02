@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace SystemEx
@@ -11,10 +13,7 @@ namespace SystemEx
 			if (!type.IsGenericType)
 				return type.FullName;
 
-			string generic = "";
-			foreach (var t in type.GetGenericArguments())
-				generic += t.SharpName() + ", ";
-			generic = generic.TrimEnd(',', ' ');
+			string generic = type.GetGenericArguments().Select(tp => tp.SharpName()).Join(", ");
 
 			string type_name = type.Name;
 			var ti = type_name.LastIndexOf('`');
@@ -35,6 +34,26 @@ namespace SystemEx
 			}
 
 			return type_name;
+		}
+
+		public static bool IsList(this Type type)
+		{
+			return typeof(IList).IsAssignableFrom(type);
+		}
+
+		public static Type GetListItemType(this Type type)
+		{
+			if (type.IsArray)
+				return type.GetElementType();
+
+			var listType = type.GetInterfaces()
+				.Where(i => i.IsGenericType)
+				.Where(i => i.GetGenericTypeDefinition() == typeof(IList<>)).First();
+
+			if (listType != null)
+				return listType.GetGenericArguments()[0];
+
+			return null;
 		}
 
 		public static bool HasAttribute<A>(this MemberInfo mi) where A : Attribute
@@ -78,9 +97,24 @@ namespace SystemEx
 		/// <returns></returns>
 		public static IEnumerable<FieldInfo> GetFields<A>(this Type t) where A : Attribute
 		{
-			foreach (var field in t.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)) {
+			foreach (var field in t.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)) {
 				if (field.HasAttribute<A>())
 					yield return field;
+			}
+			yield break;
+		}
+
+		/// <summary>
+		/// Lists all private properties with attribute A.
+		/// </summary>
+		/// <typeparam name="A"></typeparam>
+		/// <param name="t"></param>
+		/// <returns></returns>
+		public static IEnumerable<PropertyInfo> GetProperties<A>(this Type t) where A : Attribute
+		{
+			foreach (var property in t.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)) {
+				if (property.HasAttribute<A>())
+					yield return property;
 			}
 			yield break;
 		}
@@ -135,6 +169,13 @@ namespace SystemEx
 			yield break;
 		}
 
+		/// <summary>
+		/// Get method with exact name and exact parameter types.
+		/// </summary>
+		/// <param name="t"></param>
+		/// <param name="name"></param>
+		/// <param name="arguments"></param>
+		/// <returns></returns>
 		public static MethodInfo GetMethod(this Type t, string name, params Type[] arguments)
 		{
 			bool isGeneric = false;
