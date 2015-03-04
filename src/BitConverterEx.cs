@@ -30,7 +30,7 @@ namespace SystemEx
 			}
 		}
 
-		public static byte[] GetBytes(object o)
+		public static byte[] GetBytes(this object o)
 		{
 			GetBytesDelegate gbd;
 			if (bytesByType.TryGetValue(o.GetType(), out gbd))
@@ -70,14 +70,14 @@ namespace SystemEx
 			return o;
 		}
 
-		public static T FromBytes<T>(byte[] value)
+		public static T FromBytes<T>(this byte[] value)
 			where T : new()
 		{
 			int si = 0;
 			return (T) FromBytes(typeof(T), value, ref si);
 		}
 
-		public static T FromBytes<T>(byte[] value, ref int startIndex)
+		public static T FromBytes<T>(this byte[] value, ref int startIndex)
 			where T : new()
 		{
 			return (T) FromBytes(typeof(T), value, ref startIndex);

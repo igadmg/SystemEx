@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -54,4 +55,38 @@ namespace SystemEx
 			Console.WriteLine("Error: {0}", message.format(args));
 		}
     }
+
+	public class StreamLogger : ILogger
+	{
+		private StreamWriter stream;
+
+
+		public StreamLogger(Stream stream)
+		{
+			this.stream = new StreamWriter(stream);
+			this.stream.AutoFlush = true;
+		}
+
+		public StreamLogger(StreamWriter stream)
+		{
+			this.stream = stream;
+			this.stream.AutoFlush = true;
+		}
+
+
+		public void Info(string message, params object[] args)
+		{
+			stream.WriteLine("Log: {0}", message.format(args));
+		}
+
+		public void Warning(string message, params object[] args)
+		{
+			stream.WriteLine("Warning: {0}", message.format(args));
+		}
+
+		public void Error(string message, params object[] args)
+		{
+			stream.WriteLine("Error: {0}", message.format(args));
+		}
+	}
 }

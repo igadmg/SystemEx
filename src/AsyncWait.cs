@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace SystemEx
 {
+	[Serializable]
 	public abstract class AsyncWait
 	{
 		public object AsyncState
@@ -21,16 +22,19 @@ namespace SystemEx
 		}
 	}
 
+	[Serializable]
 	public class WaitSkip : AsyncWait, IAsyncResult
 	{
 		public bool IsCompleted { get { return true; } }
 	}
 
+	[Serializable]
 	public class WaitForever : AsyncWait, IAsyncResult
 	{
 		public bool IsCompleted { get { return false; } }
 	}
 
+	[Serializable]
 	public class WaitTrue : AsyncWait, IAsyncResult
 	{
 		Func<bool> f;
@@ -39,6 +43,7 @@ namespace SystemEx
 		public bool IsCompleted { get { return f(); } }
 	}
 
+	[Serializable]
 	public class WaitAny : AsyncWait, IAsyncResult
 	{
 		IEnumerable<Func<bool>> fs;
@@ -47,6 +52,7 @@ namespace SystemEx
 		public bool IsCompleted { get { foreach (var f in fs) if (f()) return true; return false; } }
 	}
 
+	[Serializable]
 	public class WaitEvery : AsyncWait, IAsyncResult
 	{
 		IEnumerable<Func<bool>> fs;
