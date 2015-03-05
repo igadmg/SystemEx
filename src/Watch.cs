@@ -22,12 +22,13 @@ namespace SystemEx
 	public interface IClockProvider
 	{
 		float tick { get; }
+		float hwtick { get; }
 	}
 
 	public class SystemClockProvider : IClockProvider
 	{
 		public float tick { get { return getTick(); } }
-
+		public float hwtick { get { return getTick(); } }
 
 
 		long base_;
