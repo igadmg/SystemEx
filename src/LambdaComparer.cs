@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SystemEx
 {
-	public class LambdaComparer<T> : IComparer<T>
+	public class LambdaComparer<T> : IComparer<T>, IEqualityComparer<T>
 	{
 		private Comparison<T> c;
 
@@ -17,6 +17,16 @@ namespace SystemEx
 		public int Compare(T x, T y)
 		{
 			return c(x, y);
+		}
+
+		public bool Equals(T x, T y)
+		{
+			return Compare(x, y) == 0;
+		}
+
+		public int GetHashCode(T obj)
+		{
+			return obj.GetHashCode();
 		}
 	}
 
