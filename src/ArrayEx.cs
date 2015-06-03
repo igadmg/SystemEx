@@ -131,6 +131,15 @@ namespace SystemEx
 			return r;
 		}
 
+		public static int CalcHashCode<T>(this T[] array)
+		{
+			int result = 0;
+			for (int i = 0; i < array.Length; i++) {
+				result = (result * 397) ^ array[i].GetHashCode();
+			}
+			return result;
+		}
+
 		public static Stream ToStream(this byte[] array)
 		{
 			return new MemoryStream(array);

@@ -59,5 +59,16 @@ namespace SystemEx
 
 			return default(V);
 		}
+
+		public static int GetId<K>(this Dictionary<K, int> d, K key)
+		{
+			int id;
+			if (!d.TryGetValue(key, out id)) {
+				id = d.Count;
+				d.Add(key, id);
+			}
+
+			return id;
+		}
 	}
 }

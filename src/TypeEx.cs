@@ -56,6 +56,23 @@ namespace SystemEx
 			return null;
 		}
 
+		public static bool IsDictionary(this Type type)
+		{
+			return typeof(IDictionary).IsAssignableFrom(type);
+		}
+
+		public static KeyValuePair<Type, Type> GetDictionaryKeyValueType(this Type type)
+		{
+			var dictionaryType = type.GetInterfaces()
+				.Where(i => i.IsGenericType)
+				.Where(i => i.GetGenericTypeDefinition() == typeof(IDictionary<,>)).First();
+
+			if (dictionaryType != null)
+				return new KeyValuePair<Type, Type>(dictionaryType.GetGenericArguments()[0], dictionaryType.GetGenericArguments()[1]);
+
+			return new KeyValuePair<Type, Type>(null, null);
+		}
+
 		public static bool HasAttribute<A>(this MemberInfo mi) where A : Attribute
 		{
 			foreach (var attribute in mi.GetCustomAttributes(true)) {

@@ -6,9 +6,25 @@ namespace SystemEx
     public class StructStream : IDisposable
     {
         byte[] data_;
+		int length_;
 
         GCHandle handle;
         IntPtr dataPtr;
+
+
+		public int Capacity { get { return data_.Length; }
+			set
+			{
+				handle.Free();
+
+				Array.Resize(ref data_, value);
+
+				handle = GCHandle.Alloc(data_, GCHandleType.Pinned);
+				dataPtr = handle.AddrOfPinnedObject();
+			}
+		}
+		public int Length { get { return length_; } }
+		public bool isEOF { get { return length_ == data_.Length; } }
 
 
         public StructStream()
@@ -19,8 +35,9 @@ namespace SystemEx
         public StructStream(byte[] data)
         {
             data_ = data;
+			length_ = 0;
 
-            handle = GCHandle.Alloc(data_, GCHandleType.Pinned);
+			handle = GCHandle.Alloc(data_, GCHandleType.Pinned);
             dataPtr = handle.AddrOfPinnedObject();
         }
 
@@ -29,12 +46,16 @@ namespace SystemEx
             handle.Free();
         }
 
+		public object Read(Type T)
+		{
+			object r = Marshal.PtrToStructure(dataPtr, T);
+			Skip(T);
+			return r;
+		}
 
-        public T Read<T>() where T : struct
+		public T Read<T>() where T : struct
         {
-            T r = (T)Marshal.PtrToStructure(dataPtr, typeof(T));
-            Skip<T>();
-            return r;
+            return (T)Read(typeof(T));
         }
 
         public T[] Read<T>(int count) where T : struct
@@ -45,22 +66,43 @@ namespace SystemEx
             return r;
         }
 
-        public StructStream Write<T>(T o) where T : struct
+		public StructStream Write(object o, Type T)
+		{
+			if (length_ + Marshal.SizeOf(T) > Capacity) {
+				Capacity = Capacity * 2;
+			}
+
+			Marshal.StructureToPtr(o, dataPtr, false);
+			Skip(T);
+			return this;
+		}
+
+		public StructStream Write<T>(T o) where T : struct
         {
-            Marshal.StructureToPtr(o, dataPtr, false);
-            Skip<T>();
-            return this;
+            return Write(o, typeof(T));
         }
 
-        public void Skip<T>()
+		public void Skip(Type T)
+		{
+			Skip(T, 1);
+		}
+
+		public void Skip(Type T, int count)
+		{
+			int delta = count * Marshal.SizeOf(T);
+            dataPtr = new IntPtr(dataPtr.ToInt64() + delta);
+			length_ += delta;
+		}
+
+		public void Skip<T>()
         {
-            Skip<T>(1);
+            Skip(typeof(T), 1);
         }
 
         public void Skip<T>(int count)
         {
-            dataPtr = new IntPtr(dataPtr.ToInt64() + count * Marshal.SizeOf(typeof(T)));
-        }
+            Skip(typeof(T), count);
+		}
 
         public byte[] ToArray()
         {
