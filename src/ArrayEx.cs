@@ -21,6 +21,22 @@ namespace SystemEx
 			return a[index];
 		}
 
+		public static void at<T>(this T[] a, int index, T value)
+		{
+			if (index < 0)
+				a[a.Length + index] = value;
+			else
+				a[index] = value;
+		}
+
+		public static void at<T>(this IList<T> a, int index, T value)
+		{
+			if (index < 0)
+				a[a.Count + index] = value;
+			else
+				a[index] = value;
+		}
+
 		public static IList<T> Swap<T>(this IList<T> l, int a, int b)
 		{
 			T tmp = l[a];
