@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+
+
 
 namespace SystemEx
 {
@@ -65,6 +68,40 @@ namespace SystemEx
 			}
 
 			return r;
+		}
+
+		public static IEnumerable<T[]> Tuples<T>(this IEnumerable<T> e, int count)
+		{
+			T[] array = e.ToArray<T>();
+			T[] result = new T[count];
+
+			foreach (T[] r in array.Tuples(count, result, 0, 0))
+			{
+				yield return r;
+			}
+
+			yield break;
+		}
+
+		private static IEnumerable<T[]> Tuples<T>(this T[] array, int count, T[] result, int startIndex, int resultIndex)
+		{
+			for (int i = startIndex; i < array.Length - count + 1; i++)
+			{
+				result[resultIndex] = array[i];
+				if (count > 1)
+				{
+					foreach (T[] r in array.Tuples(count - 1, result, i + 1, resultIndex + 1))
+					{
+						yield return r;
+					}
+				}
+				else
+				{
+					yield return result;
+				}
+			}
+
+			yield break;
 		}
 	}
 }
