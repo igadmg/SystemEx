@@ -37,7 +37,20 @@ namespace SystemEx
 				a[index] = value;
 		}
 
-		public static IList<T> Swap<T>(this IList<T> l, int a, int b)
+        public static IList<T> Shuffle<T>(this IList<T> list)
+        {
+            Random rnd = new Random();
+            int n = list.Count;
+            while (n > 1)
+            {
+                int k = rnd.Next(n--);
+                list.Swap(n, k);
+            }
+
+            return list;
+        }
+
+        public static IList<T> Swap<T>(this IList<T> l, int a, int b)
 		{
 			T tmp = l[a];
 			l[a] = l[b];
