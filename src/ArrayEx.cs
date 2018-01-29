@@ -37,6 +37,16 @@ namespace SystemEx
 				a[index] = value;
 		}
 
+        public static T any<T>(this T[] a)
+        {
+            return a[new Random().Next(a.Length)];
+        }
+
+        public static T any<T>(this IList<T> a)
+        {
+            return a[new Random().Next(a.Count)];
+        }
+
         public static IList<T> Shuffle<T>(this IList<T> list)
         {
             Random rnd = new Random();

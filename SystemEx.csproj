@@ -116,6 +116,7 @@
     <Compile Include="src\StreamReaderEx.cs" />
     <Compile Include="src\StringEx.cs" />
     <Compile Include="src\StructStream.cs" />
+    <Compile Include="src\Template.cs" />
     <Compile Include="src\Tuple.cs" />
     <Compile Include="src\TupleEx.cs" />
     <Compile Include="src\TypeEx.cs" />
