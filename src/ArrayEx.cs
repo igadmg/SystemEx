@@ -39,21 +39,20 @@ namespace SystemEx
 
         public static T any<T>(this T[] a)
         {
-            return a[new Random().Next(a.Length)];
+            return a[RandomEx.instance.Next(a.Length)];
         }
 
         public static T any<T>(this IList<T> a)
         {
-            return a[new Random().Next(a.Count)];
+            return a[RandomEx.instance.Next(a.Count)];
         }
 
         public static IList<T> Shuffle<T>(this IList<T> list)
         {
-            Random rnd = new Random();
             int n = list.Count;
             while (n > 1)
             {
-                int k = rnd.Next(n--);
+                int k = RandomEx.instance.Next(n--);
                 list.Swap(n, k);
             }
 

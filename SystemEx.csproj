@@ -105,6 +105,7 @@
     <Compile Include="src\DictionaryEx.cs" />
     <Compile Include="src\FuncContainer.cs" />
     <Compile Include="src\IProgram.cs" />
+    <Compile Include="src\RandomEx.cs" />
     <Compile Include="src\LoggerEx.cs" />
     <Compile Include="src\LambdaComparer.cs" />
     <Compile Include="src\ListEx.cs" />

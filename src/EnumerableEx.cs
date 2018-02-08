@@ -106,3 +106,47 @@ namespace SystemEx
 	}
 }
 
+#if NET35
+namespace System.Linq
+{
+    public static class EnumerableEx
+    {
+        public static IEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IEnumerable<TFirst> first, IEnumerable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+            if (resultSelector == null)
+                throw new ArgumentNullException(nameof(resultSelector));
+            return EnumerableEx.ZipIterator<TFirst, TSecond, TResult>(first, second, resultSelector);
+        }
+
+        private static IEnumerable<TResult> ZipIterator<TFirst, TSecond, TResult>(IEnumerable<TFirst> first, IEnumerable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector)
+        {
+            IEnumerator<TFirst> e1 = first.GetEnumerator();
+            try
+            {
+                IEnumerator<TSecond> e2 = second.GetEnumerator();
+                try
+                {
+                    while (e1.MoveNext() && e2.MoveNext())
+                        yield return resultSelector(e1.Current, e2.Current);
+                }
+                finally
+                {
+                    if (e2 != null)
+                        e2.Dispose();
+                }
+                e2 = (IEnumerator<TSecond>)null;
+            }
+            finally
+            {
+                if (e1 != null)
+                    e1.Dispose();
+            }
+            e1 = (IEnumerator<TFirst>)null;
+        }
+    }
+}
+#endif
