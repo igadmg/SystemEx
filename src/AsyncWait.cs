@@ -20,22 +20,32 @@ namespace SystemEx
 		{
 			get { throw new NotImplementedException(); }
 		}
-	}
+
+
+
+        public static IAsyncResult Skip() { return new WaitSkip(); }
+        public static IAsyncResult Forever() { return new WaitForever(); }
+        public static IAsyncResult True(Func<bool> cond) { return new WaitTrue(cond); }
+        public static IAsyncResult Any(IEnumerable<Func<bool>> cond) { return new WaitAny(cond); }
+        public static IAsyncResult Any(IEnumerable<IAsyncResult> cond) { return new WaitAnyAsync(cond); }
+        public static IAsyncResult Every(IEnumerable<Func<bool>> cond) { return new WaitEvery(cond); }
+        public static IAsyncResult Every(IEnumerable<IAsyncResult> cond) { return new WaitEveryAsync(cond); }
+    }
 
 	[Serializable]
-	public class WaitSkip : AsyncWait, IAsyncResult
+	internal class WaitSkip : AsyncWait, IAsyncResult
 	{
 		public bool IsCompleted { get { return true; } }
 	}
 
 	[Serializable]
-	public class WaitForever : AsyncWait, IAsyncResult
+    internal class WaitForever : AsyncWait, IAsyncResult
 	{
 		public bool IsCompleted { get { return false; } }
 	}
 
 	[Serializable]
-	public class WaitTrue : AsyncWait, IAsyncResult
+    internal class WaitTrue : AsyncWait, IAsyncResult
 	{
 		Func<bool> f;
 
@@ -44,7 +54,7 @@ namespace SystemEx
 	}
 
 	[Serializable]
-	public class WaitAny : AsyncWait, IAsyncResult
+    internal class WaitAny : AsyncWait, IAsyncResult
 	{
 		IEnumerable<Func<bool>> fs;
 
@@ -52,12 +62,30 @@ namespace SystemEx
 		public bool IsCompleted { get { foreach (var f in fs) if (f()) return true; return false; } }
 	}
 
-	[Serializable]
-	public class WaitEvery : AsyncWait, IAsyncResult
+    [Serializable]
+    internal class WaitAnyAsync : AsyncWait, IAsyncResult
+    {
+        IEnumerable<IAsyncResult> fs;
+
+        public WaitAnyAsync(IEnumerable<IAsyncResult> cond) { fs = cond; }
+        public bool IsCompleted { get { foreach (var f in fs) if (f.IsCompleted) return true; return false; } }
+    }
+
+    [Serializable]
+    internal class WaitEvery : AsyncWait, IAsyncResult
 	{
 		IEnumerable<Func<bool>> fs;
 
 		public WaitEvery(IEnumerable<Func<bool>> cond) { fs = cond; }
 		public bool IsCompleted { get { foreach (var f in fs) if (!f()) return false; return true; } }
 	}
+
+    [Serializable]
+    internal class WaitEveryAsync : AsyncWait, IAsyncResult
+    {
+        IEnumerable<IAsyncResult> fs;
+
+        public WaitEveryAsync(IEnumerable<IAsyncResult> cond) { fs = cond; }
+        public bool IsCompleted { get { foreach (var f in fs) if (!f.IsCompleted) return false; return true; } }
+    }
 }
