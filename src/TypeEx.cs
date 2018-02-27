@@ -73,6 +73,16 @@ namespace SystemEx
 			return new KeyValuePair<Type, Type>(null, null);
 		}
 
+		public static IEnumerable<Type> GetBaseTypes<StopType>(this Type type)
+		{
+			Type c = type;
+			while (c != null && c != typeof(StopType))
+			{
+				yield return c;
+				c = c.BaseType;
+			}
+		}
+
 		public static bool HasAttribute<A>(this MemberInfo mi) where A : Attribute
 		{
 			foreach (var attribute in mi.GetCustomAttributes(true)) {

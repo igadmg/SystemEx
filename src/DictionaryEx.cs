@@ -60,6 +60,18 @@ namespace SystemEx
 			return default(V);
 		}
 
+		public static V GetOrAdd<K, V>(this Dictionary<K, V> d, K key, Func<V> ctor)
+		{
+			V v;
+			if (!d.TryGetValue(key, out v))
+			{
+				v = ctor();
+				d.Add(key, v);
+			}
+
+			return v;
+		}
+
 		public static int GetId<K>(this Dictionary<K, int> d, K key)
 		{
 			int id;
