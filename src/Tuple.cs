@@ -98,7 +98,7 @@ namespace System
 			Item3 = item3;
 			Item4 = item4;
 		}
-		
+
 		public override int GetHashCode()
 		{
 			return Item1.GetHashCode() ^ Item2.GetHashCode() ^ Item3.GetHashCode() ^ Item4.GetHashCode();

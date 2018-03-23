@@ -157,7 +157,7 @@ namespace SystemEx
 	public static class MathOperationsFloat
 	{
 		private static float epsilon = 0.0001f;
-		
+
 		static public float lerp(float a, float b, float t)
 		{
 			return a + (b - a) * t;

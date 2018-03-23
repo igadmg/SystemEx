@@ -102,7 +102,7 @@ namespace SystemEx
 		{
 			Dictionary<Type, GetBytesDelegate> bytesByType = new Dictionary<Type, GetBytesDelegate>();
 			Dictionary<Type, GetTypeDelegate> typeByType = new Dictionary<Type, GetTypeDelegate>();
-		
+
 			foreach (var m in typeof(BitConverter).GetMethods(BindingFlags.Static | BindingFlags.Public)) {
 				var method = m;
 				if (m.Name == "GetBytes") {
@@ -150,7 +150,7 @@ namespace SystemEx
 				tbc = TypeDesciption.Parse(type);
 				typeDescriptions.Add(type, tbc);
 			}
-			
+
 			object o = tbc.FromBytes(value, startIndex);
 			startIndex += tbc.Length;
 			return o;

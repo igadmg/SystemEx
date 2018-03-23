@@ -24,7 +24,7 @@ namespace SystemEx
 		{
 			stream.Dispose();
 		}
-		
+
 
 		public T Read<T>() where T : struct
 		{

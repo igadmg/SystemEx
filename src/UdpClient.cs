@@ -3,7 +3,7 @@ using System.Net.Sockets;
 
 namespace SystemEx
 {
-	public static class UdpClientEx	
+	public static class UdpClientEx
 	{
 		public static void Send(this UdpClient socket, byte[] data)
 		{
