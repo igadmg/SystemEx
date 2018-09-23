@@ -1,6 +1,8 @@
 /.vs/
-obj/
-bin/
+/bin/
+obj
+obj.meta
+
 *.suo
 *.user
 .project
