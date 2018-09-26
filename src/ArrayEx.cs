@@ -97,6 +97,14 @@ namespace SystemEx
 			return array;
 		}
 
+		public static T[] Modify<T>(this T[] array, Func<T, T> fn)
+		{
+			for (int i = 0; i < array.Length; i++)
+				array[i] = fn(array[i]);
+
+			return array;
+		}
+
 		public static U[] Transform<T, U>(this T[] array, Func<T, U> fn)
 		{
 			U[] result = new U[array.Length];
