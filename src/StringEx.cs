@@ -71,5 +71,38 @@ namespace SystemEx
 
 			return hex.ToString();
 		}
+
+		public static bool IsAnyOf(this char ch, params char[] chars)
+		{
+			foreach (char c in chars)
+			{
+				if (ch == c)
+					return true;
+			}
+
+			return false;
+		}
+
+		public static object ToAnyType(this string str, params Type[] types)
+		{
+			foreach (var type in types)
+			{
+				try
+				{
+					return Convert.ChangeType(str, type);
+				}
+				catch { }
+			}
+
+			return str;
+		}
+
+		public static int SkipWhiteSpace(this string str, int index = 0)
+		{
+			while (index < str.Length && char.IsWhiteSpace(str[index]))
+				index++;
+
+			return index;
+		}
 	}
 }
