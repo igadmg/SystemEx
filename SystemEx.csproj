@@ -55,12 +55,6 @@
     <Prefer32Bit>false</Prefer32Bit>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>systemex.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Net 4.0|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>$(SolutionDir)bin\Debug.Net4_0\</OutputPath>
