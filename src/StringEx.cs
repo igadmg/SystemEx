@@ -164,13 +164,13 @@ namespace SystemEx
 	public class LineTokenizer
 	{
 		public int li = 0;
-		public int ei = 0;
+		public int ei = -1;
 
 		public string line;
 
 		public bool end()
 		{
-			return ei == -1 || li == line.Length;
+			return ei == -2 || li == line.Length;
 		}
 
 		public string token()
@@ -184,6 +184,8 @@ namespace SystemEx
 				return false;
 
 			ei = line.IndexOfAny(chars, li);
+			if (ei < 0)
+				ei--;
 
 			return !end();
 		}
@@ -202,7 +204,9 @@ namespace SystemEx
 			if (!skip())
 				return false;
 
-			ei = li = line.SkipWhiteSpace(li);
+			ei = line.SkipWhiteSpace(li);
+			if (ei < 0)
+				ei--;
 
 			return !end();
 		}
