@@ -115,11 +115,22 @@ namespace SystemEx
 			return index;
 		}
 
-		public static int IndexOfReverse(this string str, char ch, int startIndex)
+		public static int IndexOfReverse(this string str, int startIndex, char ch)
 		{
 			for (int i = startIndex; i >= 0; i--)
 			{
 				if (str[i] == ch)
+					return i;
+			}
+
+			return -1;
+		}
+
+		public static int IndexOfAnyReverse(this string str, int startIndex, params char[] ch)
+		{
+			for (int i = startIndex; i >= 0; i--)
+			{
+				if (str[i].IsAnyOf(ch))
 					return i;
 			}
 
