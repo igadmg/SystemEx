@@ -10,11 +10,12 @@ namespace SystemEx
 	{
 		public static Assembly ExecutingAssembly { get { return Assembly.GetExecutingAssembly(); } }
 
-
 		public static IEnumerable<Type> EnumNamespace(this Assembly assembly, string namespaceName)
 		{
-			foreach (var type in assembly.GetTypes()) {
-				if (type.FullName.StartsWith(namespaceName)) {
+			foreach (var type in assembly.GetTypes())
+			{
+				if (type.FullName.StartsWith(namespaceName))
+				{
 					yield return type;
 				}
 			}

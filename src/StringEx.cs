@@ -25,7 +25,7 @@ namespace SystemEx
 		/// <returns></returns>
 		public static string format(this string str, params object[] args)
 		{
-            return String.Format(str, args);
+			return String.Format(str, args);
 		}
 
 		public static char at(this string s, int i)
@@ -139,7 +139,8 @@ namespace SystemEx
 
 		public static LineTokenizer tokenize(this string str)
 		{
-			return new LineTokenizer {
+			return new LineTokenizer
+			{
 				line = str
 			};
 		}
@@ -156,7 +157,7 @@ namespace SystemEx
 
 		public static bool find_any(this string str, out LineTokenizer tokenizer, out char ch, params char[] chars)
 		{
-			tokenizer = str.tokenize();			
+			tokenizer = str.tokenize();
 			return tokenizer.find_any(out ch, chars);
 		}
 

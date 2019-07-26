@@ -6,9 +6,9 @@ using System.Text;
 
 namespace SystemEx
 {
-    public static class Log
-    {
-        public static ILogger logger = new ConsoleLogger();
+	public static class Log
+	{
+		public static ILogger logger = new ConsoleLogger();
 
 		public static void Init(ILogger logger)
 		{
@@ -29,7 +29,7 @@ namespace SystemEx
 		{
 			logger.Error(message, args);
 		}
-    }
+	}
 
 	public interface ILogger
 	{
@@ -39,11 +39,11 @@ namespace SystemEx
 	}
 
 	public class ConsoleLogger : ILogger
-    {
-        public void Info(string message, params object[] args)
-        {
+	{
+		public void Info(string message, params object[] args)
+		{
 			Console.WriteLine("Log: {0}", message.format(args));
-        }
+		}
 
 		public void Warning(string message, params object[] args)
 		{
@@ -54,7 +54,7 @@ namespace SystemEx
 		{
 			Console.WriteLine("Error: {0}", message.format(args));
 		}
-    }
+	}
 
 	public class StreamLogger : ILogger
 	{

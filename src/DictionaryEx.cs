@@ -9,7 +9,8 @@ namespace SystemEx
 		{
 			Tuple<K, V>[] r = new Tuple<K, V>[d.Count];
 			int i = 0;
-			foreach (var kvp in d) {
+			foreach (var kvp in d)
+			{
 				r[i++] = Tuple.Create(kvp.Key, kvp.Value);
 			}
 
@@ -20,7 +21,8 @@ namespace SystemEx
 		{
 			R[] r = new R[d.Count];
 			int i = 0;
-			foreach (var kvp in d) {
+			foreach (var kvp in d)
+			{
 				r[i++] = t(Tuple.Create(kvp.Key, kvp.Value));
 			}
 
@@ -35,7 +37,8 @@ namespace SystemEx
 
 		public static IDictionary<K, V> Insert<K, V>(this IDictionary<K, V> d, params Tuple<K, V>[] items)
 		{
-			foreach (var item in items) {
+			foreach (var item in items)
+			{
 				d.Add(item);
 			}
 
@@ -44,7 +47,8 @@ namespace SystemEx
 
 		public static IDictionary<K, V> Insert<K, V, I>(this IDictionary<K, V> d, Func<I, Tuple<K, V>> t, params I[] items)
 		{
-			foreach (var item in items) {
+			foreach (var item in items)
+			{
 				d.Add(t(item));
 			}
 
@@ -75,7 +79,8 @@ namespace SystemEx
 		public static int GetId<K>(this Dictionary<K, int> d, K key)
 		{
 			int id;
-			if (!d.TryGetValue(key, out id)) {
+			if (!d.TryGetValue(key, out id))
+			{
 				id = d.Count;
 				d.Add(key, id);
 			}

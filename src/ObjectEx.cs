@@ -10,7 +10,7 @@ namespace SystemEx
 	{
 		public static T GetPropertyValue<T>(this object o, string name)
 		{
-			return (T) o.GetType().GetProperty(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).GetValue(o, null);
+			return (T)o.GetType().GetProperty(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).GetValue(o, null);
 		}
 	}
 }
