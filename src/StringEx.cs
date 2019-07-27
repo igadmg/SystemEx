@@ -250,6 +250,18 @@ namespace SystemEx
 			return this;
 		}
 
+		public LineCutter cut(int si)
+		{
+			si = si + di;
+			int l = result.Length - si;
+			di += 0 - l;
+
+			result = result
+					.Remove(si, l);
+
+			return this;
+		}
+
 		public LineCutter replace(int si, int ei, string str)
 		{
 			si = si + di;
