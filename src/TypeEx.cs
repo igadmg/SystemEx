@@ -91,7 +91,7 @@ namespace SystemEx
 		{
 			foreach (var attribute in mi.GetCustomAttributes(true))
 			{
-				if (attribute.GetType() == typeof(A))
+				if (attribute.GetType() == typeof(A) || attribute.GetType().IsSubclassOf(typeof(A)))
 				{
 					return true;
 				}
@@ -104,7 +104,7 @@ namespace SystemEx
 		{
 			foreach (var attribute in mi.GetCustomAttributes(true))
 			{
-				if (attribute.GetType() == typeof(A))
+				if (attribute.GetType() == typeof(A) || attribute.GetType().IsSubclassOf(typeof(A)))
 				{
 					return (A)attribute;
 				}
@@ -117,7 +117,7 @@ namespace SystemEx
 		{
 			foreach (var attribute in mi.GetCustomAttributes(true))
 			{
-				if (attribute.GetType() == typeof(A))
+				if (attribute.GetType() == typeof(A) || attribute.GetType().IsSubclassOf(typeof(A)))
 				{
 					yield return (A)attribute;
 				}
