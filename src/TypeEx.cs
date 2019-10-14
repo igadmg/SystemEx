@@ -260,6 +260,21 @@ namespace SystemEx
 			return type.HasInterface(typeof(I));
 		}
 
+		public static IEnumerable<dynamic> EnumFieldsWithAttribute<A>(this Type type, BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+			where A: Attribute
+		{
+			var fields = from field in type.GetFields(bindingAttr)
+			select new
+			{
+				Field = field,
+				Attribute = field.GetAttribute<A>()
+			};
+
+			return from field in fields
+				where field.Attribute != null
+				select field.ToExpando();
+		}
+
 		public static IEnumerable<dynamic> EnumEnumValues(this Type type)
 		{
 			foreach (var fieldInfo in type.GetFields())
