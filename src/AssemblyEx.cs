@@ -22,5 +22,22 @@ namespace SystemEx
 
 			yield break;
 		}
+
+		public static IEnumerable<dynamic> EnumTypesWithAttribute<A>(this Assembly assembly)
+			 where A : Attribute
+		{
+			var assemblyTypes =
+				from t in assembly.GetTypes()
+				select new
+				{
+					Type = t,
+					Attribute = t.GetAttribute<A>()
+				};
+
+			return
+				from t in assemblyTypes
+				where t.Attribute != null
+				select t.ToExpando();
+		}
 	}
 }

@@ -259,5 +259,20 @@ namespace SystemEx
 		{
 			return type.HasInterface(typeof(I));
 		}
+
+		public static IEnumerable<dynamic> EnumEnumValues(this Type type)
+		{
+			foreach (var fieldInfo in type.GetFields())
+			{
+				if (fieldInfo.FieldType.IsEnum)
+				{
+					yield return new
+					{
+						Name = fieldInfo.Name,
+						Value = fieldInfo.GetRawConstantValue()
+					}.ToExpando();
+				}
+			}
+		}
 	}
 }

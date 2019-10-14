@@ -49,7 +49,9 @@
     <Compile Include="src\BinaryStructStream.cs" />
     <Compile Include="src\BitConverterEx.cs" />
     <Compile Include="src\DictionaryEx.cs" />
+    <Compile Include="src\DynamicEx.cs" />
     <Compile Include="src\EnumerableEx.cs" />
+    <Compile Include="src\EnumEx.cs" />
     <Compile Include="src\FuncContainer.cs" />
     <Compile Include="src\IProgram.cs" />
     <Compile Include="src\LambdaComparer.cs" />
