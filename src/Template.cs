@@ -4,7 +4,7 @@ namespace SystemEx
 {
 	public static class Template
 	{
-		public static string TransformToText<TemplateType>(Dictionary<string, object> parameters) where TemplateType : new()
+		public static string TransformToText<TemplateType>(IDictionary<string, object> parameters) where TemplateType : new()
 		{
 			var TemplateInstance = new TemplateType();
 			typeof(TemplateType).GetProperty("Session").SetValue(TemplateInstance, parameters, null);
