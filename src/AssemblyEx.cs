@@ -23,12 +23,12 @@ namespace SystemEx
 			yield break;
 		}
 
-		public static IEnumerable<dynamic> EnumTypesWithAttribute<A>(this Assembly assembly)
+		public static IEnumerable<TypeAttributePair<A>> EnumTypesWithAttribute<A>(this Assembly assembly)
 			 where A : Attribute
 		{
 			var assemblyTypes =
 				from t in assembly.GetTypes()
-				select new
+				select new TypeAttributePair<A>
 				{
 					Type = t,
 					Attribute = t.GetAttribute<A>()
@@ -37,7 +37,7 @@ namespace SystemEx
 			return
 				from t in assemblyTypes
 				where t.Attribute != null
-				select t.ToExpando();
+				select t;
 		}
 	}
 }

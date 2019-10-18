@@ -6,6 +6,12 @@ using System.Reflection;
 
 namespace SystemEx
 {
+	public struct EnumNameValuePair<T>
+	{
+		public string Name;
+		public T Value;
+	}
+
 	public static class TypeEx
 	{
 		public static string SharpName(this Type type)
@@ -260,32 +266,51 @@ namespace SystemEx
 			return type.HasInterface(typeof(I));
 		}
 
-		public static IEnumerable<dynamic> EnumFieldsWithAttribute<A>(this Type type, BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+		public static IEnumerable<FieldAttributePair<A>> EnumFieldsWithAttribute<A>(this Type type, BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
 			where A: Attribute
 		{
-			var fields = from field in type.GetFields(bindingAttr)
-			select new
-			{
-				Field = field,
-				Attribute = field.GetAttribute<A>()
-			};
+			var fields = 
+				from field in type.GetFields(bindingAttr)
+				select new FieldAttributePair<A>
+				{
+					Field = field,
+					Attribute = field.GetAttribute<A>()
+				};
 
-			return from field in fields
+			return from
+				field in fields
 				where field.Attribute != null
-				select field.ToExpando();
+				select field;
 		}
 
-		public static IEnumerable<dynamic> EnumEnumValues(this Type type)
+		public static IEnumerable<MethodAttributePair<A>> EnumMethodsWithAttribute<A>(this Type type, BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+			where A : Attribute
+		{
+			var methods =
+				from method in type.GetMethods(bindingAttr)
+				select new MethodAttributePair<A>
+				{
+					Method = method,
+					Attribute = method.GetAttribute<A>()
+				};
+
+			return
+				from method in methods
+				where method.Attribute != null
+				select method;
+		}
+
+		public static IEnumerable<EnumNameValuePair<T>> EnumEnumValues<T>(this Type type)
 		{
 			foreach (var fieldInfo in type.GetFields())
 			{
 				if (fieldInfo.FieldType.IsEnum)
 				{
-					yield return new
+					yield return new EnumNameValuePair<T>
 					{
 						Name = fieldInfo.Name,
-						Value = fieldInfo.GetRawConstantValue()
-					}.ToExpando();
+						Value = (T)fieldInfo.GetRawConstantValue()
+					};
 				}
 			}
 		}
