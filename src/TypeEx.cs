@@ -12,6 +12,14 @@ namespace SystemEx
 		public T Value;
 	}
 
+	public struct EnumNameValuePairWithAttribute<T, A>
+		where A : Attribute
+	{
+		public string Name;
+		public T Value;
+		public A Attribute;
+	}
+
 	public static class TypeEx
 	{
 		public static string SharpName(this Type type)
@@ -93,7 +101,8 @@ namespace SystemEx
 			}
 		}
 
-		public static bool HasAttribute<A>(this MemberInfo mi) where A : Attribute
+		public static bool HasAttribute<A>(this MemberInfo mi)
+			where A : Attribute
 		{
 			foreach (var attribute in mi.GetCustomAttributes(true))
 			{
@@ -106,7 +115,8 @@ namespace SystemEx
 			return false;
 		}
 
-		public static A GetAttribute<A>(this MemberInfo mi) where A : Attribute
+		public static A GetAttribute<A>(this MemberInfo mi)
+			where A : Attribute
 		{
 			foreach (var attribute in mi.GetCustomAttributes(true))
 			{
@@ -119,7 +129,8 @@ namespace SystemEx
 			return null;
 		}
 
-		public static IEnumerable<A> GetAttributes<A>(this MemberInfo mi) where A : Attribute
+		public static IEnumerable<A> GetAttributes<A>(this MemberInfo mi)
+			where A : Attribute
 		{
 			foreach (var attribute in mi.GetCustomAttributes(true))
 			{
@@ -138,7 +149,8 @@ namespace SystemEx
 		/// <typeparam name="A"></typeparam>
 		/// <param name="t"></param>
 		/// <returns></returns>
-		public static IEnumerable<FieldInfo> GetFields<A>(this Type t) where A : Attribute
+		public static IEnumerable<FieldInfo> GetFields<A>(this Type t)
+			where A : Attribute
 		{
 			foreach (var field in t.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
 			{
@@ -154,7 +166,8 @@ namespace SystemEx
 		/// <typeparam name="A"></typeparam>
 		/// <param name="t"></param>
 		/// <returns></returns>
-		public static IEnumerable<PropertyInfo> GetProperties<A>(this Type t) where A : Attribute
+		public static IEnumerable<PropertyInfo> GetProperties<A>(this Type t)
+			where A : Attribute
 		{
 			foreach (var property in t.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
 			{
@@ -170,7 +183,8 @@ namespace SystemEx
 		/// <typeparam name="A"></typeparam>
 		/// <param name="t"></param>
 		/// <returns></returns>
-		public static IEnumerable<Tuple<FieldInfo, A>> GetFieldsAndAttributes<A>(this Type t) where A : Attribute
+		public static IEnumerable<Tuple<FieldInfo, A>> GetFieldsAndAttributes<A>(this Type t)
+			where A : Attribute
 		{
 			foreach (var field in t.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
 			{
@@ -197,7 +211,8 @@ namespace SystemEx
 		/// <typeparam name="A"></typeparam>
 		/// <param name="t"></param>
 		/// <returns></returns>
-		public static IEnumerable<MethodInfo> GetMethods<A>(this Type t) where A : Attribute
+		public static IEnumerable<MethodInfo> GetMethods<A>(this Type t)
+			where A : Attribute
 		{
 			foreach (var method in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
 			{
@@ -207,7 +222,8 @@ namespace SystemEx
 			yield break;
 		}
 
-		public static IEnumerable<Tuple<MethodInfo, A>> GetMethodsAndAttributes<A>(this Type t) where A : Attribute
+		public static IEnumerable<Tuple<MethodInfo, A>> GetMethodsAndAttributes<A>(this Type t)
+			where A : Attribute
 		{
 			foreach (var method in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
 			{
@@ -267,7 +283,7 @@ namespace SystemEx
 		}
 
 		public static IEnumerable<FieldAttributePair<A>> EnumFieldsWithAttribute<A>(this Type type, BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-			where A: Attribute
+			where A : Attribute
 		{
 			var fields = 
 				from field in type.GetFields(bindingAttr)
@@ -310,6 +326,24 @@ namespace SystemEx
 					{
 						Name = fieldInfo.Name,
 						Value = (T)fieldInfo.GetRawConstantValue()
+					};
+				}
+			}
+		}
+
+		public static IEnumerable<EnumNameValuePairWithAttribute<T, A>> EnumEnumValuesWithAttribute<T, A>(this Type type)
+			where A : Attribute
+		{
+			foreach (var fieldInfo in type.GetFields())
+			{
+				if (fieldInfo.FieldType.IsEnum)
+				{
+					A a = fieldInfo.GetAttribute<A>();
+					yield return new EnumNameValuePairWithAttribute<T, A>
+					{
+						Name = fieldInfo.Name,
+						Value = (T)fieldInfo.GetRawConstantValue(),
+						Attribute = a
 					};
 				}
 			}
