@@ -339,12 +339,15 @@ namespace SystemEx
 				if (fieldInfo.FieldType.IsEnum)
 				{
 					A a = fieldInfo.GetAttribute<A>();
-					yield return new EnumNameValuePairWithAttribute<T, A>
+					if (a != null)
 					{
-						Name = fieldInfo.Name,
-						Value = (T)fieldInfo.GetRawConstantValue(),
-						Attribute = a
-					};
+						yield return new EnumNameValuePairWithAttribute<T, A>
+						{
+							Name = fieldInfo.Name,
+							Value = (T)fieldInfo.GetRawConstantValue(),
+							Attribute = a
+						};
+					}
 				}
 			}
 		}
