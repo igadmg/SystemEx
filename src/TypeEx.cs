@@ -282,6 +282,20 @@ namespace SystemEx
 			return type.HasInterface(typeof(I));
 		}
 
+		public static string id(this Enum e)
+		{
+			return "{0}.{1}".format(e.GetType().FullName, e.ToString());
+		}
+
+		public static FieldInfo field(this string s)
+		{
+			string[] names = s.Split(',');
+
+			int lastDot = names[0].LastIndexOf('.');
+			return Type.GetType(names[0].Substring(0, lastDot) + ',' + names[1])
+				?.GetField(names[0].Substring(lastDot + 1));
+		}
+
 		public static IEnumerable<FieldAttributePair<A>> EnumFieldsWithAttribute<A>(this Type type, BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
 			where A : Attribute
 		{
