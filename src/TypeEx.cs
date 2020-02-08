@@ -332,38 +332,46 @@ namespace SystemEx
 
 		public static IEnumerable<EnumNameValuePair<T>> EnumEnumValues<T>(this Type type)
 		{
-			foreach (var fieldInfo in type.GetFields())
-			{
-				if (fieldInfo.FieldType.IsEnum)
+			return type.GetFields()
+				.Where(i => i.FieldType.IsEnum)
+				.Select(i => new EnumNameValuePair<T>
 				{
-					yield return new EnumNameValuePair<T>
-					{
-						Name = fieldInfo.Name,
-						Value = (T)fieldInfo.GetRawConstantValue()
-					};
-				}
-			}
+					Name = i.Name,
+					Value = (T)i.GetRawConstantValue()
+				});
 		}
 
 		public static IEnumerable<EnumNameValuePairWithAttribute<T, A>> EnumEnumValuesWithAttribute<T, A>(this Type type)
 			where A : Attribute
 		{
-			foreach (var fieldInfo in type.GetFields())
-			{
-				if (fieldInfo.FieldType.IsEnum)
+			return type.GetFields()
+				.Where(i => i.FieldType.IsEnum)
+				.Select(i => new EnumNameValuePairWithAttribute<T, A>
 				{
-					A a = fieldInfo.GetAttribute<A>();
-					if (a != null)
-					{
-						yield return new EnumNameValuePairWithAttribute<T, A>
-						{
-							Name = fieldInfo.Name,
-							Value = (T)fieldInfo.GetRawConstantValue(),
-							Attribute = a
-						};
-					}
-				}
-			}
+					Name = i.Name,
+					Value = (T)i.GetRawConstantValue(),
+					Attribute = i.GetAttribute<A>()
+				})
+				.Where(i => i.Attribute != null);
+		}
+
+		public static IEnumerable<EnumNameValuePair<T>> EnumEnumValuesWithoutAttribute<T, A>(this Type type)
+			where A : Attribute
+		{
+			return type.GetFields()
+				.Where(i => i.FieldType.IsEnum)
+				.Select(i => new EnumNameValuePairWithAttribute<T, A>
+				{
+					Name = i.Name,
+					Value = (T)i.GetRawConstantValue(),
+					Attribute = i.GetAttribute<A>()
+				})
+				.Where(i => i.Attribute == null)
+				.Select(i => new EnumNameValuePair<T>
+				{
+					Name = i.Name,
+					Value = i.Value
+				});
 		}
 	}
 }
