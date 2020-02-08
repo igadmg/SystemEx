@@ -12,32 +12,20 @@ namespace SystemEx
 
 		public static IEnumerable<Type> EnumNamespace(this Assembly assembly, string namespaceName)
 		{
-			foreach (var type in assembly.GetTypes())
-			{
-				if (type.FullName.StartsWith(namespaceName))
-				{
-					yield return type;
-				}
-			}
-
-			yield break;
+			return assembly.GetTypes()
+				.Where(t => t.FullName.StartsWith(namespaceName));
 		}
 
 		public static IEnumerable<TypeAttributePair<A>> EnumTypesWithAttribute<A>(this Assembly assembly)
 			 where A : Attribute
 		{
-			var assemblyTypes =
-				from t in assembly.GetTypes()
-				select new TypeAttributePair<A>
+			return assembly.GetTypes()
+				.Select(t => new TypeAttributePair<A>
 				{
 					Type = t,
 					Attribute = t.GetAttribute<A>()
-				};
-
-			return
-				from t in assemblyTypes
-				where t.Attribute != null
-				select t;
+				})
+				.Where(t => t.Attribute != null);
 		}
 	}
 }
