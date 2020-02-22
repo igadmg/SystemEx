@@ -6,6 +6,20 @@ using System.Reflection;
 
 namespace SystemEx
 {
+	public struct EnumNameValuePair<T>
+	{
+		public string Name;
+		public T Value;
+	}
+
+	public struct EnumNameValuePairWithAttribute<T, A>
+		where A : Attribute
+	{
+		public string Name;
+		public T Value;
+		public A Attribute;
+	}
+
 	public static class TypeEx
 	{
 		public static string SharpName(this Type type)
@@ -17,19 +31,23 @@ namespace SystemEx
 
 			string type_name = type.Name;
 			var ti = type_name.LastIndexOf('`');
-			if (ti < 0) {
+			if (ti < 0)
+			{
 				var dt = type.DeclaringType;
-				while (dt != null) {
+				while (dt != null)
+				{
 					var tn = dt.Namespace + "." + dt.Name;
 					ti = tn.LastIndexOf('`');
-					if (!(ti < 0)) {
+					if (!(ti < 0))
+					{
 						type_name = string.Format("{0}<{1}>", tn.Substring(0, ti), generic) + "." + type_name;
 					}
 
 					dt = dt.DeclaringType;
 				}
 			}
-			else {
+			else
+			{
 				type_name = string.Format("{0}<{1}>", type.Namespace + "." + type_name.Substring(0, ti), generic);
 			}
 
@@ -83,10 +101,13 @@ namespace SystemEx
 			}
 		}
 
-		public static bool HasAttribute<A>(this MemberInfo mi) where A : Attribute
+		public static bool HasAttribute<A>(this MemberInfo mi)
+			where A : Attribute
 		{
-			foreach (var attribute in mi.GetCustomAttributes(true)) {
-				if (attribute.GetType() == typeof(A)) {
+			foreach (var attribute in mi.GetCustomAttributes(true))
+			{
+				if (attribute.GetType() == typeof(A) || attribute.GetType().IsSubclassOf(typeof(A)))
+				{
 					return true;
 				}
 			}
@@ -94,10 +115,13 @@ namespace SystemEx
 			return false;
 		}
 
-		public static A GetAttribute<A>(this MemberInfo mi) where A : Attribute
+		public static A GetAttribute<A>(this MemberInfo mi)
+			where A : Attribute
 		{
-			foreach (var attribute in mi.GetCustomAttributes(true)) {
-				if (attribute.GetType() == typeof(A)) {
+			foreach (var attribute in mi.GetCustomAttributes(true))
+			{
+				if (attribute.GetType() == typeof(A) || attribute.GetType().IsSubclassOf(typeof(A)))
+				{
 					return (A)attribute;
 				}
 			}
@@ -105,10 +129,13 @@ namespace SystemEx
 			return null;
 		}
 
-		public static IEnumerable<A> GetAttributes<A>(this MemberInfo mi) where A : Attribute
+		public static IEnumerable<A> GetAttributes<A>(this MemberInfo mi)
+			where A : Attribute
 		{
-			foreach (var attribute in mi.GetCustomAttributes(true)) {
-				if (attribute.GetType() == typeof(A)) {
+			foreach (var attribute in mi.GetCustomAttributes(true))
+			{
+				if (attribute.GetType() == typeof(A) || attribute.GetType().IsSubclassOf(typeof(A)))
+				{
 					yield return (A)attribute;
 				}
 			}
@@ -122,9 +149,11 @@ namespace SystemEx
 		/// <typeparam name="A"></typeparam>
 		/// <param name="t"></param>
 		/// <returns></returns>
-		public static IEnumerable<FieldInfo> GetFields<A>(this Type t) where A : Attribute
+		public static IEnumerable<FieldInfo> GetFields<A>(this Type t)
+			where A : Attribute
 		{
-			foreach (var field in t.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)) {
+			foreach (var field in t.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+			{
 				if (field.HasAttribute<A>())
 					yield return field;
 			}
@@ -137,9 +166,11 @@ namespace SystemEx
 		/// <typeparam name="A"></typeparam>
 		/// <param name="t"></param>
 		/// <returns></returns>
-		public static IEnumerable<PropertyInfo> GetProperties<A>(this Type t) where A : Attribute
+		public static IEnumerable<PropertyInfo> GetProperties<A>(this Type t)
+			where A : Attribute
 		{
-			foreach (var property in t.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)) {
+			foreach (var property in t.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+			{
 				if (property.HasAttribute<A>())
 					yield return property;
 			}
@@ -152,9 +183,11 @@ namespace SystemEx
 		/// <typeparam name="A"></typeparam>
 		/// <param name="t"></param>
 		/// <returns></returns>
-		public static IEnumerable<Tuple<FieldInfo, A>> GetFieldsAndAttributes<A>(this Type t) where A : Attribute
+		public static IEnumerable<Tuple<FieldInfo, A>> GetFieldsAndAttributes<A>(this Type t)
+			where A : Attribute
 		{
-			foreach (var field in t.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)) {
+			foreach (var field in t.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+			{
 				A a = field.GetAttribute<A>();
 				if (a != null)
 					yield return new Tuple<FieldInfo, A>(field, a);
@@ -164,7 +197,8 @@ namespace SystemEx
 
 		public static IEnumerable<MethodInfo> GetMethods(this Type t, string name)
 		{
-			foreach (var method in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)) {
+			foreach (var method in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+			{
 				if (method.Name == name)
 					yield return method;
 			}
@@ -177,18 +211,22 @@ namespace SystemEx
 		/// <typeparam name="A"></typeparam>
 		/// <param name="t"></param>
 		/// <returns></returns>
-		public static IEnumerable<MethodInfo> GetMethods<A>(this Type t) where A : Attribute
+		public static IEnumerable<MethodInfo> GetMethods<A>(this Type t)
+			where A : Attribute
 		{
-			foreach (var method in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)) {
+			foreach (var method in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+			{
 				if (method.HasAttribute<A>())
 					yield return method;
 			}
 			yield break;
 		}
 
-		public static IEnumerable<Tuple<MethodInfo, A>> GetMethodsAndAttributes<A>(this Type t) where A : Attribute
+		public static IEnumerable<Tuple<MethodInfo, A>> GetMethodsAndAttributes<A>(this Type t)
+			where A : Attribute
 		{
-			foreach (var method in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)) {
+			foreach (var method in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+			{
 				A a = method.GetAttribute<A>();
 				if (a != null)
 					yield return new Tuple<MethodInfo, A>(method, a);
@@ -207,12 +245,14 @@ namespace SystemEx
 		{
 			bool isGeneric = false;
 			int i = name.IndexOf('`');
-			if (i > 0) {
+			if (i > 0)
+			{
 				isGeneric = true;
 				name = name.Substring(0, i);
 			}
 
-			foreach (var method in t.GetMethods(name)) {
+			foreach (var method in t.GetMethods(name))
+			{
 				if (method.IsGenericMethod != isGeneric)
 					continue;
 
@@ -228,7 +268,8 @@ namespace SystemEx
 			if (!iface.IsGenericType)
 				return type.GetInterface(iface.Name) != null;
 
-			foreach (var itype in type.GetInterfaces()) {
+			foreach (var itype in type.GetInterfaces())
+			{
 				if (itype.IsGenericType && itype.GetGenericTypeDefinition() == iface)
 					return true;
 			}
@@ -239,6 +280,98 @@ namespace SystemEx
 		public static bool HasInterface<I>(this Type type)
 		{
 			return type.HasInterface(typeof(I));
+		}
+
+		public static string id(this Enum e)
+		{
+			return "{0}.{1}".format(e.GetType().FullName, e.ToString());
+		}
+
+		public static FieldInfo field(this string s)
+		{
+			string[] names = s.Split(',');
+
+			int lastDot = names[0].LastIndexOf('.');
+			return Type.GetType(names[0].Substring(0, lastDot) + ',' + names[1])
+				?.GetField(names[0].Substring(lastDot + 1));
+		}
+
+		public static IEnumerable<FieldAttributePair<A>> EnumFieldsWithAttribute<A>(this Type type, BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+			where A : Attribute
+		{
+			var fields = 
+				from field in type.GetFields(bindingAttr)
+				select new FieldAttributePair<A>
+				{
+					Field = field,
+					Attribute = field.GetAttribute<A>()
+				};
+
+			return from
+				field in fields
+				where field.Attribute != null
+				select field;
+		}
+
+		public static IEnumerable<MethodAttributePair<A>> EnumMethodsWithAttribute<A>(this Type type, BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+			where A : Attribute
+		{
+			var methods =
+				from method in type.GetMethods(bindingAttr)
+				select new MethodAttributePair<A>
+				{
+					Method = method,
+					Attribute = method.GetAttribute<A>()
+				};
+
+			return
+				from method in methods
+				where method.Attribute != null
+				select method;
+		}
+
+		public static IEnumerable<EnumNameValuePair<T>> EnumEnumValues<T>(this Type type)
+		{
+			return type.GetFields()
+				.Where(i => i.FieldType.IsEnum)
+				.Select(i => new EnumNameValuePair<T>
+				{
+					Name = i.Name,
+					Value = (T)i.GetRawConstantValue()
+				});
+		}
+
+		public static IEnumerable<EnumNameValuePairWithAttribute<T, A>> EnumEnumValuesWithAttribute<T, A>(this Type type)
+			where A : Attribute
+		{
+			return type.GetFields()
+				.Where(i => i.FieldType.IsEnum)
+				.Select(i => new EnumNameValuePairWithAttribute<T, A>
+				{
+					Name = i.Name,
+					Value = (T)i.GetRawConstantValue(),
+					Attribute = i.GetAttribute<A>()
+				})
+				.Where(i => i.Attribute != null);
+		}
+
+		public static IEnumerable<EnumNameValuePair<T>> EnumEnumValuesWithoutAttribute<T, A>(this Type type)
+			where A : Attribute
+		{
+			return type.GetFields()
+				.Where(i => i.FieldType.IsEnum)
+				.Select(i => new EnumNameValuePairWithAttribute<T, A>
+				{
+					Name = i.Name,
+					Value = (T)i.GetRawConstantValue(),
+					Attribute = i.GetAttribute<A>()
+				})
+				.Where(i => i.Attribute == null)
+				.Select(i => new EnumNameValuePair<T>
+				{
+					Name = i.Name,
+					Value = i.Value
+				});
 		}
 	}
 }

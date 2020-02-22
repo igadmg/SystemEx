@@ -10,7 +10,8 @@ namespace SystemEx
 	{
 		public static IEnumerable<string> EnumerateStrings(this StreamReader sr)
 		{
-			while (true) {
+			while (true)
+			{
 				var line = sr.ReadLine();
 				if (line != null)
 					yield return line;

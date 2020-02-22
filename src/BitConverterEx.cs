@@ -34,7 +34,7 @@ namespace SystemEx
 				this.Length = length;
 			}
 
-			public int Length {	get; protected set; }
+			public int Length { get; protected set; }
 			public byte[] GetBytes(object o) { return getBytes(o); }
 			public object FromBytes(byte[] data, int startIndex) { return fromBytes(data, startIndex); }
 		}
@@ -50,19 +50,24 @@ namespace SystemEx
 
 				td.type = type;
 				td.Length = 0;
-				foreach (var field in type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)) {
-					if (field.FieldType.IsEnum) {
+				foreach (var field in type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
+				{
+					if (field.FieldType.IsEnum)
+					{
 						var enum_type = Enum.GetUnderlyingType(field.FieldType);
 						ITypeBitConverter tbc;
-						if (!typeDescriptions.TryGetValue(enum_type, out tbc)) {
+						if (!typeDescriptions.TryGetValue(enum_type, out tbc))
+						{
 							throw new Exception("Unknown enum underlying type '{0}'".format(enum_type.FullName));
 						}
 						td.fields.Add(Tuple.Create(field, tbc));
 						td.Length += tbc.Length;
 					}
-					else {
+					else
+					{
 						ITypeBitConverter tbc;
-						if (!typeDescriptions.TryGetValue(field.FieldType, out tbc)) {
+						if (!typeDescriptions.TryGetValue(field.FieldType, out tbc))
+						{
 							tbc = TypeDesciption.Parse(field.FieldType);
 							typeDescriptions.Add(field.FieldType, tbc);
 						}
@@ -77,8 +82,10 @@ namespace SystemEx
 			public int Length { get; protected set; }
 			public byte[] GetBytes(object o)
 			{
-				using (MemoryStream bytes = new MemoryStream(Length)) {
-					foreach (var field in fields) {
+				using (MemoryStream bytes = new MemoryStream(Length))
+				{
+					foreach (var field in fields)
+					{
 						bytes.Write(field.Item2.GetBytes(field.Item1.GetValue(o)));
 					}
 					return bytes.ToArray();
@@ -89,7 +96,8 @@ namespace SystemEx
 			{
 				var o = Activator.CreateInstance(type);
 
-				foreach (var field in fields) {
+				foreach (var field in fields)
+				{
 					field.Item1.SetValue(o, field.Item2.FromBytes(data, startIndex));
 					startIndex += field.Item2.Length;
 				}
@@ -103,17 +111,21 @@ namespace SystemEx
 			Dictionary<Type, GetBytesDelegate> bytesByType = new Dictionary<Type, GetBytesDelegate>();
 			Dictionary<Type, GetTypeDelegate> typeByType = new Dictionary<Type, GetTypeDelegate>();
 
-			foreach (var m in typeof(BitConverter).GetMethods(BindingFlags.Static | BindingFlags.Public)) {
+			foreach (var m in typeof(BitConverter).GetMethods(BindingFlags.Static | BindingFlags.Public))
+			{
 				var method = m;
-				if (m.Name == "GetBytes") {
+				if (m.Name == "GetBytes")
+				{
 					bytesByType.Add(m.GetParameters()[0].ParameterType, (o) => (byte[])method.Invoke(null, new object[] { o }));
 				}
-				else if (m.Name.StartsWith("To") && m.GetParameters().Length == 2 && !m.Name.StartsWith("ToString")) {
+				else if (m.Name.StartsWith("To") && m.GetParameters().Length == 2 && !m.Name.StartsWith("ToString"))
+				{
 					typeByType.Add(m.ReturnType, (data, si) => method.Invoke(null, new object[] { data, si }));
 				}
 			}
 
-			foreach (var key in bytesByType.Keys) {
+			foreach (var key in bytesByType.Keys)
+			{
 				typeDescriptions.Add(key, new SimpleTypeBitConverter(bytesByType[key], typeByType[key], bytesByType[key](Activator.CreateInstance(key)).Length));
 			}
 		}
@@ -121,11 +133,13 @@ namespace SystemEx
 		public static void RegisterType(Type type)
 		{
 			ITypeBitConverter tbc;
-			if (!typeDescriptions.TryGetValue(type, out tbc)) {
+			if (!typeDescriptions.TryGetValue(type, out tbc))
+			{
 				tbc = TypeDesciption.Parse(type);
 				typeDescriptions.Add(type, tbc);
 			}
-			else {
+			else
+			{
 				Log.Error("Type '{0}' is already registered in BitConverterEx.", type.FullName);
 			}
 		}
@@ -135,7 +149,8 @@ namespace SystemEx
 			Type type = o.GetType();
 
 			ITypeBitConverter tbc;
-			if (!typeDescriptions.TryGetValue(type, out tbc)) {
+			if (!typeDescriptions.TryGetValue(type, out tbc))
+			{
 				tbc = TypeDesciption.Parse(type);
 				typeDescriptions.Add(type, tbc);
 			}
@@ -146,7 +161,8 @@ namespace SystemEx
 		public static object FromBytes(Type type, byte[] value, ref int startIndex)
 		{
 			ITypeBitConverter tbc;
-			if (!typeDescriptions.TryGetValue(type, out tbc)) {
+			if (!typeDescriptions.TryGetValue(type, out tbc))
+			{
 				tbc = TypeDesciption.Parse(type);
 				typeDescriptions.Add(type, tbc);
 			}
@@ -160,13 +176,13 @@ namespace SystemEx
 			where T : new()
 		{
 			int si = 0;
-			return (T) FromBytes(typeof(T), value, ref si);
+			return (T)FromBytes(typeof(T), value, ref si);
 		}
 
 		public static T FromBytes<T>(this byte[] value, ref int startIndex)
 			where T : new()
 		{
-			return (T) FromBytes(typeof(T), value, ref startIndex);
+			return (T)FromBytes(typeof(T), value, ref startIndex);
 		}
 	}
 }

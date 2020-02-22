@@ -7,7 +7,7 @@ namespace SystemEx
 	{
 		public static int SizeOf<T>() { return Marshal.SizeOf(typeof(T)); }
 
-		public static T PtrToStructure<T>(IntPtr data) { return (T) Marshal.PtrToStructure(data, typeof(T)); }
+		public static T PtrToStructure<T>(IntPtr data) { return (T)Marshal.PtrToStructure(data, typeof(T)); }
 
 
 		public static T BytesToStructure<T>(byte[] data)
@@ -19,8 +19,8 @@ namespace SystemEx
 		}
 
 		public static byte[] StructureToBytes<T>(T o)
-        {
-            byte[] data = new byte[MarshalEx.SizeOf<T>()];
+		{
+			byte[] data = new byte[MarshalEx.SizeOf<T>()];
 			GCHandle pdata = GCHandle.Alloc(data, GCHandleType.Pinned);
 			Marshal.StructureToPtr(o, pdata.AddrOfPinnedObject(), false);
 			pdata.Free();
