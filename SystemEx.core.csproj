@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>SystemEx</AssemblyName>
+    <RootNamespace>SystemEx</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="Properties\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="*.meta" />
+    <None Remove="*\*.meta" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="src\Action.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Action.cs</LastGenOutput>
+    </None>
+    <None Update="src\Func.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Func.cs</LastGenOutput>
+    </None>
+    <None Update="src\_.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>_.cs</LastGenOutput>
+    </None>
+    <Compile Update="src\Action.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Action.tt</DependentUpon>
+    </Compile>
+    <Compile Update="src\Func.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Func.tt</DependentUpon>
+    </Compile>
+    <Compile Update="src\_.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>_.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+</Project>
