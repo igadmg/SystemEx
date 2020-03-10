@@ -50,6 +50,15 @@ namespace SystemEx
 			return s.Substring(0, MathOperationsInt.max(s.Length - length, 0));
 		}
 
+		public static string CutEnd(this string s, char c)
+		{
+			var ui = s.LastIndexOf(c);
+			if (ui < 0)
+				return s;
+
+			return s.CutEnd(s.Length - ui);
+		}
+
 		public static string FirstCharacterToLower(this string str)
 		{
 			if (String.IsNullOrEmpty(str) || Char.IsLower(str, 0))
