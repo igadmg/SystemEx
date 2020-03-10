@@ -45,6 +45,11 @@ namespace SystemEx
 			return string.Join(separator, s.ToArray());
 		}
 
+		public static string CutEnd(this string s, int length)
+		{
+			return s.Substring(0, MathOperationsInt.max(s.Length - length, 0));
+		}
+
 		public static string FirstCharacterToLower(this string str)
 		{
 			if (String.IsNullOrEmpty(str) || Char.IsLower(str, 0))

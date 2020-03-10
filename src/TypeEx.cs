@@ -197,7 +197,7 @@ namespace SystemEx
 
 		public static IEnumerable<MethodInfo> GetMethods(this Type t, string name)
 		{
-			foreach (var method in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+			foreach (var method in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))
 			{
 				if (method.Name == name)
 					yield return method;
