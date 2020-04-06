@@ -7,26 +7,27 @@ namespace SystemEx
 	public class LazyFuncEnumerator<T> : IEnumerator<T>
 	{
 		Func<T> func;
-		Lazy<T> current = new Lazy<T>();
+		Lazy<T> current;
 		public T Current => current.Value;
 		object IEnumerator.Current => Current;
 
 		public LazyFuncEnumerator(Func<T> fn_)
 		{
 			func = fn_;
+			Reset();
 		}
 		public void Dispose() { }
 
 		public bool MoveNext()
 		{
-			Reset();
+			if (current.IsValueCreated)
+				Reset();
 			return true;
 		}
 
 		public void Reset()
 		{
-			if (current.IsValueCreated)
-				current = new Lazy<T>(() => func());
+			current = new Lazy<T>(() => func());
 		}
 	}
 }
