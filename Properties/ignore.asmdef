@@ -1,18 +1,29 @@
 {
     "name": "2ed05fa3-89f5-4395-80ce-ca0b46ae4c3b",
     "references": [],
-    "optionalUnityReferences": [
-        "TestAssemblies"
-    ],
     "includePlatforms": [],
     "excludePlatforms": [
         "Android",
         "Editor",
         "iOS",
         "LinuxStandalone64",
+        "Lumin",
         "macOSStandalone",
+        "PS4",
+        "Stadia",
+        "Switch",
+        "tvOS",
+        "WSA",
+        "WebGL",
         "WindowsStandalone32",
-        "WindowsStandalone64"
+        "WindowsStandalone64",
+        "XboxOne"
     ],
-    "allowUnsafeCode": false
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
