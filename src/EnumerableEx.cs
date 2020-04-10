@@ -9,6 +9,24 @@ namespace SystemEx
 {
 	public static class EnumerableEx
 	{
+		public static IEnumerable<T> Execute<T>(this IEnumerable<T> submodules, Action<T> fn)
+		{
+			using (var aes = new AggregateExceptionScope())
+			{
+				aes.Aggregate(
+					submodules.Select(v =>
+					{
+						try { fn(v); }
+						catch (Exception e) { return e; }
+						return null;
+					})
+					.Where(e => e != null));
+
+				return submodules;
+			}
+		}
+
+		[Obsolete("Use Linq .Cast instead.")]
 		public static IEnumerable<T> convert<T>(this IEnumerable e)
 		{
 			foreach (object o in e)

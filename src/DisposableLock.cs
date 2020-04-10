@@ -4,9 +4,14 @@ namespace SystemEx
 {
 	public static class DisposableLock
 	{
-		public static DisposableLock<T> Lock<T>(T v, Action<T> fn_)
+		public static DisposableLock<T> Lock<T>(T v, Action<T> fn)
 		{
-			return new DisposableLock<T>(v, fn_);
+			return new DisposableLock<T>(v, fn);
+		}
+
+		public static DisposableLock<T> Lock<T>(Func<T> v, Action<T> fn)
+		{
+			return new DisposableLock<T>(v(), fn);
 		}
 	}
 
