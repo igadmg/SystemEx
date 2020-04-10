@@ -2,8 +2,13 @@
 
 namespace SystemEx
 {
-	public static class DisposableLock
+	public class DisposableLock : IDisposable
 	{
+		public static DisposableLock Lock(Action fn)
+		{
+			return new DisposableLock(fn);
+		}
+
 		public static DisposableLock<T> Lock<T>(T v, Action<T> fn)
 		{
 			return new DisposableLock<T>(v, fn);
@@ -12,6 +17,18 @@ namespace SystemEx
 		public static DisposableLock<T> Lock<T>(Func<T> v, Action<T> fn)
 		{
 			return new DisposableLock<T>(v(), fn);
+		}
+
+		Action disposeFn;
+
+		public DisposableLock(Action disposeFn_)
+		{
+			disposeFn = disposeFn_;
+		}
+
+		public void Dispose()
+		{
+			disposeFn();
 		}
 	}
 
