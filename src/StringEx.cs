@@ -28,6 +28,27 @@ namespace SystemEx
 			return String.Format(str, args);
 		}
 
+		public static string format(this string str, Func<string, string> fn)
+		{
+			var t = str.tokenize();
+
+			StringBuilder sb = new StringBuilder(str.Length);
+			while (t.find_any('{'))
+			{
+				sb.Append(t.token());
+
+				t.step();
+				if (!t.find_any('}'))
+					throw new FormatException("Missing cloasing '}'");
+
+				sb.Append(fn(t.token()));
+				t.step();
+			}
+			sb.Append(t.token());
+
+			return sb.ToString();
+		}
+
 		public static char at(this string s, int i)
 		{
 			if (i < 0)
