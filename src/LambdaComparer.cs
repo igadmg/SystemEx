@@ -78,6 +78,8 @@ namespace SystemEx
 			return new LambdaComparer<T>(comparison);
 		}
 
+		//static 
+
 		static public IComparer Create2<T, U>(Comparison<T, U> comparison)
 		{
 			return new LambdaComparer<T, U>(comparison);
