@@ -9,12 +9,12 @@ namespace SystemEx
 {
 	public static class EnumerableEx
 	{
-		public static IEnumerable<T> Execute<T>(this IEnumerable<T> submodules, Action<T> fn)
+		public static IEnumerable<TSource> Execute<TSource>(this IEnumerable<TSource> source, Action<TSource> fn)
 		{
 			using (var aes = new AggregateExceptionScope())
 			{
 				aes.Aggregate(
-					submodules.Select(v =>
+					source.Select(v =>
 					{
 						try { fn(v); }
 						catch (Exception e) { return e; }
@@ -22,7 +22,20 @@ namespace SystemEx
 					})
 					.Where(e => e != null));
 
-				return submodules;
+				return source;
+			}
+		}
+
+		public static IEnumerable<TSource> TakeWhileAndLast<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+		{
+			int index = -1;
+			foreach (var v in source.TakeWhile((c, i) =>
+			{
+				if (!predicate(c)) index = i + 1;
+				return index != i;
+			}))
+			{
+				yield return v;
 			}
 		}
 
@@ -59,9 +72,11 @@ namespace SystemEx
 			V maxv = mo.min;
 			T r = default(T);
 
-			foreach (var i in e) {
+			foreach (var i in e)
+			{
 				V v = transformFn(i);
-				if (mo.gt(v, maxv)) {
+				if (mo.gt(v, maxv))
+				{
 					maxv = v;
 					r = i;
 				}
@@ -77,9 +92,11 @@ namespace SystemEx
 			V minv = mo.max;
 			T r = default(T);
 
-			foreach (var i in e) {
+			foreach (var i in e)
+			{
 				V cv = transformFn(i);
-				if (mo.lt(cv, minv)) {
+				if (mo.lt(cv, minv))
+				{
 					minv = cv;
 					r = i;
 				}

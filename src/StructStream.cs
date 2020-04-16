@@ -12,11 +12,9 @@ namespace SystemEx
 		IntPtr dataPtr;
 
 
-		public int Capacity
-		{
+		public int Capacity {
 			get { return data_.Length; }
-			set
-			{
+			set {
 				handle.Free();
 
 				Array.Resize(ref data_, value);

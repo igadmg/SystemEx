@@ -299,35 +299,25 @@ namespace SystemEx
 		public static IEnumerable<FieldAttributePair<A>> EnumFieldsWithAttribute<A>(this Type type, BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
 			where A : Attribute
 		{
-			var fields = 
-				from field in type.GetFields(bindingAttr)
-				select new FieldAttributePair<A>
+			return type.GetFields(bindingAttr)
+				.Select(field => new FieldAttributePair<A>
 				{
 					Field = field,
 					Attribute = field.GetAttribute<A>()
-				};
-
-			return from
-				field in fields
-				where field.Attribute != null
-				select field;
+				})
+				.Where(field => field.Attribute != null);
 		}
 
 		public static IEnumerable<MethodAttributePair<A>> EnumMethodsWithAttribute<A>(this Type type, BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
 			where A : Attribute
 		{
-			var methods =
-				from method in type.GetMethods(bindingAttr)
-				select new MethodAttributePair<A>
+			return type.GetMethods(bindingAttr)
+				.Select(method => new MethodAttributePair<A>
 				{
 					Method = method,
 					Attribute = method.GetAttribute<A>()
-				};
-
-			return
-				from method in methods
-				where method.Attribute != null
-				select method;
+				})
+				.Where(method => method.Attribute != null);
 		}
 
 		public static IEnumerable<EnumNameValuePair<T>> EnumEnumValues<T>(this Type type)
