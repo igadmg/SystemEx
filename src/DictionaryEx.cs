@@ -5,6 +5,18 @@ namespace SystemEx
 {
 	public static class DictionaryEx
 	{
+		public static string ToString(this Dictionary<string, string> d, char separator)
+		{
+			List<string> l = new List<string>(d.Count * 2);
+			foreach (var p in d)
+			{
+				l.Add(p.Key);
+				l.Add(p.Value);
+			}
+
+			return l.Join(separator);
+		}
+
 		public static Tuple<K, V>[] ToArray<K, V>(this IDictionary<K, V> d)
 		{
 			Tuple<K, V>[] r = new Tuple<K, V>[d.Count];

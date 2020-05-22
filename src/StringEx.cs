@@ -56,9 +56,19 @@ namespace SystemEx
 			return s[i];
 		}
 
+		public static string Join(this string[] s, char separator)
+		{
+			return string.Join(new string(separator, 1), s);
+		}
+
 		public static string Join(this string[] s, string separator)
 		{
 			return string.Join(separator, s);
+		}
+
+		public static string Join(this IEnumerable<string> s, char separator)
+		{
+			return string.Join(new string(separator, 1), s.ToArray());
 		}
 
 		public static string Join(this IEnumerable<string> s, string separator)
@@ -140,6 +150,21 @@ namespace SystemEx
 			}
 
 			return str;
+		}
+
+		public static Dictionary<string, string> ToDictionary(this string str, char separator)
+		{
+			var a = str.Split(separator);
+			Dictionary<string, string> r = new Dictionary<string, string>(a.Length / 2);
+
+			for (int i = 0; i < a.Length;)
+			{
+				var k = a[i++];
+				var v = a[i++];
+				r.Add(k, v);
+			}
+
+			return r;
 		}
 
 		public static int SkipWhiteSpace(this string str, int index = 0)
