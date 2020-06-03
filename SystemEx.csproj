@@ -6,7 +6,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>systemex.snk</AssemblyOriginatorKeyFile>
-    <Version>4.2.8</Version>
+    <Version>4.2.12</Version>
   </PropertyGroup>
 
   <ItemGroup>
