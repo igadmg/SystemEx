@@ -289,10 +289,10 @@ namespace SystemEx
 
 		public static FieldInfo field(this string s)
 		{
-			string[] names = s.Split(',');
+			string[] names = s.Split(new[] { ',' }, 2);
 
 			int lastDot = names[0].LastIndexOf('.');
-			return Type.GetType(names[0].Substring(0, lastDot) + ',' + names[1])
+			return Type.GetType(names[1])
 				?.GetField(names[0].Substring(lastDot + 1));
 		}
 
