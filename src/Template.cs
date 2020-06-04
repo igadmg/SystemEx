@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace SystemEx
 {
@@ -10,7 +12,19 @@ namespace SystemEx
 			typeof(TemplateType).GetProperty("Session").SetValue(TemplateInstance, parameters, null);
 			typeof(TemplateType).GetMethod("Initialize").Invoke(TemplateInstance, null);
 
-			return (string)typeof(TemplateType).GetMethod("TransformText").Invoke(TemplateInstance, null);
+			var Result = (string)typeof(TemplateType).GetMethod("TransformText").Invoke(TemplateInstance, null);
+			var ResultBuilder = new StringBuilder(Result.Length);
+			using (var ResultReader = new StringReader(Result))
+			{
+				var line = ResultReader.ReadLine();
+				while (line != null)
+				{
+					ResultBuilder.AppendLine(line);
+					line = ResultReader.ReadLine();
+				}
+			}
+
+			return ResultBuilder.ToString();
 		}
 	}
 }
