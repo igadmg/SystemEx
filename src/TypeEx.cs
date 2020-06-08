@@ -320,6 +320,23 @@ namespace SystemEx
 				.Where(method => method.Attribute != null);
 		}
 
+		public static IEnumerable<MethodAttributePair<A>> EnumMethodsWithMultipleAttribute<A>(this Type type, BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+			where A : Attribute
+		{
+			return type.GetMethods(bindingAttr)
+				.Select(method => new
+				{
+					Method = method,
+					Attributes = method.GetAttributes<A>().ToArray()
+				})
+				.Where(method => method.Attributes.Length > 0)
+				.SelectMany(method => method.Attributes.Select(a => new MethodAttributePair<A>
+				{
+					Method = method.Method,
+					Attribute = a
+				}));
+		}
+
 		public static IEnumerable<EnumNameValuePair<T>> EnumEnumValues<T>(this Type type)
 		{
 			return type.GetFields()
