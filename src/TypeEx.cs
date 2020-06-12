@@ -91,6 +91,11 @@ namespace SystemEx
 			return new KeyValuePair<Type, Type>(null, null);
 		}
 
+		public static bool IsSubclassOf<T>(this Type type)
+		{
+			return type == typeof(T) || type.IsSubclassOf(typeof(T));
+		}
+
 		public static IEnumerable<Type> GetBaseTypes<StopType>(this Type type)
 		{
 			Type c = type;
