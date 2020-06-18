@@ -47,12 +47,15 @@ namespace SystemEx
 			return a[RandomEx.instance.Next(a.Count)];
 		}
 
-		public static IList<T> Shuffle<T>(this IList<T> list)
+		//public static IList<T> Shuffle<T>(this IList<T> list)
+		//	=> list.Shuffle(RandomEx.instance);
+
+		public static IList<T> Shuffle<T>(this IList<T> list, IRandomGenerator<int> rgi)
 		{
 			int n = list.Count;
 			while (n > 1)
 			{
-				int k = RandomEx.instance.Next(n--);
+				int k = rgi.Next(max: n--);
 				list.Swap(n, k);
 			}
 
