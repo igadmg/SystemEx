@@ -305,8 +305,7 @@ namespace SystemEx
 			where A : Attribute
 		{
 			return type.GetFields(bindingAttr)
-				.Select(field => new FieldAttributePair<A>
-				{
+				.Select(field => new FieldAttributePair<A> {
 					Field = field,
 					Attribute = field.GetAttribute<A>()
 				})
@@ -317,8 +316,7 @@ namespace SystemEx
 			where A : Attribute
 		{
 			return type.GetMethods(bindingAttr)
-				.Select(method => new MethodAttributePair<A>
-				{
+				.Select(method => new MethodAttributePair<A> {
 					Method = method,
 					Attribute = method.GetAttribute<A>()
 				})
@@ -329,8 +327,7 @@ namespace SystemEx
 		{
 			return type.GetFields()
 				.Where(i => i.FieldType.IsEnum)
-				.Select(i => new EnumNameValuePair<T>
-				{
+				.Select(i => new EnumNameValuePair<T> {
 					Name = i.Name,
 					Value = (T)i.GetRawConstantValue()
 				});
@@ -341,8 +338,7 @@ namespace SystemEx
 		{
 			return type.GetFields()
 				.Where(i => i.FieldType.IsEnum)
-				.Select(i => new EnumNameValuePairWithAttribute<T, A>
-				{
+				.Select(i => new EnumNameValuePairWithAttribute<T, A> {
 					Name = i.Name,
 					Value = (T)i.GetRawConstantValue(),
 					Attribute = i.GetAttribute<A>()
@@ -355,15 +351,13 @@ namespace SystemEx
 		{
 			return type.GetFields()
 				.Where(i => i.FieldType.IsEnum)
-				.Select(i => new EnumNameValuePairWithAttribute<T, A>
-				{
+				.Select(i => new EnumNameValuePairWithAttribute<T, A> {
 					Name = i.Name,
 					Value = (T)i.GetRawConstantValue(),
 					Attribute = i.GetAttribute<A>()
 				})
 				.Where(i => i.Attribute == null)
-				.Select(i => new EnumNameValuePair<T>
-				{
+				.Select(i => new EnumNameValuePair<T> {
 					Name = i.Name,
 					Value = i.Value
 				});

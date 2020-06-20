@@ -19,8 +19,7 @@ namespace SystemEx
 			 where A : Attribute
 		{
 			return assembly.GetTypes()
-				.Select(t => new TypeAttributePair<A>
-				{
+				.Select(t => new TypeAttributePair<A> {
 					Type = t,
 					Attribute = t.GetAttribute<A>()
 				})

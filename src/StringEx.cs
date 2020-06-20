@@ -199,16 +199,14 @@ namespace SystemEx
 
 		public static LineTokenizer tokenize(this string str)
 		{
-			return new LineTokenizer
-			{
+			return new LineTokenizer {
 				line = str
 			};
 		}
 
 		public static LineTokenizer tokenize(this string str, int si)
 		{
-			return new LineTokenizer
-			{
+			return new LineTokenizer {
 				line = str,
 				li = si,
 				ei = si

@@ -14,8 +14,7 @@ namespace SystemEx
 			using (var aes = new AggregateExceptionScope())
 			{
 				aes.Aggregate(
-					source.Select(v =>
-					{
+					source.Select(v => {
 						try { fn(v); }
 						catch (Exception e) { return e; }
 						return null;
@@ -29,8 +28,7 @@ namespace SystemEx
 		public static IEnumerable<TSource> TakeWhileAndLast<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
 		{
 			int index = -1;
-			foreach (var v in source.TakeWhile((c, i) =>
-			{
+			foreach (var v in source.TakeWhile((c, i) => {
 				if (!predicate(c)) index = i + 1;
 				return index != i;
 			}))
