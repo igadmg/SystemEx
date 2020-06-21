@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace SystemEx
@@ -16,6 +17,11 @@ namespace SystemEx
 		{
 			block(self);
 			return self;
+		}
+
+		public static T Or<T>(this T self, Func<T> block)
+		{
+			return (self == null) ? block() : self;
 		}
 
 		public static T GetPropertyValue<T>(this object o, string name)
