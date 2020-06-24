@@ -19,9 +19,26 @@ namespace SystemEx
 			return self;
 		}
 
+		public static T IfValid<T>(this T self, Action<T> block)
+		{
+			if (self != null) block(self);
+			return self;
+		}
+
+		public static T UnlessValid<T>(this T self, Action<T> block)
+		{
+			if (self != null) block(self);
+			return self;
+		}
+
 		public static T Or<T>(this T self, Func<T> block)
 		{
 			return (self == null) ? block() : self;
+		}
+
+		public static R Elvis<T, R>(this T self, Func<T, R> block, R defualtValue = default)
+		{
+			return (self != null) ? block(self) : defualtValue;
 		}
 
 		public static T GetPropertyValue<T>(this object o, string name)
