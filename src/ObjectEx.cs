@@ -27,7 +27,7 @@ namespace SystemEx
 
 		public static T UnlessValid<T>(this T self, Action<T> block)
 		{
-			if (self != null) block(self);
+			if (self == null) block(self);
 			return self;
 		}
 

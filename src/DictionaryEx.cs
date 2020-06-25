@@ -99,5 +99,25 @@ namespace SystemEx
 
 			return id;
 		}
+
+		public static bool Remove<K, V>(this Dictionary<K, V> d, K key, Action<V> executeFn)
+		{
+			if (d.TryGetValue(key, out V v))
+			{
+				executeFn(v);
+				d.Remove(key);
+				return true;
+			}
+
+			return false;
+		}
+
+		public static void Clear<K, V>(this Dictionary<K, V> d, Action<K, V> executeFn)
+		{
+			foreach (var p in d)
+				executeFn(p.Key, p.Value);
+
+			d.Clear();
+		}
 	}
 }
