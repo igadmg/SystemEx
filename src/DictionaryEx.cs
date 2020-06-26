@@ -112,6 +112,16 @@ namespace SystemEx
 			return false;
 		}
 
+		public static bool Remove<K, V>(this Dictionary<K, V> d, object o, Action<V> executeFn)
+		{
+			if (o is K key)
+			{
+				return d.Remove(key, executeFn);
+			}
+
+			return false;
+		}
+
 		public static void Clear<K, V>(this Dictionary<K, V> d, Action<K, V> executeFn)
 		{
 			foreach (var p in d)

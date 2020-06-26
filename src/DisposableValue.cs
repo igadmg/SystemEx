@@ -9,6 +9,7 @@ namespace SystemEx
 		public DisposableValue() { }
 		public DisposableValue(IDisposable initialValue) { value = initialValue; }
 
+		public IDisposable _ { get => Value; set => Value = value; }
 		public IDisposable Value {
 			get => value;
 			set {
