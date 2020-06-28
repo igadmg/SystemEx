@@ -32,5 +32,12 @@ namespace SystemEx
 		{
 			return list.BinarySearch(index, count, item, new LambdaComparer<T>(comparer));
 		}
+
+		public static void Clear<T>(this IList<T> list, Action<T> disposeFn)
+		{
+			foreach (var item in list)
+				disposeFn(item);
+			list.Clear();
+		}
 	}
 }

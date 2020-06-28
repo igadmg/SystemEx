@@ -32,6 +32,7 @@ namespace SystemEx
 		public DisposableValue() { }
 		public DisposableValue(T initialValue) { value = initialValue; }
 
+		public T _ { get => Value; set => Value = value; }
 		public T Value {
 			get => value;
 			set {
