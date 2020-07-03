@@ -37,6 +37,9 @@ namespace SystemEx
 			}
 		}
 
+		public static TAccumulate Aggregate<TSource, TAccumulate>(this IEnumerable<TSource> source, Func<TAccumulate, TSource, TAccumulate> func)
+			=> source.Aggregate(default(TAccumulate), func);
+
 		[Obsolete("Use Linq .Cast instead.")]
 		public static IEnumerable<T> convert<T>(this IEnumerable e)
 		{
