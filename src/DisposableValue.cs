@@ -4,6 +4,7 @@ namespace SystemEx
 {
 	public class DisposableValue : IDisposable
 	{
+		bool isDisposed = false;
 		IDisposable value;
 
 		public DisposableValue() { }
@@ -15,18 +16,24 @@ namespace SystemEx
 			set {
 				this.value?.Dispose();
 				this.value = value;
+				isDisposed = false;
 			}
 		}
 
 		public void Dispose()
 		{
-			value?.Dispose();
+			if (isDisposed)
+			{
+				value?.Dispose();
+				isDisposed = true;
+			}
 		}
 	}
 
 	public class DisposableValue<T> : IDisposable
 		where T : IDisposable
 	{
+		bool isDisposed = false;
 		T value;
 
 		public DisposableValue() { }
@@ -38,12 +45,17 @@ namespace SystemEx
 			set {
 				this.value?.Dispose();
 				this.value = value;
+				isDisposed = false;
 			}
 		}
 
 		public void Dispose()
 		{
-			value?.Dispose();
+			if (isDisposed)
+			{
+				value?.Dispose();
+				isDisposed = true;
+			}
 		}
 	}
 }
