@@ -40,6 +40,11 @@ namespace SystemEx
 			return (self != null) ? block(self) : defualtValue;
 		}
 
+		public static string Elvis<T>(this T self, Func<T, string> block, string defualtValue = "")
+		{
+			return (self != null) ? block(self) : defualtValue;
+		}
+
 		public static T GetPropertyValue<T>(this object o, string name)
 		{
 			return (T)o.GetType().GetProperty(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).GetValue(o, null);
