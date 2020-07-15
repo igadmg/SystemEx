@@ -35,6 +35,11 @@ namespace SystemEx
 			return (self == null) ? block() : self;
 		}
 
+		public static void Elvis<T>(this T self, Action<T> block)
+		{
+			if (self != null) block(self);
+		}
+
 		public static R Elvis<T, R>(this T self, Func<T, R> block, R defualtValue = default)
 		{
 			return (self != null) ? block(self) : defualtValue;
