@@ -39,5 +39,16 @@ namespace SystemEx
 				disposeFn(item);
 			list.Clear();
 		}
+
+		public static bool Remove<T>(this List<T> l, T item, Action<T> executeFn)
+		{
+			if (l.Remove(item))
+			{
+				executeFn(item);
+				return true;
+			}
+
+			return false;
+		}
 	}
 }
