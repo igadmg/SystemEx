@@ -73,16 +73,24 @@ namespace SystemEx
 			if (key != null && d.TryGetValue(key, out v))
 				return v;
 
-			return default(V);
+			return default;
 		}
+
+		public static V GetOrAdd<K, V>(this Dictionary<K, V> d, K key, Func<V> ctor)
+			=> d.GetOrAdd(key, ctor != null ? k => ctor() : (Func<K, V>)null);
 
 		public static V GetOrAdd<K, V>(this Dictionary<K, V> d, K key, Func<K, V> ctor)
 		{
 			V v;
 			if (!d.TryGetValue(key, out v))
 			{
-				v = ctor(key);
-				d.Add(key, v);
+				if (ctor != null)
+				{
+					v = ctor(key);
+					d.Add(key, v);
+				}
+				else
+					v = default;
 			}
 
 			return v;
