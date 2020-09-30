@@ -10,6 +10,22 @@ namespace SystemEx
 	{
 		public static System.Random instance = new System.Random();
 
+		public static IEnumerable<T> NextN<T>(this IRandomGenerator<int> irg, T[] array, int count)
+		{
+			HashSet<int> visited = new HashSet<int>();
+
+			while (count > 0)
+			{
+				int i = irg.Next(max: array.Length);
+				if (visited.Contains(i))
+					continue;
+
+				visited.Add(i);
+				yield return array[i];
+				count--;
+			}
+		}
+
 		public static float Next(this IRandomGenerator<float> frg, Vector2 range)
 			=> frg.Next(range.x, range.y);
 

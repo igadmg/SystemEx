@@ -58,6 +58,9 @@ namespace SystemEx
 			yield break;
 		}
 
+		public static IEnumerable<T> Repeat<T>(this T v, int count)
+			=> Enumerable.Repeat(v, count);
+
 		public static IEnumerable<T> repeat<T>(this T v, int count)
 		{
 			for (int i = 0; i < count; i++)
