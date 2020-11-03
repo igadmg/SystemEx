@@ -91,10 +91,30 @@ namespace SystemEx
 			return new KeyValuePair<Type, Type>(null, null);
 		}
 
-		public static bool IsSubclassOf<T>(this Type type)
+		public static bool IsA<T>(this Type type)
+			=> type.IsA(typeof(T));
+
+		public static bool IsA(this Type type, Type t)
 		{
-			return type == typeof(T) || type.IsSubclassOf(typeof(T));
+			bool IsBothGenericType = type.IsGenericType && t.IsGenericType;
+			bool IsAnyGenericTypeDefinition = type.IsGenericTypeDefinition || t.IsGenericTypeDefinition;
+
+			if (IsBothGenericType && !IsAnyGenericTypeDefinition)
+			{
+				var gtype = type.GetGenericTypeDefinition();
+				var gt = t.GetGenericTypeDefinition();
+				return gtype.IsA(gt)
+					&& type.GenericTypeArguments
+						.Zip(t.GenericTypeArguments, (a, b) => new { a, b })
+						.All(p => p.a.IsA(p.b));
+			}
+			else
+				return type == t || type.IsSubclassOf(t);
 		}
+
+		[Obsolete("Use IsA")]
+		public static bool IsSubclassOf<T>(this Type type)
+			=> type.IsSubclassOf<T>();
 
 		public static IEnumerable<Type> GetBaseTypes<StopType>(this Type type)
 		{

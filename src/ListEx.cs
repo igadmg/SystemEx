@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SystemEx
 {
@@ -49,6 +50,30 @@ namespace SystemEx
 			}
 
 			return false;
+		}
+
+		public static void Add<T>(this ICollection<T> c, IEnumerable<T> e)
+		{
+			foreach (var i in e)
+				c.Add(i);
+		}
+
+		public static bool Remove<T>(this ICollection<T> c, IEnumerable<T> e)
+		{
+			bool result = false;
+
+			foreach (var i in e)
+				result |= c.Remove(i);
+
+			return result;
+		}
+
+		public static void Update<T>(this IList<T> l, IEnumerable<T> e)
+		{
+			var nl = e.ToList();
+
+			l.Remove(l.Except(nl).ToList());
+			l.Add(nl.Except(l).ToList());
 		}
 	}
 }
