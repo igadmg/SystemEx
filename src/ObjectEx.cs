@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace SystemEx
@@ -50,9 +52,46 @@ namespace SystemEx
 			return (self != null) ? block(self) : defualtValue;
 		}
 
+		public static T GetFieldValue<T>(this object o, string name)
+		{
+			return (T)o.GetType().GetField(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)?.GetValue(o);
+		}
+
 		public static T GetPropertyValue<T>(this object o, string name)
 		{
-			return (T)o.GetType().GetProperty(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).GetValue(o, null);
+			return (T)o.GetType().GetProperty(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)?.GetValue(o, null);
+		}
+
+		public static void DisposeFields(this object o)
+		{
+			foreach (var field in o.GetType().GetFieldsOf<IDisposable>())
+			{
+				(field.GetValue(o) as IDisposable).Elvis(d => d.Dispose());
+			}
+
+			foreach (var field in o.GetType().GetFields<DisposeAttribute>())
+			{
+				if (field.FieldType.IsA<IDictionary<object, IDisposable>>())
+				{
+					var dict = field.GetValue(o) as IEnumerable;
+					if (dict == null) continue;
+
+					foreach (object p in dict)
+					{
+						p.GetFieldValue<IDisposable>("Value")?.Dispose();
+					}
+				}
+				if (field.FieldType.IsA<IList<IDisposable>>())
+				{
+					var list = field.GetValue(o) as IEnumerable;
+					if (list == null) continue;
+
+					foreach (object p in list)
+					{
+						(p as IDisposable)?.Dispose();
+					}
+				}
+			}
 		}
 	}
 }

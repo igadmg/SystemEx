@@ -14,7 +14,7 @@ namespace SystemEx
 		public IDisposable Value {
 			get => value;
 			set {
-				this.value?.Dispose();
+				Dispose();
 				this.value = value;
 				isDisposed = false;
 			}
@@ -22,9 +22,10 @@ namespace SystemEx
 
 		public void Dispose()
 		{
-			if (isDisposed)
+			if (!isDisposed)
 			{
 				value?.Dispose();
+				value = null;
 				isDisposed = true;
 			}
 		}
@@ -43,7 +44,7 @@ namespace SystemEx
 		public T Value {
 			get => value;
 			set {
-				this.value?.Dispose();
+				Dispose();
 				this.value = value;
 				isDisposed = false;
 			}
@@ -51,9 +52,10 @@ namespace SystemEx
 
 		public void Dispose()
 		{
-			if (isDisposed)
+			if (!isDisposed)
 			{
 				value?.Dispose();
+				value = null;
 				isDisposed = true;
 			}
 		}

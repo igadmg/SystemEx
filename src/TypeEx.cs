@@ -99,17 +99,24 @@ namespace SystemEx
 			bool IsBothGenericType = type.IsGenericType && t.IsGenericType;
 			bool IsAnyGenericTypeDefinition = type.IsGenericTypeDefinition || t.IsGenericTypeDefinition;
 
-			if (IsBothGenericType && !IsAnyGenericTypeDefinition)
+			if (IsBothGenericType)
 			{
-				var gtype = type.GetGenericTypeDefinition();
-				var gt = t.GetGenericTypeDefinition();
-				return gtype.IsA(gt)
-					&& type.GenericTypeArguments
-						.Zip(t.GenericTypeArguments, (a, b) => new { a, b })
-						.All(p => p.a.IsA(p.b));
+				if (!IsAnyGenericTypeDefinition)
+				{
+					var gtype = type.GetGenericTypeDefinition();
+					var gt = t.GetGenericTypeDefinition();
+					return gtype.IsA(gt)
+						&& type.GenericTypeArguments
+							.Zip(t.GenericTypeArguments, (a, b) => new { a, b })
+							.All(p => p.a.IsA(p.b));
+				}
+				else
+				{
+					return type == t || type.IsSubclassOf(t) || type.GetInterfaces().Where(i => i.Name == t.Name).Any();
+				}
 			}
 			else
-				return type == t || type.IsSubclassOf(t);
+				return type == t || type.IsSubclassOf(t) || t.IsAssignableFrom(type);
 		}
 
 		[Obsolete("Use IsA")]
@@ -180,6 +187,19 @@ namespace SystemEx
 			foreach (var field in t.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
 			{
 				if (field.HasAttribute<A>())
+					yield return field;
+			}
+			yield break;
+		}
+
+		public static IEnumerable<FieldInfo> GetFieldsOf<TType>(this Type t)
+			=> t.GetFieldsOf(typeof(TType));
+
+		public static IEnumerable<FieldInfo> GetFieldsOf(this Type t, Type type)
+		{
+			foreach (var field in t.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+			{
+				if (field.FieldType.IsA(type))
 					yield return field;
 			}
 			yield break;

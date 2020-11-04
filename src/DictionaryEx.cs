@@ -120,7 +120,7 @@ namespace SystemEx
 			return false;
 		}
 
-		public static bool Remove<K, V>(this Dictionary<K, V> d, object o, Action<V> executeFn)
+		public static bool Remove<K, V>(this IDictionary<K, V> d, object o, Action<V> executeFn)
 		{
 			if (o is K key)
 			{
@@ -130,7 +130,7 @@ namespace SystemEx
 			return false;
 		}
 
-		public static void Clear<K, V>(this Dictionary<K, V> d, Action<K, V> executeFn)
+		public static void Clear<K, V>(this IDictionary<K, V> d, Action<K, V> executeFn)
 		{
 			foreach (var p in d)
 				executeFn(p.Key, p.Value);
