@@ -55,7 +55,7 @@ namespace SystemEx
 			if (!isDisposed)
 			{
 				value?.Dispose();
-				value = null;
+				value = default;
 				isDisposed = true;
 			}
 		}

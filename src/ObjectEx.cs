@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace SystemEx
@@ -64,11 +65,6 @@ namespace SystemEx
 
 		public static void DisposeFields(this object o)
 		{
-			foreach (var field in o.GetType().GetFieldsOf<IDisposable>())
-			{
-				(field.GetValue(o) as IDisposable).Elvis(d => d.Dispose());
-			}
-
 			foreach (var field in o.GetType().GetFields<DisposeAttribute>())
 			{
 				if (field.FieldType.IsA<IDictionary<object, IDisposable>>())
@@ -81,7 +77,7 @@ namespace SystemEx
 						p.GetFieldValue<IDisposable>("Value")?.Dispose();
 					}
 				}
-				if (field.FieldType.IsA<IList<IDisposable>>())
+				else if (field.FieldType.IsA<IList<IDisposable>>())
 				{
 					var list = field.GetValue(o) as IEnumerable;
 					if (list == null) continue;
@@ -90,6 +86,14 @@ namespace SystemEx
 					{
 						(p as IDisposable)?.Dispose();
 					}
+				}
+				else if (field.FieldType.IsA<IDisposable>())
+				{
+					(field.GetValue(o) as IDisposable).Elvis(d => d.Dispose());
+				}
+				else
+				{
+					UnityEngine.Debug.LogWarning($"Don't know how to dispose field: {field.FieldType.Name} {o.GetType().Name}.{field.Name}");
 				}
 			}
 		}
