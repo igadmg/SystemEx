@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace SystemEx
 {
@@ -22,6 +23,15 @@ namespace SystemEx
 
 	public static class TypeEx
 	{
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static string GetCurrentMethodName()
+		{
+			var st = new System.Diagnostics.StackTrace();
+			var sf = st.GetFrame(1);
+
+			return sf.GetMethod().Name;
+		}
+
 		public static string SharpName(this Type type)
 		{
 			if (!type.IsGenericType)
