@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace SystemEx
 {
 	public static class ArrayEx
 	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static T at<T>(this T[] a, int index)
 		{
 			if (index < 0)
@@ -14,6 +16,7 @@ namespace SystemEx
 			return a[index];
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static T at<T>(this IList<T> a, int index)
 		{
 			if (index < 0)
@@ -21,6 +24,19 @@ namespace SystemEx
 			return a[index];
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static T at<T>(this T[] a, uint index)
+		{
+			return a[index];
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static T at<T>(this IList<T> a, uint index)
+		{
+			return a[(int)index];
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void at<T>(this T[] a, int index, T value)
 		{
 			if (index < 0)
@@ -29,12 +45,25 @@ namespace SystemEx
 				a[index] = value;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void at<T>(this IList<T> a, int index, T value)
 		{
 			if (index < 0)
 				a[a.Count + index] = value;
 			else
 				a[index] = value;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void at<T>(this T[] a, uint index, T value)
+		{
+			a[index] = value;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void at<T>(this IList<T> a, uint index, T value)
+		{
+			a[(int)index] = value;
 		}
 
 		public static T any<T>(this T[] a)
@@ -122,6 +151,12 @@ namespace SystemEx
 				result[i] = fn(array[i]);
 
 			return result;
+		}
+
+		public static T[] Sort<T>(this T[] array)
+		{
+			Array.Sort(array);
+			return array;
 		}
 
 		public static T[] Sort<T>(this T[] array, Comparison<T> c)
