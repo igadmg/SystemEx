@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace SystemEx
 {
@@ -79,6 +77,8 @@ namespace SystemEx
 		{
 			return new LambdaComparer<T>(comparison);
 		}
+
+		//static 
 
 		static public IComparer Create2<T, U>(Comparison<T, U> comparison)
 		{

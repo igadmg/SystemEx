@@ -91,6 +91,38 @@ namespace SystemEx
 			return new KeyValuePair<Type, Type>(null, null);
 		}
 
+		public static bool IsA<T>(this Type type)
+			=> type.IsA(typeof(T));
+
+		public static bool IsA(this Type type, Type t)
+		{
+			bool IsBothGenericType = type.IsGenericType && t.IsGenericType;
+			bool IsAnyGenericTypeDefinition = type.IsGenericTypeDefinition || t.IsGenericTypeDefinition;
+
+			if (IsBothGenericType)
+			{
+				if (!IsAnyGenericTypeDefinition)
+				{
+					var gtype = type.GetGenericTypeDefinition();
+					var gt = t.GetGenericTypeDefinition();
+					return gtype.IsA(gt)
+						&& type.GenericTypeArguments
+							.Zip(t.GenericTypeArguments, (a, b) => new { a, b })
+							.All(p => p.a.IsA(p.b));
+				}
+				else
+				{
+					return type == t || type.IsSubclassOf(t) || type.GetInterfaces().Where(i => i.Name == t.Name).Any();
+				}
+			}
+			else
+				return type == t || type.IsSubclassOf(t) || t.IsAssignableFrom(type);
+		}
+
+		[Obsolete("Use IsA")]
+		public static bool IsSubclassOf<T>(this Type type)
+			=> type.IsSubclassOf<T>();
+
 		public static IEnumerable<Type> GetBaseTypes<StopType>(this Type type)
 		{
 			Type c = type;
@@ -155,6 +187,19 @@ namespace SystemEx
 			foreach (var field in t.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
 			{
 				if (field.HasAttribute<A>())
+					yield return field;
+			}
+			yield break;
+		}
+
+		public static IEnumerable<FieldInfo> GetFieldsOf<TType>(this Type t)
+			=> t.GetFieldsOf(typeof(TType));
+
+		public static IEnumerable<FieldInfo> GetFieldsOf(this Type t, Type type)
+		{
+			foreach (var field in t.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+			{
+				if (field.FieldType.IsA(type))
 					yield return field;
 			}
 			yield break;
@@ -289,53 +334,40 @@ namespace SystemEx
 
 		public static FieldInfo field(this string s)
 		{
-			string[] names = s.Split(',');
+			string[] names = s.Split(new[] { ',' }, 2);
 
 			int lastDot = names[0].LastIndexOf('.');
-			return Type.GetType(names[0].Substring(0, lastDot) + ',' + names[1])
+			return Type.GetType(names[1])
 				?.GetField(names[0].Substring(lastDot + 1));
 		}
 
 		public static IEnumerable<FieldAttributePair<A>> EnumFieldsWithAttribute<A>(this Type type, BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
 			where A : Attribute
 		{
-			var fields = 
-				from field in type.GetFields(bindingAttr)
-				select new FieldAttributePair<A>
-				{
+			return type.GetFields(bindingAttr)
+				.Select(field => new FieldAttributePair<A> {
 					Field = field,
 					Attribute = field.GetAttribute<A>()
-				};
-
-			return from
-				field in fields
-				where field.Attribute != null
-				select field;
+				})
+				.Where(field => field.Attribute != null);
 		}
 
 		public static IEnumerable<MethodAttributePair<A>> EnumMethodsWithAttribute<A>(this Type type, BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
 			where A : Attribute
 		{
-			var methods =
-				from method in type.GetMethods(bindingAttr)
-				select new MethodAttributePair<A>
-				{
+			return type.GetMethods(bindingAttr)
+				.Select(method => new MethodAttributePair<A> {
 					Method = method,
 					Attribute = method.GetAttribute<A>()
-				};
-
-			return
-				from method in methods
-				where method.Attribute != null
-				select method;
+				})
+				.Where(method => method.Attribute != null);
 		}
 
 		public static IEnumerable<EnumNameValuePair<T>> EnumEnumValues<T>(this Type type)
 		{
 			return type.GetFields()
 				.Where(i => i.FieldType.IsEnum)
-				.Select(i => new EnumNameValuePair<T>
-				{
+				.Select(i => new EnumNameValuePair<T> {
 					Name = i.Name,
 					Value = (T)i.GetRawConstantValue()
 				});
@@ -346,8 +378,7 @@ namespace SystemEx
 		{
 			return type.GetFields()
 				.Where(i => i.FieldType.IsEnum)
-				.Select(i => new EnumNameValuePairWithAttribute<T, A>
-				{
+				.Select(i => new EnumNameValuePairWithAttribute<T, A> {
 					Name = i.Name,
 					Value = (T)i.GetRawConstantValue(),
 					Attribute = i.GetAttribute<A>()
@@ -360,15 +391,13 @@ namespace SystemEx
 		{
 			return type.GetFields()
 				.Where(i => i.FieldType.IsEnum)
-				.Select(i => new EnumNameValuePairWithAttribute<T, A>
-				{
+				.Select(i => new EnumNameValuePairWithAttribute<T, A> {
 					Name = i.Name,
 					Value = (T)i.GetRawConstantValue(),
 					Attribute = i.GetAttribute<A>()
 				})
 				.Where(i => i.Attribute == null)
-				.Select(i => new EnumNameValuePair<T>
-				{
+				.Select(i => new EnumNameValuePair<T> {
 					Name = i.Name,
 					Value = i.Value
 				});

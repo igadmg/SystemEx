@@ -1,5 +1,3 @@
-using System;
-
 namespace System
 {
 #if NET35

@@ -30,7 +30,7 @@ namespace SystemEx
 
 		public void Dispose()
 		{
-			if (exceptions.IsValueCreated)
+			if (exceptions.IsValueCreated && exceptions.Value.Count != 0)
 				throw new AggregateException(exceptions.Value);
 		}
 	}

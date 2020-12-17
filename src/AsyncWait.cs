@@ -6,18 +6,15 @@ namespace SystemEx
 	[Serializable]
 	public abstract class AsyncWait
 	{
-		public object AsyncState
-		{
+		public object AsyncState {
 			get { throw new NotImplementedException(); }
 		}
 
-		public System.Threading.WaitHandle AsyncWaitHandle
-		{
+		public System.Threading.WaitHandle AsyncWaitHandle {
 			get { throw new NotImplementedException(); }
 		}
 
-		public bool CompletedSynchronously
-		{
+		public bool CompletedSynchronously {
 			get { throw new NotImplementedException(); }
 		}
 

@@ -5,6 +5,18 @@ namespace SystemEx
 {
 	public static class DictionaryEx
 	{
+		public static string ToString(this Dictionary<string, string> d, char separator)
+		{
+			List<string> l = new List<string>(d.Count * 2);
+			foreach (var p in d)
+			{
+				l.Add(p.Key);
+				l.Add(p.Value);
+			}
+
+			return l.Join(separator);
+		}
+
 		public static Tuple<K, V>[] ToArray<K, V>(this IDictionary<K, V> d)
 		{
 			Tuple<K, V>[] r = new Tuple<K, V>[d.Count];
@@ -58,19 +70,27 @@ namespace SystemEx
 		public static V Get<K, V>(this Dictionary<K, V> d, K key)
 		{
 			V v;
-			if (d.TryGetValue(key, out v))
+			if (key != null && d.TryGetValue(key, out v))
 				return v;
 
-			return default(V);
+			return default;
 		}
+
+		public static V GetOrAdd<K, V>(this Dictionary<K, V> d, K key, Func<V> ctor)
+			=> d.GetOrAdd(key, ctor != null ? k => ctor() : (Func<K, V>)null);
 
 		public static V GetOrAdd<K, V>(this Dictionary<K, V> d, K key, Func<K, V> ctor)
 		{
 			V v;
 			if (!d.TryGetValue(key, out v))
 			{
-				v = ctor(key);
-				d.Add(key, v);
+				if (ctor != null)
+				{
+					v = ctor(key);
+					d.Add(key, v);
+				}
+				else
+					v = default;
 			}
 
 			return v;
@@ -86,6 +106,36 @@ namespace SystemEx
 			}
 
 			return id;
+		}
+
+		public static bool Remove<K, V>(this Dictionary<K, V> d, K key, Action<V> executeFn)
+		{
+			if (d.TryGetValue(key, out V v))
+			{
+				executeFn(v);
+				d.Remove(key);
+				return true;
+			}
+
+			return false;
+		}
+
+		public static bool Remove<K, V>(this IDictionary<K, V> d, object o, Action<V> executeFn)
+		{
+			if (o is K key)
+			{
+				return d.Remove(key, executeFn);
+			}
+
+			return false;
+		}
+
+		public static void Clear<K, V>(this IDictionary<K, V> d, Action<K, V> executeFn)
+		{
+			foreach (var p in d)
+				executeFn(p.Key, p.Value);
+
+			d.Clear();
 		}
 	}
 }

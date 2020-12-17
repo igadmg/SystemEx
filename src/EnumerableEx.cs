@@ -14,8 +14,7 @@ namespace SystemEx
 			using (var aes = new AggregateExceptionScope())
 			{
 				aes.Aggregate(
-					source.Select(v =>
-					{
+					source.Select(v => {
 						try { fn(v); }
 						catch (Exception e) { return e; }
 						return null;
@@ -38,6 +37,9 @@ namespace SystemEx
 			}
 		}
 
+		public static TAccumulate Aggregate<TSource, TAccumulate>(this IEnumerable<TSource> source, Func<TAccumulate, TSource, TAccumulate> func)
+			=> source.Aggregate(default(TAccumulate), func);
+
 		[Obsolete("Use Linq .Cast instead.")]
 		public static IEnumerable<T> convert<T>(this IEnumerable e)
 		{
@@ -56,6 +58,9 @@ namespace SystemEx
 			yield break;
 		}
 
+		public static IEnumerable<T> Repeat<T>(this T v, int count)
+			=> Enumerable.Repeat(v, count);
+
 		public static IEnumerable<T> repeat<T>(this T v, int count)
 		{
 			for (int i = 0; i < count; i++)
@@ -71,9 +76,11 @@ namespace SystemEx
 			V maxv = mo.min;
 			T r = default(T);
 
-			foreach (var i in e) {
+			foreach (var i in e)
+			{
 				V v = transformFn(i);
-				if (mo.gt(v, maxv)) {
+				if (mo.gt(v, maxv))
+				{
 					maxv = v;
 					r = i;
 				}
@@ -89,9 +96,11 @@ namespace SystemEx
 			V minv = mo.max;
 			T r = default(T);
 
-			foreach (var i in e) {
+			foreach (var i in e)
+			{
 				V cv = transformFn(i);
-				if (mo.lt(cv, minv)) {
+				if (mo.lt(cv, minv))
+				{
 					minv = cv;
 					r = i;
 				}

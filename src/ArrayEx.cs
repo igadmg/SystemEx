@@ -37,29 +37,38 @@ namespace SystemEx
 				a[index] = value;
 		}
 
-        public static T any<T>(this T[] a)
-        {
-            return a[RandomEx.instance.Next(a.Length)];
-        }
+		public static T any<T>(this T[] a)
+		{
+			return a[RandomEx.instance.Next(a.Length)];
+		}
 
-        public static T any<T>(this IList<T> a)
-        {
-            return a[RandomEx.instance.Next(a.Count)];
-        }
+		public static T any<T>(this IList<T> a)
+		{
+			return a[RandomEx.instance.Next(a.Count)];
+		}
 
-        public static IList<T> Shuffle<T>(this IList<T> list)
-        {
-            int n = list.Count;
-            while (n > 1)
-            {
-                int k = RandomEx.instance.Next(n--);
-                list.Swap(n, k);
-            }
+		public static bool IsEmptyOrNull<T>(this T[] a)
+			=> (a?.Length ?? 0) == 0;
 
-            return list;
-        }
+		public static bool IsEmptyOrNull<T>(this IList<T> a)
+			=> (a?.Count ?? 0) == 0;
 
-        public static IList<T> Swap<T>(this IList<T> l, int a, int b)
+		//public static IList<T> Shuffle<T>(this IList<T> list)
+		//	=> list.Shuffle(RandomEx.instance);
+
+		public static IList<T> Shuffle<T>(this IList<T> list, IRandomGenerator<int> rgi)
+		{
+			int n = list.Count;
+			while (n > 1)
+			{
+				int k = rgi.Next(max: n--);
+				list.Swap(n, k);
+			}
+
+			return list;
+		}
+
+		public static IList<T> Swap<T>(this IList<T> l, int a, int b)
 		{
 			T tmp = l[a];
 			l[a] = l[b];
@@ -149,7 +158,8 @@ namespace SystemEx
 
 		public static T[] Skip<T>(this T[] array, int count)
 		{
-			if (count < array.Length) {
+			if (count < array.Length)
+			{
 				T[] result = new T[array.Length - count];
 				Array.Copy(array, count, result, 0, result.Length);
 				return result;
@@ -162,7 +172,8 @@ namespace SystemEx
 			string[] tokens = value.Split(new Char[] { ':' });
 			T[] result = new T[tokens.Length];
 
-			for (int i = 0; i < result.Length; i++) {
+			for (int i = 0; i < result.Length; i++)
+			{
 				result[i] = (T)Convert.ChangeType(tokens[i], typeof(T));
 			}
 
@@ -186,7 +197,8 @@ namespace SystemEx
 		public static int CalcHashCode<T>(this T[] array)
 		{
 			int result = 0;
-			for (int i = 0; i < array.Length; i++) {
+			for (int i = 0; i < array.Length; i++)
+			{
 				result = (result * 397) ^ array[i].GetHashCode();
 			}
 			return result;
