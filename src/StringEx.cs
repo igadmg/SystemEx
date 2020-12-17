@@ -56,9 +56,19 @@ namespace SystemEx
 			return s[i];
 		}
 
+		public static string Join(this string[] s, char separator)
+		{
+			return string.Join(new string(separator, 1), s);
+		}
+
 		public static string Join(this string[] s, string separator)
 		{
 			return string.Join(separator, s);
+		}
+
+		public static string Join(this IEnumerable<string> s, char separator)
+		{
+			return string.Join(new string(separator, 1), s.ToArray());
 		}
 
 		public static string Join(this IEnumerable<string> s, string separator)
@@ -142,6 +152,30 @@ namespace SystemEx
 			return str;
 		}
 
+		public static Dictionary<string, string> ToDictionary(this string str, char separator)
+		{
+			var a = str.Split(separator);
+			Dictionary<string, string> r = new Dictionary<string, string>(a.Length / 2);
+
+			for (int i = 0; i < a.Length;)
+			{
+				var k = a[i++];
+				var v = a[i++];
+				r.Add(k, v);
+			}
+
+			return r;
+		}
+
+		public static string[] ToPath(this string str)
+			=> str.Split('/', '\'');
+
+		public static string FromPath(this string[] path)
+			=> path.Join('/');
+
+		public static bool IsEmptyPath(this string[] path)
+			=> path.Length == 0 || path.All(s => s.null_ws_());
+
 		public static int SkipWhiteSpace(this string str, int index = 0)
 		{
 			while (index < str.Length && char.IsWhiteSpace(str[index]))
@@ -174,16 +208,14 @@ namespace SystemEx
 
 		public static LineTokenizer tokenize(this string str)
 		{
-			return new LineTokenizer
-			{
+			return new LineTokenizer {
 				line = str
 			};
 		}
 
 		public static LineTokenizer tokenize(this string str, int si)
 		{
-			return new LineTokenizer
-			{
+			return new LineTokenizer {
 				line = str,
 				li = si,
 				ei = si

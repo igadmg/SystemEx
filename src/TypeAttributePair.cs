@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace SystemEx
 {
-	public struct TypeAttributePair<A> where A: Attribute
+	public struct TypeAttributePair<A> where A : Attribute
 	{
 		public Type Type;
 		public A Attribute;

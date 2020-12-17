@@ -53,8 +53,7 @@ namespace SystemEx
 		public static IEnumerable<TSource> TakeWhileAndLast<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
 		{
 			int index = -1;
-			foreach (var v in source.TakeWhile((c, i) =>
-			{
+			foreach (var v in source.TakeWhile((c, i) => {
 				if (!predicate(c)) index = i + 1;
 				return index != i;
 			}))
@@ -62,6 +61,9 @@ namespace SystemEx
 				yield return v;
 			}
 		}
+
+		public static TAccumulate Aggregate<TSource, TAccumulate>(this IEnumerable<TSource> source, Func<TAccumulate, TSource, TAccumulate> func)
+			=> source.Aggregate(default(TAccumulate), func);
 
 		[Obsolete("Use Linq .Cast instead.")]
 		public static IEnumerable<T> convert<T>(this IEnumerable e)
@@ -80,6 +82,9 @@ namespace SystemEx
 
 			yield break;
 		}
+
+		public static IEnumerable<T> Repeat<T>(this T v, int count)
+			=> Enumerable.Repeat(v, count);
 
 		public static IEnumerable<T> repeat<T>(this T v, int count)
 		{
