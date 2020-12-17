@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace SystemEx
 {
@@ -22,6 +23,15 @@ namespace SystemEx
 
 	public static class TypeEx
 	{
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static string GetCurrentMethodName()
+		{
+			var st = new System.Diagnostics.StackTrace();
+			var sf = st.GetFrame(1);
+
+			return sf.GetMethod().Name;
+		}
+
 		public static string SharpName(this Type type)
 		{
 			if (!type.IsGenericType)
@@ -361,6 +371,23 @@ namespace SystemEx
 					Attribute = method.GetAttribute<A>()
 				})
 				.Where(method => method.Attribute != null);
+		}
+
+		public static IEnumerable<MethodAttributePair<A>> EnumMethodsWithMultipleAttribute<A>(this Type type, BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+			where A : Attribute
+		{
+			return type.GetMethods(bindingAttr)
+				.Select(method => new
+				{
+					Method = method,
+					Attributes = method.GetAttributes<A>().ToArray()
+				})
+				.Where(method => method.Attributes.Length > 0)
+				.SelectMany(method => method.Attributes.Select(a => new MethodAttributePair<A>
+				{
+					Method = method.Method,
+					Attribute = a
+				}));
 		}
 
 		public static IEnumerable<EnumNameValuePair<T>> EnumEnumValues<T>(this Type type)

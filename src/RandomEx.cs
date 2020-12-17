@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace SystemEx
 {
@@ -26,16 +24,15 @@ namespace SystemEx
 			}
 		}
 
-		public static float Next(this IRandomGenerator<float> frg, Vector2 range)
-			=> frg.Next(range.x, range.y);
+		#region float
 
-		public static Vector2 NextPointInRing(this IRandomGenerator<float> frg, Vector2 ring)
-		{
-			float r = frg.Next(ring);
-			float phi = frg.Next(0, 2 * Mathf.PI);
+		public static float Sign(this IRandomGenerator<float> frg)
+			=> frg.Next(-0.5f, 0.5f) < 0 ? -1.0f : 1.0f;
 
-			return new Vector2(r * Mathf.Cos(phi), r * Mathf.Sin(phi));
-		}
+		public static float Next01(this IRandomGenerator<float> frg)
+			=> frg.Next(0f, 1.0f + float.Epsilon);
+
+		#endregion float
 
 		public static (float frequency, T item)[] CalculateItemFrequencies<T>(this FrequencyOf<T>[] items)
 		{

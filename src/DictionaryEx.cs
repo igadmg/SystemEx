@@ -5,7 +5,7 @@ namespace SystemEx
 {
 	public static class DictionaryEx
 	{
-		public static string ToString(this Dictionary<string, string> d, char separator)
+		public static string ToString(this IDictionary<string, string> d, char separator)
 		{
 			List<string> l = new List<string>(d.Count * 2);
 			foreach (var p in d)
@@ -67,19 +67,19 @@ namespace SystemEx
 			return d;
 		}
 
-		public static V Get<K, V>(this Dictionary<K, V> d, K key)
+		public static V Get<K, V>(this Dictionary<K, V> d, K key, V dv = default)
 		{
 			V v;
 			if (key != null && d.TryGetValue(key, out v))
 				return v;
 
-			return default;
+			return dv;
 		}
 
-		public static V GetOrAdd<K, V>(this Dictionary<K, V> d, K key, Func<V> ctor)
+		public static V GetOrAdd<K, V>(this IDictionary<K, V> d, K key, Func<V> ctor)
 			=> d.GetOrAdd(key, ctor != null ? k => ctor() : (Func<K, V>)null);
 
-		public static V GetOrAdd<K, V>(this Dictionary<K, V> d, K key, Func<K, V> ctor)
+		public static V GetOrAdd<K, V>(this IDictionary<K, V> d, K key, Func<K, V> ctor)
 		{
 			V v;
 			if (!d.TryGetValue(key, out v))
@@ -96,7 +96,7 @@ namespace SystemEx
 			return v;
 		}
 
-		public static int GetId<K>(this Dictionary<K, int> d, K key)
+		public static int GetId<K>(this IDictionary<K, int> d, K key)
 		{
 			int id;
 			if (!d.TryGetValue(key, out id))
@@ -108,7 +108,7 @@ namespace SystemEx
 			return id;
 		}
 
-		public static bool Remove<K, V>(this Dictionary<K, V> d, K key, Action<V> executeFn)
+		public static bool Remove<K, V>(this IDictionary<K, V> d, K key, Action<V> executeFn)
 		{
 			if (d.TryGetValue(key, out V v))
 			{
