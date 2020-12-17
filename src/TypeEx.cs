@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace SystemEx
 {
@@ -22,6 +23,15 @@ namespace SystemEx
 
 	public static class TypeEx
 	{
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static string GetCurrentMethodName()
+		{
+			var st = new System.Diagnostics.StackTrace();
+			var sf = st.GetFrame(1);
+
+			return sf.GetMethod().Name;
+		}
+
 		public static string SharpName(this Type type)
 		{
 			if (!type.IsGenericType)
@@ -91,6 +101,38 @@ namespace SystemEx
 			return new KeyValuePair<Type, Type>(null, null);
 		}
 
+		public static bool IsA<T>(this Type type)
+			=> type.IsA(typeof(T));
+
+		public static bool IsA(this Type type, Type t)
+		{
+			bool IsBothGenericType = type.IsGenericType && t.IsGenericType;
+			bool IsAnyGenericTypeDefinition = type.IsGenericTypeDefinition || t.IsGenericTypeDefinition;
+
+			if (IsBothGenericType)
+			{
+				if (!IsAnyGenericTypeDefinition)
+				{
+					var gtype = type.GetGenericTypeDefinition();
+					var gt = t.GetGenericTypeDefinition();
+					return gtype.IsA(gt)
+						&& type.GenericTypeArguments
+							.Zip(t.GenericTypeArguments, (a, b) => new { a, b })
+							.All(p => p.a.IsA(p.b));
+				}
+				else
+				{
+					return type == t || type.IsSubclassOf(t) || type.GetInterfaces().Where(i => i.Name == t.Name).Any();
+				}
+			}
+			else
+				return type == t || type.IsSubclassOf(t) || t.IsAssignableFrom(type);
+		}
+
+		[Obsolete("Use IsA")]
+		public static bool IsSubclassOf<T>(this Type type)
+			=> type.IsSubclassOf<T>();
+
 		public static IEnumerable<Type> GetBaseTypes<StopType>(this Type type)
 		{
 			Type c = type;
@@ -155,6 +197,19 @@ namespace SystemEx
 			foreach (var field in t.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
 			{
 				if (field.HasAttribute<A>())
+					yield return field;
+			}
+			yield break;
+		}
+
+		public static IEnumerable<FieldInfo> GetFieldsOf<TType>(this Type t)
+			=> t.GetFieldsOf(typeof(TType));
+
+		public static IEnumerable<FieldInfo> GetFieldsOf(this Type t, Type type)
+		{
+			foreach (var field in t.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+			{
+				if (field.FieldType.IsA(type))
 					yield return field;
 			}
 			yield break;
@@ -300,8 +355,7 @@ namespace SystemEx
 			where A : Attribute
 		{
 			return type.GetFields(bindingAttr)
-				.Select(field => new FieldAttributePair<A>
-				{
+				.Select(field => new FieldAttributePair<A> {
 					Field = field,
 					Attribute = field.GetAttribute<A>()
 				})
@@ -312,8 +366,7 @@ namespace SystemEx
 			where A : Attribute
 		{
 			return type.GetMethods(bindingAttr)
-				.Select(method => new MethodAttributePair<A>
-				{
+				.Select(method => new MethodAttributePair<A> {
 					Method = method,
 					Attribute = method.GetAttribute<A>()
 				})
@@ -341,8 +394,7 @@ namespace SystemEx
 		{
 			return type.GetFields()
 				.Where(i => i.FieldType.IsEnum)
-				.Select(i => new EnumNameValuePair<T>
-				{
+				.Select(i => new EnumNameValuePair<T> {
 					Name = i.Name,
 					Value = (T)i.GetRawConstantValue()
 				});
@@ -353,8 +405,7 @@ namespace SystemEx
 		{
 			return type.GetFields()
 				.Where(i => i.FieldType.IsEnum)
-				.Select(i => new EnumNameValuePairWithAttribute<T, A>
-				{
+				.Select(i => new EnumNameValuePairWithAttribute<T, A> {
 					Name = i.Name,
 					Value = (T)i.GetRawConstantValue(),
 					Attribute = i.GetAttribute<A>()
@@ -367,15 +418,13 @@ namespace SystemEx
 		{
 			return type.GetFields()
 				.Where(i => i.FieldType.IsEnum)
-				.Select(i => new EnumNameValuePairWithAttribute<T, A>
-				{
+				.Select(i => new EnumNameValuePairWithAttribute<T, A> {
 					Name = i.Name,
 					Value = (T)i.GetRawConstantValue(),
 					Attribute = i.GetAttribute<A>()
 				})
 				.Where(i => i.Attribute == null)
-				.Select(i => new EnumNameValuePair<T>
-				{
+				.Select(i => new EnumNameValuePair<T> {
 					Name = i.Name,
 					Value = i.Value
 				});

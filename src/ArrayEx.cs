@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace SystemEx
 {
 	public static class ArrayEx
 	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static T at<T>(this T[] a, int index)
 		{
 			if (index < 0)
@@ -14,6 +16,7 @@ namespace SystemEx
 			return a[index];
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static T at<T>(this IList<T> a, int index)
 		{
 			if (index < 0)
@@ -21,6 +24,19 @@ namespace SystemEx
 			return a[index];
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static T at<T>(this T[] a, uint index)
+		{
+			return a[index];
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static T at<T>(this IList<T> a, uint index)
+		{
+			return a[(int)index];
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void at<T>(this T[] a, int index, T value)
 		{
 			if (index < 0)
@@ -29,12 +45,25 @@ namespace SystemEx
 				a[index] = value;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void at<T>(this IList<T> a, int index, T value)
 		{
 			if (index < 0)
 				a[a.Count + index] = value;
 			else
 				a[index] = value;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void at<T>(this T[] a, uint index, T value)
+		{
+			a[index] = value;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void at<T>(this IList<T> a, uint index, T value)
+		{
+			a[(int)index] = value;
 		}
 
 		public static T any<T>(this T[] a)
@@ -47,12 +76,21 @@ namespace SystemEx
 			return a[RandomEx.instance.Next(a.Count)];
 		}
 
-		public static IList<T> Shuffle<T>(this IList<T> list)
+		public static bool IsEmptyOrNull<T>(this T[] a)
+			=> (a?.Length ?? 0) == 0;
+
+		public static bool IsEmptyOrNull<T>(this IList<T> a)
+			=> (a?.Count ?? 0) == 0;
+
+		//public static IList<T> Shuffle<T>(this IList<T> list)
+		//	=> list.Shuffle(RandomEx.instance);
+
+		public static IList<T> Shuffle<T>(this IList<T> list, IRandomGenerator<int> rgi)
 		{
 			int n = list.Count;
 			while (n > 1)
 			{
-				int k = RandomEx.instance.Next(n--);
+				int k = rgi.Next(max: n--);
 				list.Swap(n, k);
 			}
 
@@ -113,6 +151,12 @@ namespace SystemEx
 				result[i] = fn(array[i]);
 
 			return result;
+		}
+
+		public static T[] Sort<T>(this T[] array)
+		{
+			Array.Sort(array);
+			return array;
 		}
 
 		public static T[] Sort<T>(this T[] array, Comparison<T> c)

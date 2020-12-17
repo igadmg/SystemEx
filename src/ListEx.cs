@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SystemEx
 {
@@ -31,6 +32,55 @@ namespace SystemEx
 		public static int BinarySearch<T>(this List<T> list, int index, int count, T item, Comparison<T> comparer)
 		{
 			return list.BinarySearch(index, count, item, new LambdaComparer<T>(comparer));
+		}
+
+		public static void Clear<T>(this IList<T> list, Action<T> disposeFn)
+		{
+			foreach (var item in list)
+				disposeFn(item);
+			list.Clear();
+		}
+
+		public static bool Remove<T>(this List<T> l, T item, Action<T> executeFn)
+		{
+			if (l.Remove(item))
+			{
+				executeFn(item);
+				return true;
+			}
+
+			return false;
+		}
+
+		public static void Add<T>(this ICollection<T> c, IEnumerable<T> e)
+		{
+			foreach (var i in e)
+				c.Add(i);
+		}
+
+		public static bool Remove<T>(this ICollection<T> c, IEnumerable<T> e)
+		{
+			bool result = false;
+
+			foreach (var i in e)
+				result |= c.Remove(i);
+
+			return result;
+		}
+
+		public static void Update<T>(this IList<T> l, IEnumerable<T> e)
+		{
+			var nl = e.ToList();
+
+			l.Remove(l.Except(nl).ToList());
+			l.Add(nl.Except(l).ToList());
+		}
+
+		public static List<T> Reversed<T>(this List<T> l)
+		{
+			var r = new List<T>(l);
+			r.Reverse();
+			return r;
 		}
 	}
 }

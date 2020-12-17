@@ -167,6 +167,15 @@ namespace SystemEx
 			return r;
 		}
 
+		public static string[] ToPath(this string str)
+			=> str.Split('/', '\'');
+
+		public static string FromPath(this string[] path)
+			=> path.Join('/');
+
+		public static bool IsEmptyPath(this string[] path)
+			=> path.Length == 0 || path.All(s => s.null_ws_());
+
 		public static int SkipWhiteSpace(this string str, int index = 0)
 		{
 			while (index < str.Length && char.IsWhiteSpace(str[index]))
@@ -199,16 +208,14 @@ namespace SystemEx
 
 		public static LineTokenizer tokenize(this string str)
 		{
-			return new LineTokenizer
-			{
+			return new LineTokenizer {
 				line = str
 			};
 		}
 
 		public static LineTokenizer tokenize(this string str, int si)
 		{
-			return new LineTokenizer
-			{
+			return new LineTokenizer {
 				line = str,
 				li = si,
 				ei = si
