@@ -9,21 +9,45 @@ namespace SystemEx
 {
 	public static class EnumerableEx
 	{
+		//public static IEnumerable<TResult> SelectValid<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> fn)
+		//{
+		//	using (var aes = new AggregateExceptionScope())
+		//	{
+		//		return source.SelectValid(fn, aes);
+		//	}
+		//}
+
+		public static IEnumerable<TResult> SelectValid<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> fn, AggregateExceptionScope aes = null)
+		{
+			return source.Select(v => {
+					try { return new { result = fn(v), error = false }; }
+					catch (Exception e) { aes?.Aggregate(e); }
+					return new { result = default(TResult), error = true };
+				})
+				.Where(r => !r.error)
+				.Select(r => r.result);
+		}
+
 		public static IEnumerable<TSource> Execute<TSource>(this IEnumerable<TSource> source, Action<TSource> fn)
 		{
 			using (var aes = new AggregateExceptionScope())
 			{
-				aes.Aggregate(
-					source.Select(v =>
-					{
-						try { fn(v); }
-						catch (Exception e) { return e; }
-						return null;
-					})
-					.Where(e => e != null));
-
-				return source;
+				return source.Execute(fn, aes);
 			}
+		}
+
+		public static IEnumerable<TSource> Execute<TSource>(this IEnumerable<TSource> source, Action<TSource> fn, AggregateExceptionScope aes)
+		{
+			aes.Aggregate(
+				source.Select(v =>
+				{
+					try { fn(v); }
+					catch (Exception e) { return e; }
+					return null;
+				})
+				.Where(e => e != null));
+
+			return source;
 		}
 
 		public static IEnumerable<TSource> TakeWhileAndLast<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
