@@ -75,5 +75,12 @@ namespace SystemEx
 			l.Remove(l.Except(nl).ToList());
 			l.Add(nl.Except(l).ToList());
 		}
+
+		public static List<T> Reversed<T>(this List<T> l)
+		{
+			var r = new List<T>(l);
+			r.Reverse();
+			return r;
+		}
 	}
 }
