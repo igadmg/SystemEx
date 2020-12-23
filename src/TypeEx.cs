@@ -351,6 +351,9 @@ namespace SystemEx
 				?.GetField(names[0].Substring(lastDot + 1));
 		}
 
+		public static FieldInfo field(this Enum e)
+			=> e.GetType().GetField(e.ToString());
+
 		public static IEnumerable<FieldAttributePair<A>> EnumFieldsWithAttribute<A>(this Type type, BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
 			where A : Attribute
 		{
