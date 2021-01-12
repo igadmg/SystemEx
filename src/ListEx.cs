@@ -13,6 +13,53 @@ namespace SystemEx
 			return t;
 		}
 
+		public static IEnumerable<T[]> ChunkBy<T>(this List<T> list, int chunkSize)
+		{
+			for (int i = 0; i < list.Count; i += chunkSize)
+			{
+				var buffer = new T[chunkSize];
+				list.CopyTo(i, buffer, 0, Math.Min(chunkSize, list.Count - i));
+				yield return buffer;
+			}
+		}
+
+		public static IEnumerable<R[]> ChunkBy<T, R>(this List<T> list, int chunkSize, Func<T, R> selector)
+		{
+			for (int i = 0; i < list.Count; i += chunkSize)
+			{
+				var buffer = new R[chunkSize];
+				int je = i + Math.Min(chunkSize, list.Count - i);
+				for (int j = i; j < je; j++)
+				{
+					buffer[j - i] = selector(list[j]);
+				}
+				yield return buffer;
+			}
+		}
+
+		public static IEnumerable<T[]> ChunkBy<T>(this List<T> list, T[] buffer)
+		{
+			for (int i = 0; i < list.Count; i += buffer.Length)
+			{
+				list.CopyTo(i, buffer, 0, Math.Min(buffer.Length, list.Count - i));
+				yield return buffer;
+			}
+		}
+
+		public static IEnumerable<R[]> ChunkBy<T, R>(this List<T> list, R[] buffer, Func<T, R> selector)
+		{
+			for (int i = 0; i < list.Count; i += buffer.Length)
+			{
+				int je = i + Math.Min(buffer.Length, list.Count - i);
+				for (int j = i; j < je; j++)
+				{
+					buffer[j - i] = selector(list[j]);
+				}
+				yield return buffer;
+			}
+		}
+
+
 		public static int Reserve<T>(this List<T> list, int size)
 		{
 			list.Capacity = Math.Max(list.Capacity, size);
