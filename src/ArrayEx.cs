@@ -85,6 +85,16 @@ namespace SystemEx
 		//public static IList<T> Shuffle<T>(this IList<T> list)
 		//	=> list.Shuffle(RandomEx.instance);
 
+		public static IEnumerable<T[]> ChunkBy<T>(this T[] a, int chunkSize)
+		{
+			for (int i = 0; i < a.Length; i += chunkSize)
+			{
+				var buffer = new T[chunkSize];
+				Array.Copy(a, i, buffer, 0, Math.Min(chunkSize, a.Length - i));
+				yield return buffer;
+			}
+		}
+
 		public static IList<T> Shuffle<T>(this IList<T> list, IRandomGenerator<int> rgi)
 		{
 			int n = list.Count;
