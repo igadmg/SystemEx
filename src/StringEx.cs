@@ -184,6 +184,17 @@ namespace SystemEx
 			return index;
 		}
 
+		public static int SkipWhiteSpaceReverse(this string str)
+			=> str.SkipWhiteSpaceReverse(str.Length);
+
+		public static int SkipWhiteSpaceReverse(this string str, int index)
+		{
+			while (index >= 0 && char.IsWhiteSpace(str[index]))
+				index--;
+
+			return index;
+		}
+
 		public static int IndexOfReverse(this string str, int startIndex, char ch)
 		{
 			for (int i = startIndex; i >= 0; i--)
@@ -247,20 +258,32 @@ namespace SystemEx
 
 		public string line;
 
+
+		public LineTokenizer copy()
+			=> new LineTokenizer { li = li, ei = ei, line = line };
+
+		public bool begin()
+		{
+			return ei == -1;
+		}
+
 		public bool end()
 		{
-			return ei == -1 || ei >= line.Length;
+			return ei >= line.Length;
 		}
 
 		public string token()
 		{
-			return end() ? line.Substring(li) : line.Substring(li, ei - li);
+			return end() ? line.Substring(li) : 
+				begin() ? line.Substring(0, li - 1) :
+				(ei > li ? line.Substring(li, ei - li) : line.Substring(ei, li - ei));
 		}
 
 		public bool find_any(params char[] chars)
 		{
 			li = ei;
 			ei = line.IndexOfAny(chars, li);
+			if (ei == -1) ei = line.Length;
 
 			return !end();
 		}
@@ -274,6 +297,23 @@ namespace SystemEx
 			return !end();
 		}
 
+		public bool find_any_reverse(params char[] chars)
+		{
+			li = ei;
+			ei = line.IndexOfAnyReverse(li, chars);
+
+			return !begin();
+		}
+
+		public bool find_any_reverse(out char ch, params char[] chars)
+		{
+			ch = char.MaxValue;
+			if (find_any_reverse(chars))
+				ch = line[ei];
+
+			return !begin();
+		}
+
 		public bool skip_whitespace()
 		{
 			li = ei;
@@ -283,6 +323,32 @@ namespace SystemEx
 		}
 
 		public bool skip_whitespace(out char ch)
+		{
+			ch = char.MaxValue;
+			if (skip_whitespace())
+				ch = line[ei];
+
+			return !end();
+		}
+
+		public bool skip_whitespace(out string token)
+		{
+			token = string.Empty;
+			if (skip_whitespace())
+				 token = this.token();
+
+			return !end();
+		}
+
+		public bool skip_whitespace_reverse()
+		{
+			li = ei;
+			ei = line.SkipWhiteSpaceReverse(li);
+
+			return !end();
+		}
+
+		public bool skip_whitespace_reverse(out char ch)
 		{
 			ch = char.MaxValue;
 			if (skip_whitespace())
