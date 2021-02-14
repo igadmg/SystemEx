@@ -97,6 +97,14 @@ namespace SystemEx
 						(p as IDisposable)?.Dispose();
 					}
 				}
+				else if (field.FieldType.IsA<Lazy<IDisposable>>())
+				{
+					dynamic lazy = field.GetValue(o);
+					if (lazy.IsValueCreated)
+					{
+						(lazy.Value as IDisposable)?.Dispose();
+					}
+				}
 				else if (field.FieldType.IsA<IDisposable>())
 				{
 					(field.GetValue(o) as IDisposable).Elvis(d => d.Dispose());
