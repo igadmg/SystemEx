@@ -76,6 +76,15 @@ namespace SystemEx
 			return dv;
 		}
 
+		public static V Get<K, V>(this Dictionary<K, V> d, K key, Func<V> fdv)
+		{
+			V v;
+			if (key != null && d.TryGetValue(key, out v))
+				return v;
+
+			return fdv();
+		}
+
 		public static V GetOrAdd<K, V>(this IDictionary<K, V> d, K key, Func<V> ctor)
 			=> d.GetOrAdd(key, ctor != null ? k => ctor() : (Func<K, V>)null);
 
