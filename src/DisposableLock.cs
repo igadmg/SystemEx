@@ -51,6 +51,7 @@ namespace SystemEx
 		}
 
 		public T Value => v;
+		public T _ => v;
 		public static implicit operator T(DisposableLock<T> dl) => dl.v;
 	}
 }

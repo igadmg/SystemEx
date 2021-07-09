@@ -73,6 +73,18 @@ namespace SystemEx
 			return (T)o.GetType().GetProperty(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)?.GetValue(o, null);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static int GetHashCode(params int[] hashcodes)
+		{
+			unchecked // Overflow is fine, just wrap
+			{
+				int hash = 17;
+				foreach (var hashcode in hashcodes)
+					hash = hash * 23 + hashcode;
+				return hash;
+			}
+		}
+
 		public static void DisposeFields(this object o)
 		{
 			foreach (var field in o.GetType().GetFields<DisposeAttribute>())

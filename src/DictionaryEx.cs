@@ -67,6 +67,16 @@ namespace SystemEx
 			return d;
 		}
 
+		public static int Accumulate<K>(this Dictionary<K, int> d, K key)
+		{
+			if (!d.TryGetValue(key, out int i))
+				d.Add(key, ++i);
+			else
+				d[key] = ++i;
+
+			return i;
+		}
+
 		public static V Get<K, V>(this Dictionary<K, V> d, K key, V dv = default)
 		{
 			V v;
