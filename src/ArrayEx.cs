@@ -124,10 +124,11 @@ namespace SystemEx
 			return l;
 		}
 
-		public static T[] Initialize<T>(this T[] array, T value)
+		public static T[] Fill<T>(this T[] array, T value)
 		{
-			for (int i = 0; i < array.Length; i++)
-				array[i] = value;
+			//for (int i = 0; i < array.Length; i++)
+			//	array[i] = value;
+			Array.Fill(array, value);
 			return array;
 		}
 
