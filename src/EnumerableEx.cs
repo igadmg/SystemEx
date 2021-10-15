@@ -28,6 +28,12 @@ namespace SystemEx
 				.Select(r => r.result);
 		}
 
+		public static void ExecuteFast<TSource>(this IEnumerable<TSource> source, Action<TSource> fn)
+		{
+			foreach (var i in source)
+				fn(i);
+	}
+
 		public static IEnumerable<TSource> Execute<TSource>(this IEnumerable<TSource> source, Action<TSource> fn)
 		{
 			using (var aes = new AggregateExceptionScope())

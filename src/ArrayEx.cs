@@ -85,6 +85,15 @@ namespace SystemEx
 		//public static IList<T> Shuffle<T>(this IList<T> list)
 		//	=> list.Shuffle(RandomEx.instance);
 
+		public delegate void SliceByFn<T>(Span<T> span);
+		public static void SliceBy<T>(this T[] a, int sliceSize, SliceByFn<T> action)
+		{
+			for (int i = 0; i < a.Length; i += sliceSize)
+			{
+				action(new Span<T>(a, i, sliceSize));
+			}
+		}
+
 		public static IEnumerable<T[]> ChunkBy<T>(this T[] a, int chunkSize)
 		{
 			for (int i = 0; i < a.Length; i += chunkSize)
@@ -115,10 +124,11 @@ namespace SystemEx
 			return l;
 		}
 
-		public static T[] Initialize<T>(this T[] array, T value)
+		public static T[] Fill<T>(this T[] array, T value)
 		{
 			for (int i = 0; i < array.Length; i++)
 				array[i] = value;
+			//Array.Fill(array, value);
 			return array;
 		}
 

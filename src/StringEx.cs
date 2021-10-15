@@ -28,6 +28,11 @@ namespace SystemEx
 			return String.Format(str, args);
 		}
 
+		public static string format(this string str, IFormatProvider format, params object[] args)
+		{
+			return String.Format(format, str, args);
+		}
+
 		public static string format(this string str, Func<string, string> fn)
 		{
 			var t = str.tokenize();
