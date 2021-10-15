@@ -126,9 +126,9 @@ namespace SystemEx
 
 		public static T[] Fill<T>(this T[] array, T value)
 		{
-			//for (int i = 0; i < array.Length; i++)
-			//	array[i] = value;
-			Array.Fill(array, value);
+			for (int i = 0; i < array.Length; i++)
+				array[i] = value;
+			//Array.Fill(array, value);
 			return array;
 		}
 

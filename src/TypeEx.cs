@@ -24,12 +24,21 @@ namespace SystemEx
 	public static class TypeEx
 	{
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static string GetCurrentMethodName()
+		public static MethodBase GetCurrentMethod()
 		{
 			var st = new System.Diagnostics.StackTrace();
 			var sf = st.GetFrame(1);
 
-			return sf.GetMethod().Name;
+			return sf.GetMethod();
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static MethodBase GetCallingMethod()
+		{
+			var st = new System.Diagnostics.StackTrace();
+			var sf = st.GetFrame(2);
+
+			return sf.GetMethod();
 		}
 
 		public static string SharpName(this Type type)

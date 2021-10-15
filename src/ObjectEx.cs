@@ -111,10 +111,10 @@ namespace SystemEx
 				}
 				else if (field.FieldType.IsA<Lazy<IDisposable>>())
 				{
-					dynamic lazy = field.GetValue(o);
-					if (lazy.IsValueCreated)
+					var lazy = field.GetValue(o);
+					if (lazy.GetPropertyValue<bool>("IsValueCreated"))
 					{
-						(lazy.Value as IDisposable)?.Dispose();
+						lazy.GetFieldValue<IDisposable>("Value")?.Dispose();
 					}
 				}
 				else if (field.FieldType.IsA<IDisposable>())
