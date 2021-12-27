@@ -3,7 +3,7 @@
   <Import Project="$(SolutionDir)\Common.props" Condition="Exists('$(SolutionDir)\Common.props')" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net461;net50</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>systemex.snk</AssemblyOriginatorKeyFile>
     <Version>4.2.15.3</Version>
@@ -15,6 +15,10 @@
     <None Remove="Properties\**" />
     <None Remove="*.meta" />
     <None Remove="**\*.meta" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
