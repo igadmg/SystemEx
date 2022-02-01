@@ -37,12 +37,14 @@ namespace SystemEx
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void at<T>(this T[] a, int index, T value)
+		public static T[] at<T>(this T[] a, int index, T value)
 		{
 			if (index < 0)
 				a[a.Length + index] = value;
 			else
 				a[index] = value;
+
+			return a;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -55,9 +57,10 @@ namespace SystemEx
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void at<T>(this T[] a, uint index, T value)
+		public static T[] at<T>(this T[] a, uint index, T value)
 		{
 			a[index] = value;
+			return a;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

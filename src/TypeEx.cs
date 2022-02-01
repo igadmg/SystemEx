@@ -135,7 +135,7 @@ namespace SystemEx
 				}
 			}
 			else
-				return type == t || type.IsSubclassOf(t) || t.IsAssignableFrom(type);
+				return type == t || type.BaseType == t || type.IsSubclassOf(t) || t.IsAssignableFrom(type);
 		}
 
 		[Obsolete("Use IsA")]
