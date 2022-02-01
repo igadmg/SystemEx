@@ -17,6 +17,12 @@ namespace SystemEx
 			return string.IsNullOrWhiteSpace(str);
 		}
 
+		public static bool IsNullOrEmpty(this string str)
+			=> string.IsNullOrEmpty(str);
+
+		public static bool IsNullOrWhiteSpace(this string str)
+			=> string.IsNullOrWhiteSpace(str);
+
 		/// <summary>
 		/// Foramat string as a member function of string.
 		/// </summary>

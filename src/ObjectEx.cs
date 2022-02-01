@@ -8,11 +8,31 @@ namespace SystemEx
 {
 	public static class ObjectEx
 	{
+#if UNITY
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsNull<T>(this T self)
+		{
+			return self == null || self.Equals(null);
+		}
+#else
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsNull<T>(this T self)
+		{
+			return self == null;
+		}
+#endif
+
 		// Kotlin: fun <T, R> T.let(block: (T) -> R): R
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static R Let<T, R>(this T self, Func<T, R> block)
 		{
 			return block(self);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void Let<T>(this T self, Action<T> block)
+		{
+			block(self);
 		}
 
 		// Kotlin: fun <T> T.also(block: (T) -> Unit): T
@@ -26,39 +46,47 @@ namespace SystemEx
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static T IfValid<T>(this T self, Action<T> block)
 		{
-			if (self != null) block(self);
+			if (!self.IsNull())
+				block(self);
 			return self;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static T UnlessValid<T>(this T self, Action<T> block)
 		{
-			if (self == null) block(self);
+			if (self.IsNull())
+				block(self);
 			return self;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static T Or<T>(this T self, Func<T> block)
 		{
-			return (self == null) ? block() : self;
+			return (self.IsNull()) ? block() : self;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void Elvis<T>(this T self, Action<T> block)
 		{
-			if (self != null) block(self);
+			if (!self.IsNull()) block(self);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static R Elvis<T, R>(this T self, Func<T, R> block, R defualtValue = default)
 		{
-			return (self != null) ? block(self) : defualtValue;
+			return (!self.IsNull()) ? block(self) : defualtValue;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static R Elvis<T, R>(this T self, Func<T, R> block, Func<R> defualtValue)
+		{
+			return (!self.IsNull()) ? block(self) : defualtValue();
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static string Elvis<T>(this T self, Func<T, string> block, string defualtValue = "")
 		{
-			return (self != null) ? block(self) : defualtValue;
+			return (!self.IsNull()) ? block(self) : defualtValue;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
