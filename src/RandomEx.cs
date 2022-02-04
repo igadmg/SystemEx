@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using static SystemEx.RandomEx;
 
 namespace SystemEx
 {
@@ -34,15 +35,21 @@ namespace SystemEx
 
 		#endregion float
 
-		public static (float frequency, T item)[] CalculateItemFrequencies<T>(this FrequencyOf<T>[] items)
+		public struct ItemAndFrequency<T>
+		{
+			public float frequency;
+			public T item;
+		}
+
+		public static ItemAndFrequency<T>[] CalculateItemFrequencies<T>(this FrequencyOf<T>[] items)
 		{
 			float total = 0;
 			return items
-				.Select(item => { total += item.frequency; return (total, item.item); })
+				.Select(item => { total += item.frequency; return new ItemAndFrequency<T> { frequency = total, item = item.item }; })
 				.ToArray();
 		}
 
-		public static T NextOf<T>(this IRandomGenerator<float> frg, (float frequency, T item)[] itemFrequencies)
+		public static T NextOf<T>(this IRandomGenerator<float> frg, ItemAndFrequency<T>[] itemFrequencies)
 		{
 			float s = frg.Next(itemFrequencies.Last().frequency);
 			return itemFrequencies.Where(f => s <= f.frequency).First().item;

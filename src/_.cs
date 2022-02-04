@@ -3,7 +3,7 @@
 
 namespace SystemEx
 {
-	public class _
+	public static class Containers
 	{
 		public static ActionContainer a<T1>(Action<T1> lambda) { return new ActionContainer((Delegate)lambda, typeof(T1)); }
 		public static ActionContainer a<T1, T2>(Action<T1, T2> lambda) { return new ActionContainer((Delegate)lambda, typeof(T1), typeof(T2)); }

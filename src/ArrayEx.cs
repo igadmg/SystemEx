@@ -88,8 +88,6 @@ namespace SystemEx
 		//public static IList<T> Shuffle<T>(this IList<T> list)
 		//	=> list.Shuffle(RandomEx.instance);
 
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_1_OR_GREATER
-
 		public delegate void SliceByFn<T>(Span<T> span);
 		public static void SliceBy<T>(this T[] a, int sliceSize, SliceByFn<T> action)
 		{
@@ -98,8 +96,6 @@ namespace SystemEx
 				action(new Span<T>(a, i, sliceSize));
 			}
 		}
-
-#endif
 
 		public static IEnumerable<T[]> ChunkBy<T>(this T[] a, int chunkSize)
 		{
