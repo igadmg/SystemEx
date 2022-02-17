@@ -7,11 +7,13 @@ namespace SystemEx
 {
 	public static class StringEx
 	{
+		[Obsolete("Use IsNullOrEmpty instead")]
 		public static bool null_(this string str)
 		{
 			return string.IsNullOrEmpty(str);
 		}
 
+		[Obsolete("Use IsNullOrWhiteSpace instead")]
 		public static bool null_ws_(this string str)
 		{
 			return string.IsNullOrWhiteSpace(str);
@@ -185,7 +187,7 @@ namespace SystemEx
 			=> path.Join('/');
 
 		public static bool IsEmptyPath(this string[] path)
-			=> path.Length == 0 || path.All(s => s.null_ws_());
+			=> path.Length == 0 || path.All(s => s.IsNullOrWhiteSpace());
 
 		public static int SkipWhiteSpace(this string str, int index = 0)
 		{
