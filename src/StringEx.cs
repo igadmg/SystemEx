@@ -94,6 +94,15 @@ namespace SystemEx
 			return s.Substring(0, MathOperationsInt.max(s.Length - length, 0));
 		}
 
+		public static string CutFront(this string s, char c)
+		{
+			var ui = s.IndexOf(c);
+			if (ui < 0)
+				return s;
+
+			return s.Substring(ui + 1);
+		}
+
 		public static string CutEnd(this string s, char c)
 		{
 			var ui = s.LastIndexOf(c);
