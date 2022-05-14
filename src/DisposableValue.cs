@@ -2,6 +2,9 @@
 
 namespace SystemEx
 {
+	// Used to store disposable objects in a filed.
+	// When new value is assigned to DisposableValue<T> field
+	// previous value is disposed.
 	public class DisposableValue : IDisposable
 	{
 		bool isDisposed = false;
