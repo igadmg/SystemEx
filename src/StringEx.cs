@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -48,16 +49,16 @@ namespace SystemEx
 			StringBuilder sb = new StringBuilder(str.Length);
 			while (t.find_any('{'))
 			{
-				sb.Append(t.token());
+				sb.Append(t.token);
 
 				t.step();
 				if (!t.find_any('}'))
 					throw new FormatException("Missing cloasing '}'");
 
-				sb.Append(fn(t.token()));
+				sb.Append(fn(t.token));
 				t.step();
 			}
-			sb.Append(t.token());
+			sb.Append(t.token);
 
 			return sb.ToString();
 		}
@@ -92,6 +93,15 @@ namespace SystemEx
 		public static string CutEnd(this string s, int length)
 		{
 			return s.Substring(0, MathOperationsInt.max(s.Length - length, 0));
+		}
+
+		public static string CutFront(this string s, char c)
+		{
+			var ui = s.IndexOf(c);
+			if (ui < 0)
+				return s;
+
+			return s.Substring(ui + 1);
 		}
 
 		public static string CutEnd(this string s, char c)
@@ -285,11 +295,38 @@ namespace SystemEx
 			return ei >= line.Length;
 		}
 
-		public string token()
-		{
-			return end() ? line.Substring(li) : 
+		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+		public string token =>
+			end() ? line.Substring(li) :
 				begin() ? line.Substring(0, li - 1) :
 				(ei > li ? line.Substring(li, ei - li) : line.Substring(ei, li - ei));
+
+		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+		public LineTokenizer skip
+			=> this.Also(_ => {
+				step(0);
+			});
+
+		public bool step(int i = 1)
+		{
+			li = ei;
+			ei += i;
+
+			return !end();
+		}
+
+		public bool match(ReadOnlySpan<char> str)
+		{
+			var s = line.AsSpan(li);
+			if (s.StartsWith(str))
+			{
+				step(str.Length);
+				step(0);
+
+				return true;
+			}
+
+			return false;
 		}
 
 		public bool find_any(params char[] chars)
@@ -348,7 +385,7 @@ namespace SystemEx
 		{
 			token = string.Empty;
 			if (skip_whitespace())
-				 token = this.token();
+				 token = this.token;
 
 			return !end();
 		}
@@ -366,14 +403,6 @@ namespace SystemEx
 			ch = char.MaxValue;
 			if (skip_whitespace())
 				ch = line[ei];
-
-			return !end();
-		}
-
-		public bool step(int i = 1)
-		{
-			li = ei;
-			ei += i;
 
 			return !end();
 		}
