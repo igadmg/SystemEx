@@ -2,6 +2,20 @@
 
 namespace SystemEx
 {
+	/*
+	public class GuardValue<T> : IDisposable
+	{
+		public static GuardValue<T> Guard(ref T v, T newv)
+		{
+			return DisposableLock.Lock(v, _ => v = _).Also(_ => v = newv);
+		}
+
+		public void Dispose()
+		{
+		}
+	}
+	*/
+
 	public class DisposableLock : IDisposable
 	{
 		public static DisposableLock empty = new DisposableLock(() => { });

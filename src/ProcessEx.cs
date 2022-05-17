@@ -1,32 +1,39 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System;
 
 namespace SystemEx
 {
 	public static class ProcessEx
 	{
-		public static int Command(string command)
+		public static int Command(string command) => Command(command, null);
+		public static int Command(string command, Action<string> contentFn)
 		{
 			var errorlevelFileName = Path.GetTempFileName();
-			ProcessStartInfo processStartInfo = new ProcessStartInfo {
-				UseShellExecute = false,
-				CreateNoWindow = true,
-			};
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			using (Process process = new Process())
 			{
-				processStartInfo.FileName = "cmd.exe";
-				processStartInfo.Arguments = "/v:on /c \"" + command + $" & echo !errorlevel! > {errorlevelFileName}\"";
-			}
-			else
-			{
-				processStartInfo.FileName = "/bin/bash";
-				processStartInfo.Arguments = command;
-			}
+				process.StartInfo = new ProcessStartInfo {
+					UseShellExecute = false,
+					CreateNoWindow = true,
+					RedirectStandardOutput = contentFn != null,
+				};
+				if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+				{
+					process.StartInfo.FileName = "cmd.exe";
+					process.StartInfo.Arguments = "/v:on /c \"" + command + $" & echo !errorlevel! > {errorlevelFileName}\"";
+				}
+				else
+				{
+					process.StartInfo.FileName = "/bin/bash";
+					process.StartInfo.Arguments = command;
+				}
 
-			using (Process process = Process.Start(processStartInfo))
-			{
+				process.Start();
+				if (contentFn != null)
+				{
+					contentFn(process.StandardOutput.ReadToEnd());
+				}
 				process.WaitForExit();
 			}
 
