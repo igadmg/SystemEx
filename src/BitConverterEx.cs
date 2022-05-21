@@ -82,14 +82,11 @@ namespace SystemEx
 			public int Length { get; protected set; }
 			public byte[] GetBytes(object o)
 			{
-				using (MemoryStream bytes = new MemoryStream(Length))
-				{
-					foreach (var field in fields)
-					{
-						bytes.Write(field.Item2.GetBytes(field.Item1.GetValue(o)));
-					}
-					return bytes.ToArray();
-				}
+				using var bytes = new MemoryStream(Length);
+				foreach (var field in fields)
+					bytes.Write(field.Item2.GetBytes(field.Item1.GetValue(o)));
+
+				return bytes.ToArray();
 			}
 
 			public object FromBytes(byte[] data, int startIndex)

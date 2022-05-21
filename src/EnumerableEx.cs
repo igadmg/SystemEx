@@ -36,10 +36,9 @@ namespace SystemEx
 
 		public static IEnumerable<TSource> Execute<TSource>(this IEnumerable<TSource> source, Action<TSource> fn)
 		{
-			using (var aes = new AggregateExceptionScope())
-			{
-				return source.Execute(fn, aes);
-			}
+			using var aes = new AggregateExceptionScope();
+
+			return source.Execute(fn, aes);
 		}
 
 		public static IEnumerable<TSource> Execute<TSource>(this IEnumerable<TSource> source, Action<TSource> fn, AggregateExceptionScope aes)
