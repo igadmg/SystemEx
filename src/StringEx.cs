@@ -338,7 +338,7 @@ namespace SystemEx
 			return !end();
 		}
 
-		public bool find_any(out char ch, string chars) => find_any(out ch, chars);
+		public bool find_any(out char ch, string chars) => find_any(out ch, chars.ToArray());
 		public bool find_any(out char ch, params char[] chars)
 		{
 			ch = char.MaxValue;
