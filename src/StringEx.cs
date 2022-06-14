@@ -190,6 +190,9 @@ namespace SystemEx
 			return r;
 		}
 
+		public static byte[] ToByte(this string str)
+			=> Encoding.UTF8.GetBytes(str);
+
 		public static string[] ToPath(this string str)
 			=> str.Split('/', '\'');
 
@@ -218,6 +221,9 @@ namespace SystemEx
 			return index;
 		}
 
+		public static int IndexOfAny(this string str, int startIndex, params char[] ch)
+			=> str.IndexOfAny(ch, startIndex);
+
 		public static int IndexOfReverse(this string str, int startIndex, char ch)
 		{
 			for (int i = startIndex; i >= 0; i--)
@@ -242,6 +248,7 @@ namespace SystemEx
 
 		public static LineTokenizer tokenize(this string str)
 		{
+			if (str == null) throw new ArgumentNullException(nameof(str));
 			return new LineTokenizer {
 				line = str
 			};
