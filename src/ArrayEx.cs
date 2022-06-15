@@ -136,9 +136,7 @@ namespace SystemEx
 		}
 
 		public static bool Contains<T>(this T[] array, T value)
-		{
-			return Array.IndexOf(array, value) != -1;
-		}
+			=> Array.IndexOf(array, value) != -1;
 
 		public static bool Compare<T, U>(this T[] array, U[] array2, Func<T, U, bool> cmp)
 		{
