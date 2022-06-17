@@ -7,7 +7,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>systemex.snk</AssemblyOriginatorKeyFile>
     <Version>4.3.1</Version>
-    
+
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
