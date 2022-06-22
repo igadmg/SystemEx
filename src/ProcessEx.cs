@@ -15,7 +15,6 @@ namespace SystemEx
 			{
 				process.StartInfo = new ProcessStartInfo {
 					UseShellExecute = false,
-					CreateNoWindow = true,
 					RedirectStandardOutput = contentFn != null,
 				};
 				if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
