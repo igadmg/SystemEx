@@ -188,13 +188,26 @@ namespace SystemEx
 
 		public static T[] Concat<T>(this T[] array, T value)
 		{
-			if (array == null)
+			if (array == null || array.Length == 0)
 				return new T[] { value };
 
 			T[] result = new T[array.Length + 1];
 
 			Array.Copy(array, 0, result, 0, array.Length);
 			result[result.Length - 1] = value;
+
+			return result;
+		}
+
+		public static T[] Concat<T>(this T[] array, T[] value)
+		{
+			if (array == null || array.Length == 0)
+				return value;
+
+			T[] result = new T[array.Length + value.Length];
+
+			Array.Copy(array, 0, result, 0, array.Length);
+			Array.Copy(value, 0, result, array.Length, value.Length);
 
 			return result;
 		}
