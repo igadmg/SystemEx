@@ -16,6 +16,12 @@ namespace SystemEx
 	}
 	*/
 
+	public static class DisposableLockEx
+	{
+		public static DisposableLock<T> Lock<T>(this T v, Action<T> fn)
+			=> DisposableLock.Lock(v, fn);
+	}
+
 	public class DisposableLock : IDisposable
 	{
 		public static DisposableLock empty = new DisposableLock(() => { });
