@@ -1,9 +1,17 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace SystemEx
 {
 	public static class DirectoryEx
 	{
+		public static IDisposable SetCurrentDirectory(string newdir)
+		{
+			return DisposableLock.Lock(
+				Directory.GetCurrentDirectory().Also(_ => Directory.SetCurrentDirectory(newdir))
+				, _ => Directory.SetCurrentDirectory(_));
+		}
+
 		public static void Copy(string sourceDirName, string destDirName)
 		{
 			Directory.CreateDirectory(destDirName);
