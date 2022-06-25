@@ -31,7 +31,14 @@ namespace SystemEx
 				process.Start();
 				if (contentFn != null)
 				{
-					contentFn(process.StandardOutput.ReadToEnd());
+					while (true)
+					{
+						var str = process.StandardOutput.ReadLine();
+						if (str == null)
+							break;
+
+						contentFn(str);
+					}
 				}
 				process.WaitForExit();
 			}
