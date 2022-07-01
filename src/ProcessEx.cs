@@ -7,8 +7,7 @@ namespace SystemEx
 {
 	public static class ProcessEx
 	{
-		public static int Command(string command) => Command(command, null);
-		public static int Command(string command, Action<string> contentFn)
+		public static int Command(string command, Action<string> contentFn = null)
 		{
 			var errorlevelFileName = Path.GetTempFileName();
 			using (Process process = new Process())
