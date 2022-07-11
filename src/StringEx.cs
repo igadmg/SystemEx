@@ -90,6 +90,15 @@ namespace SystemEx
 			return string.Join(separator, s.ToArray());
 		}
 
+		public static string[] SplitFirst(this string s, char c)
+		{
+			var ui = s.IndexOf(c);
+			if (ui < 0)
+				return new[] { s, string.Empty };
+
+			return new[] { s.Substring(0, ui), s.Substring(ui + 1) };
+		}
+
 		public static string CutEnd(this string s, int length)
 		{
 			return s.Substring(0, MathOperationsInt.max(s.Length - length, 0));
