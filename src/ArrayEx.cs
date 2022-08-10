@@ -201,6 +201,9 @@ namespace SystemEx
 
 		public static T[] Concat<T>(this T[] array, T[] value)
 		{
+			if (value == null)
+				return array;
+
 			if (array == null || array.Length == 0)
 				return value;
 
