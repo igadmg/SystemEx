@@ -4,7 +4,6 @@ namespace SystemEx
 {
 	public static class DisposableValueEx
 	{
-		//public static DisposableValue<T> 
 	}
 
 	// Used to store disposable objects in a filed.

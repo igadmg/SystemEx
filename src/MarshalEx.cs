@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace SystemEx
@@ -8,6 +9,10 @@ namespace SystemEx
 		public static int SizeOf<T>() { return Marshal.SizeOf(typeof(T)); }
 
 		public static T PtrToStructure<T>(IntPtr data) { return (T)Marshal.PtrToStructure(data, typeof(T)); }
+
+
+		public static IDisposable<GCHandle> Pin<T>(T o)
+			=> GCHandle.Alloc(o, GCHandleType.Pinned).Lock(gco => gco.Free());
 
 
 		public static T BytesToStructure<T>(byte[] data)

@@ -16,10 +16,35 @@ namespace SystemEx
 	}
 	*/
 
+	public interface IDisposable<T> : IDisposable
+	{
+		T Value { get; }
+	}
+
+	public class DisposableProxy<T> : IDisposable<T>
+	{
+		public T Value { get; private set; }
+		protected IDisposable dsp;
+
+		public DisposableProxy(IDisposable disposable, T value)
+		{
+			Value = value;
+			dsp = disposable;
+		}
+
+		public void Dispose()
+		{
+			dsp.Dispose();
+		}
+	}
+
 	public static class DisposableLockEx
 	{
 		public static DisposableLock<T> Lock<T>(this T v, Action<T> fn)
 			=> DisposableLock.Lock(v, fn);
+
+		public static DisposableProxy<T> Wrap<T>(this IDisposable disposable, T value)
+			=> new DisposableProxy<T>(disposable, value);
 	}
 
 	public class DisposableLock : IDisposable
@@ -54,7 +79,7 @@ namespace SystemEx
 		}
 	}
 
-	public class DisposableLock<T> : IDisposable
+	public class DisposableLock<T> : IDisposable<T>, IDisposable
 	{
 		T v;
 		Action<T> disposeFn;
