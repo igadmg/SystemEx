@@ -1,12 +1,27 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace SystemEx
 {
 	public static class ProcessEx
 	{
+		public static string EscapeArguments(params string[] args)
+		{
+			return string.Join(" ", args.Select((a) =>
+			{
+				var s = Regex.Replace(a, @"(\\*)" + "\"", @"$1$1\" + "\"");
+				if (s.Contains(" "))
+				{
+					s = "\"" + Regex.Replace(s, @"(\\+)$", @"$1$1") + "\"";
+				}
+				return s;
+			}).ToArray());
+		}
+
 		public static int Command(string command, Action<string> contentFn = null)
 		{
 			var errorlevelFileName = Path.GetTempFileName();
