@@ -67,5 +67,19 @@ namespace SystemEx
 
 			return errorlevel;
 		}
+
+		public static int Open(string filename)
+		{
+			Console.WriteLine("> " + filename);
+
+			ProcessStartInfo processStartInfo = new ProcessStartInfo();
+			processStartInfo.UseShellExecute = true;
+			processStartInfo.WorkingDirectory = Path.GetDirectoryName(filename);
+			processStartInfo.FileName = filename;
+			processStartInfo.Verb = "OPEN";
+			using Process process = Process.Start(processStartInfo);
+
+			return 0;
+		}
 	}
 }
