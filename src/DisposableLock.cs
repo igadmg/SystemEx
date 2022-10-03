@@ -19,11 +19,15 @@ namespace SystemEx
 	public interface IDisposable<T> : IDisposable
 	{
 		T Value { get; }
+		T _ { get; }
+		T Reset { set; }
 	}
 
 	public class DisposableProxy<T> : IDisposable<T>
 	{
 		public T Value { get; private set; }
+		public T _ => Value;
+		public T Reset { set { throw new NotImplementedException(); } }
 		protected IDisposable dsp;
 
 		public DisposableProxy(IDisposable disposable, T value)
@@ -49,7 +53,7 @@ namespace SystemEx
 
 	public class DisposableLock : IDisposable
 	{
-		public static DisposableLock empty = new DisposableLock(() => { });
+		public static DisposableLock Empty = new DisposableLock(() => { });
 
 		public static DisposableLock Lock(Action fn)
 		{
@@ -97,6 +101,7 @@ namespace SystemEx
 
 		public T Value => v;
 		public T _ => v;
+		public T Reset { set { v = value; } }
 		public static implicit operator T(DisposableLock<T> dl) => dl.v;
 	}
 }

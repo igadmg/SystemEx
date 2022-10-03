@@ -4,6 +4,8 @@ namespace SystemEx
 {
 	public static class DisposableValueEx
 	{
+		public static DisposableValue<T> Disposable<T>(this T v) where T : IDisposable
+			=> new DisposableValue<T>(v);
 	}
 
 	// Used to store disposable objects in a filed.
@@ -38,7 +40,7 @@ namespace SystemEx
 		}
 	}
 
-	public class DisposableValue<T> : IDisposable
+	public class DisposableValue<T> : IDisposable<T>
 		where T : IDisposable
 	{
 		T value;
@@ -54,6 +56,8 @@ namespace SystemEx
 				this.value = value;
 			}
 		}
+		public T Reset { set => Value = value; }
+
 
 		public void Dispose()
 		{
