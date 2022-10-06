@@ -9,6 +9,9 @@ namespace SystemEx
 {
 	public static class EnumerableEx
 	{
+		public static IEnumerable<(T v, int index)> Indexed<T>(this IEnumerable<T> e)
+			=> e.Select((v, i) => (v, i));
+
 		public static bool Any<T>(this IEnumerable<T> e, out T v)
 		{
 			if (e.Any())
