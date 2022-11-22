@@ -66,6 +66,12 @@ namespace SystemEx
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static U Or<T, U>(this T self, Func<U> block, Func<U> def)
+		{
+			return (self.IsNull()) ? block() : def();
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void Elvis<T>(this T self, Action<T> block)
 		{
 			if (!self.IsNull()) block(self);

@@ -40,8 +40,11 @@ namespace SystemEx
 
 	public static class DisposableLockEx
 	{
-		public static DisposableLock<T> Lock<T>(this T v, Action<T> fn)
-			=> DisposableLock.Lock(v, fn);
+		public static DisposableLock<T> Lock<T>(this T v, Action<T> dfn)
+			=> DisposableLock.Lock(v, dfn);
+
+		public static DisposableLock<T> Lock<T>(this T v, Action<T> vfn, Action<T> dfn)
+			=> DisposableLock.Lock(v.Also(_ => vfn(v)), dfn);
 
 		public static DisposableProxy<T> Wrap<T>(this IDisposable disposable, T value)
 			=> new DisposableProxy<T>(disposable, value);

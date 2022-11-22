@@ -247,10 +247,10 @@ namespace SystemEx
 		/// <typeparam name="A"></typeparam>
 		/// <param name="t"></param>
 		/// <returns></returns>
-		public static IEnumerable<Tuple<FieldInfo, A>> GetFieldsAndAttributes<A>(this Type t)
+		public static IEnumerable<Tuple<FieldInfo, A>> GetFieldsAndAttributes<A>(this Type t, BindingFlags flags)
 			where A : Attribute
 		{
-			foreach (var field in t.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+			foreach (var field in t.GetFields(flags))
 			{
 				A a = field.GetAttribute<A>();
 				if (a != null)
@@ -258,6 +258,10 @@ namespace SystemEx
 			}
 			yield break;
 		}
+
+		public static IEnumerable<Tuple<FieldInfo, A>> GetFieldsAndAttributes<A>(this Type t)
+			where A : Attribute
+			=> t.GetFieldsAndAttributes<A>(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
 		public static IEnumerable<MethodInfo> GetMethods(this Type t, string name)
 		{

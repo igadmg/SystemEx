@@ -317,6 +317,8 @@ namespace SystemEx
 				begin() ? line.Substring(0, li - 1) :
 				(ei > li ? line.Substring(li, ei - li) : line.Substring(ei, li - ei));
 
+		public ReadOnlySpan<char> line_end => line.AsSpan(li);
+
 		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 		public LineTokenizer skip
 			=> this.Also(_ => {
@@ -333,8 +335,7 @@ namespace SystemEx
 
 		public bool match(ReadOnlySpan<char> str)
 		{
-			var s = line.AsSpan(li);
-			if (s.StartsWith(str))
+			if (line_end.StartsWith(str))
 			{
 				step(str.Length);
 				step(0);
@@ -345,6 +346,17 @@ namespace SystemEx
 			return false;
 		}
 
+#if false
+		public bool find(string str)
+		{
+			li = ei;
+			ei = line.IndexOfAny(chars, li);
+			if (ei == -1) ei = line.Length;
+
+			return !end();
+		}
+
+#endif
 		public bool find_any(params char[] chars)
 		{
 			li = ei;
@@ -381,6 +393,14 @@ namespace SystemEx
 			return !begin();
 		}
 
+		public bool skip_to_end()
+		{
+			li = ei;
+			ei = line.Length;
+
+			return !end();
+		}
+
 		public bool skip_whitespace()
 		{
 			li = ei;
@@ -406,6 +426,7 @@ namespace SystemEx
 
 			return !end();
 		}
+
 
 		public bool skip_whitespace_reverse()
 		{
