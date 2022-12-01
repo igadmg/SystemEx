@@ -2,31 +2,16 @@
 
 namespace SystemEx
 {
-	/*
-	public class GuardValue<T> : IDisposable
-	{
-		public static GuardValue<T> Guard(ref T v, T newv)
-		{
-			return DisposableLock.Lock(v, _ => v = _).Also(_ => v = newv);
-		}
-
-		public void Dispose()
-		{
-		}
-	}
-	*/
-
 	public interface IDisposable<T> : IDisposable
 	{
 		T Value { get; }
-		T _ { get; }
+		T _ => Value;
 		T Reset { set; }
 	}
 
 	public class DisposableProxy<T> : IDisposable<T>
 	{
 		public T Value { get; private set; }
-		public T _ => Value;
 		public T Reset { set { throw new NotImplementedException(); } }
 		protected IDisposable dsp;
 
@@ -44,8 +29,11 @@ namespace SystemEx
 
 	public static class DisposableLockEx
 	{
-		public static DisposableLock<T> Lock<T>(this T v, Action<T> fn)
-			=> DisposableLock.Lock(v, fn);
+		public static DisposableLock<T> Lock<T>(this T v, Action<T> dfn)
+			=> DisposableLock.Lock(v, dfn);
+
+		public static DisposableLock<T> Lock<T>(this T v, Action<T> vfn, Action<T> dfn)
+			=> DisposableLock.Lock(v.Also(_ => vfn(v)), dfn);
 
 		public static DisposableProxy<T> Wrap<T>(this IDisposable disposable, T value)
 			=> new DisposableProxy<T>(disposable, value);
@@ -100,7 +88,6 @@ namespace SystemEx
 		}
 
 		public T Value => v;
-		public T _ => v;
 		public T Reset { set { v = value; } }
 		public static implicit operator T(DisposableLock<T> dl) => dl.v;
 	}
