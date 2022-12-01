@@ -119,6 +119,14 @@ namespace SystemEx
 			return list;
 		}
 
+		public static T[] Swap<T>(this T[] l, int a, int b)
+		{
+			T tmp = l[a];
+			l[a] = l[b];
+			l[b] = tmp;
+			return l;
+		}
+
 		public static IList<T> Swap<T>(this IList<T> l, int a, int b)
 		{
 			T tmp = l[a];

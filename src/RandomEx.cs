@@ -1,13 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using static SystemEx.RandomEx;
 
 namespace SystemEx
 {
 	public static class RandomEx
 	{
 		public static System.Random instance = new System.Random();
+
+
+		public static int Dice(this Random rnd, int num)
+			=> (int)(rnd.NextDouble() * num * (1 - double.Epsilon));
+
+		public static int[] Dice(this Random rnd, params int[] num)
+			=> num.Also(num => {
+				for (int i = 0; i < num.Length; i++)
+				{
+					num[i] = (int)(rnd.NextDouble() * num[i] * (1 - double.Epsilon));
+				}
+			});
 
 		public static IEnumerable<T> NextN<T>(this IRandomGenerator<int> irg, T[] array, int count)
 		{
