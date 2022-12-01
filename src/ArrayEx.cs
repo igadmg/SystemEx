@@ -136,9 +136,7 @@ namespace SystemEx
 		}
 
 		public static bool Contains<T>(this T[] array, T value)
-		{
-			return Array.IndexOf(array, value) != -1;
-		}
+			=> Array.IndexOf(array, value) != -1;
 
 		public static bool Compare<T, U>(this T[] array, U[] array2, Func<T, U, bool> cmp)
 		{
@@ -190,13 +188,29 @@ namespace SystemEx
 
 		public static T[] Concat<T>(this T[] array, T value)
 		{
-			if (array == null)
+			if (array == null || array.Length == 0)
 				return new T[] { value };
 
 			T[] result = new T[array.Length + 1];
 
 			Array.Copy(array, 0, result, 0, array.Length);
 			result[result.Length - 1] = value;
+
+			return result;
+		}
+
+		public static T[] Concat<T>(this T[] array, T[] value)
+		{
+			if (value == null)
+				return array;
+
+			if (array == null || array.Length == 0)
+				return value;
+
+			T[] result = new T[array.Length + value.Length];
+
+			Array.Copy(array, 0, result, 0, array.Length);
+			Array.Copy(value, 0, result, array.Length, value.Length);
 
 			return result;
 		}

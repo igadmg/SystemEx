@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -7,11 +8,13 @@ namespace SystemEx
 {
 	public static class StringEx
 	{
+		[Obsolete("Use IsNullOrEmpty instead")]
 		public static bool null_(this string str)
 		{
 			return string.IsNullOrEmpty(str);
 		}
 
+		[Obsolete("Use IsNullOrWhiteSpace instead")]
 		public static bool null_ws_(this string str)
 		{
 			return string.IsNullOrWhiteSpace(str);
@@ -46,16 +49,16 @@ namespace SystemEx
 			StringBuilder sb = new StringBuilder(str.Length);
 			while (t.find_any('{'))
 			{
-				sb.Append(t.token());
+				sb.Append(t.token);
 
 				t.step();
 				if (!t.find_any('}'))
 					throw new FormatException("Missing cloasing '}'");
 
-				sb.Append(fn(t.token()));
+				sb.Append(fn(t.token));
 				t.step();
 			}
-			sb.Append(t.token());
+			sb.Append(t.token);
 
 			return sb.ToString();
 		}
@@ -87,9 +90,27 @@ namespace SystemEx
 			return string.Join(separator, s.ToArray());
 		}
 
+		public static string[] SplitFirst(this string s, char c)
+		{
+			var ui = s.IndexOf(c);
+			if (ui < 0)
+				return new[] { s, string.Empty };
+
+			return new[] { s.Substring(0, ui), s.Substring(ui + 1) };
+		}
+
 		public static string CutEnd(this string s, int length)
 		{
 			return s.Substring(0, MathOperationsInt.max(s.Length - length, 0));
+		}
+
+		public static string CutFront(this string s, char c)
+		{
+			var ui = s.IndexOf(c);
+			if (ui < 0)
+				return s;
+
+			return s.Substring(ui + 1);
 		}
 
 		public static string CutEnd(this string s, char c)
@@ -178,6 +199,9 @@ namespace SystemEx
 			return r;
 		}
 
+		public static byte[] ToByte(this string str)
+			=> Encoding.UTF8.GetBytes(str);
+
 		public static string[] ToPath(this string str)
 			=> str.Split('/', '\'');
 
@@ -185,7 +209,7 @@ namespace SystemEx
 			=> path.Join('/');
 
 		public static bool IsEmptyPath(this string[] path)
-			=> path.Length == 0 || path.All(s => s.null_ws_());
+			=> path.Length == 0 || path.All(s => s.IsNullOrWhiteSpace());
 
 		public static int SkipWhiteSpace(this string str, int index = 0)
 		{
@@ -205,6 +229,9 @@ namespace SystemEx
 
 			return index;
 		}
+
+		public static int IndexOfAny(this string str, int startIndex, params char[] ch)
+			=> str.IndexOfAny(ch, startIndex);
 
 		public static int IndexOfReverse(this string str, int startIndex, char ch)
 		{
@@ -230,6 +257,7 @@ namespace SystemEx
 
 		public static LineTokenizer tokenize(this string str)
 		{
+			if (str == null) throw new ArgumentNullException(nameof(str));
 			return new LineTokenizer {
 				line = str
 			};
@@ -283,13 +311,52 @@ namespace SystemEx
 			return ei >= line.Length;
 		}
 
-		public string token()
-		{
-			return end() ? line.Substring(li) : 
+		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+		public string token =>
+			end() ? line.Substring(li) :
 				begin() ? line.Substring(0, li - 1) :
 				(ei > li ? line.Substring(li, ei - li) : line.Substring(ei, li - ei));
+
+		public ReadOnlySpan<char> line_end => line.AsSpan(li);
+
+		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+		public LineTokenizer skip
+			=> this.Also(_ => {
+				step(0);
+			});
+
+		public bool step(int i = 1)
+		{
+			li = ei;
+			ei += i;
+
+			return !end();
 		}
 
+		public bool match(ReadOnlySpan<char> str)
+		{
+			if (line_end.StartsWith(str))
+			{
+				step(str.Length);
+				step(0);
+
+				return true;
+			}
+
+			return false;
+		}
+
+#if false
+		public bool find(string str)
+		{
+			li = ei;
+			ei = line.IndexOfAny(chars, li);
+			if (ei == -1) ei = line.Length;
+
+			return !end();
+		}
+
+#endif
 		public bool find_any(params char[] chars)
 		{
 			li = ei;
@@ -299,6 +366,7 @@ namespace SystemEx
 			return !end();
 		}
 
+		public bool find_any(out char ch, string chars) => find_any(out ch, chars.ToArray());
 		public bool find_any(out char ch, params char[] chars)
 		{
 			ch = char.MaxValue;
@@ -325,6 +393,14 @@ namespace SystemEx
 			return !begin();
 		}
 
+		public bool skip_to_end()
+		{
+			li = ei;
+			ei = line.Length;
+
+			return !end();
+		}
+
 		public bool skip_whitespace()
 		{
 			li = ei;
@@ -346,10 +422,11 @@ namespace SystemEx
 		{
 			token = string.Empty;
 			if (skip_whitespace())
-				 token = this.token();
+				 token = this.token;
 
 			return !end();
 		}
+
 
 		public bool skip_whitespace_reverse()
 		{
@@ -364,14 +441,6 @@ namespace SystemEx
 			ch = char.MaxValue;
 			if (skip_whitespace())
 				ch = line[ei];
-
-			return !end();
-		}
-
-		public bool step(int i = 1)
-		{
-			li = ei;
-			ei += i;
 
 			return !end();
 		}

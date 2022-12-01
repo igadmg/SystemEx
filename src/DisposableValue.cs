@@ -2,6 +2,13 @@
 
 namespace SystemEx
 {
+	public static class DisposableValueEx
+	{
+	}
+
+	// Used to store disposable objects in a filed.
+	// When new value is assigned to DisposableValue<T> field
+	// previous value is disposed.
 	public class DisposableValue : IDisposable
 	{
 		bool isDisposed = false;
@@ -34,7 +41,6 @@ namespace SystemEx
 	public class DisposableValue<T> : IDisposable
 		where T : IDisposable
 	{
-		bool isDisposed = false;
 		T value;
 
 		public DisposableValue() { }
@@ -46,17 +52,15 @@ namespace SystemEx
 			set {
 				Dispose();
 				this.value = value;
-				isDisposed = false;
 			}
 		}
 
 		public void Dispose()
 		{
-			if (!isDisposed)
+			if (value != null)
 			{
 				value?.Dispose();
 				value = default;
-				isDisposed = true;
 			}
 		}
 	}

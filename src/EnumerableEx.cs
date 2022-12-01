@@ -9,6 +9,18 @@ namespace SystemEx
 {
 	public static class EnumerableEx
 	{
+		public static bool Any<T>(this IEnumerable<T> e, out T v)
+		{
+			if (e.Any())
+			{
+				v = e.First();
+				return true;
+			}
+
+			v = default;
+			return false;
+		}
+
 		//public static IEnumerable<TResult> SelectValid<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> fn)
 		//{
 		//	using (var aes = new AggregateExceptionScope())
@@ -36,10 +48,9 @@ namespace SystemEx
 
 		public static IEnumerable<TSource> Execute<TSource>(this IEnumerable<TSource> source, Action<TSource> fn)
 		{
-			using (var aes = new AggregateExceptionScope())
-			{
-				return source.Execute(fn, aes);
-			}
+			using var aes = new AggregateExceptionScope();
+
+			return source.Execute(fn, aes);
 		}
 
 		public static IEnumerable<TSource> Execute<TSource>(this IEnumerable<TSource> source, Action<TSource> fn, AggregateExceptionScope aes)
