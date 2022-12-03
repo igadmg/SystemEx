@@ -41,7 +41,7 @@ namespace SystemEx
 
 	public class DisposableLock : IDisposable
 	{
-		public static DisposableLock Empty = new DisposableLock(() => { });
+		public static DisposableLock empty = new DisposableLock(() => { });
 
 		public static DisposableLock Lock(Action fn)
 		{
