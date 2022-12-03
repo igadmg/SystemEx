@@ -12,6 +12,7 @@ namespace SystemEx
 		public static int Dice(this Random rnd, int num)
 			=> (int)(rnd.NextDouble() * num * (1 - double.Epsilon));
 
+		[Obsolete("Pzdc! Вот это меня выстегнуло. Дтшь бы цыкл не писать. Вся эта .Also магия принимает странные обороты иногда")]
 		public static int[] Dice(this Random rnd, params int[] num)
 			=> num.Also(num => {
 				for (int i = 0; i < num.Length; i++)
