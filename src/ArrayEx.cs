@@ -182,6 +182,16 @@ namespace SystemEx
 			return result;
 		}
 
+		public static U[] Transform<T, U>(this T[] array, Func<T, int, U> fn)
+		{
+			U[] result = new U[array.Length];
+
+			for (int i = 0; i < array.Length; i++)
+				result[i] = fn(array[i], i);
+
+			return result;
+		}
+
 		public static T[] Sort<T>(this T[] array)
 		{
 			Array.Sort(array);

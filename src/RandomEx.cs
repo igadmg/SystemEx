@@ -9,6 +9,9 @@ namespace SystemEx
 		public static System.Random instance = new System.Random();
 
 
+		public static T Random<T>(this T[] v) => v.Length > 0 ? v[instance.Next(v.Length)] : default;
+
+
 		public static int Dice(this Random rnd, int num)
 			=> (int)(rnd.NextDouble() * num * (1 - double.Epsilon));
 

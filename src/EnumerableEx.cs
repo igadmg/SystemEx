@@ -2,13 +2,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
-
+using System.Threading;
 
 namespace SystemEx
 {
 	public static class EnumerableEx
 	{
+		public static IEnumerable<int> Infinite() => Infinite(CancellationToken.None);
+		public static IEnumerable<int> Infinite(CancellationToken cancel)
+		{
+			int i = 0;
+			while (!cancel.IsCancellationRequested) yield return i++;
+		}
+		public static IEnumerable<T> Infinite<T>(T v) => Infinite(v, CancellationToken.None);
+		public static IEnumerable<T> Infinite<T>(T v, CancellationToken cancel)
+		{
+			while (!cancel.IsCancellationRequested) yield return v;
+		}
+
+
+		/*
+		public static IEnumerable<int> Count(int num) => Count(CancellationToken.None);
+		public static IEnumerable<int> Count(int num, CancellationToken cancel)
+		{
+			int i = 0;
+			while (i < num && !cancel.IsCancellationRequested) yield return i++;
+		}
+		*/
+
 		public static IEnumerable<(T v, int index)> Indexed<T>(this IEnumerable<T> e)
 			=> e.Select((v, i) => (v, i));
 
