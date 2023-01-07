@@ -6,6 +6,32 @@ namespace SystemEx
 {
 	public static class DisposeEx
 	{
+		public class DisposeChain : IDisposable
+		{
+			IDisposable val;
+			IDisposable next;
+
+			internal DisposeChain(IDisposable val, IDisposable next)
+			{
+				this.val = val;
+				this.next = next;
+			}
+
+			public void Dispose()
+			{
+				val.Dispose();
+				//val = null;
+				next.Dispose();
+				//next = null;
+			}
+
+			public DisposeChain Chain(IDisposable val)
+				=> new DisposeChain(val, this);
+		}
+
+		public static DisposeChain Chain(this IDisposable self, IDisposable val)
+			=> new DisposeChain(val, self);
+
 		public static void Dispose(this IEnumerable<IDisposable> items)
 		{
 			foreach (var item in items)
