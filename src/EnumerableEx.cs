@@ -64,11 +64,16 @@ namespace SystemEx
 				.Select(r => r.result);
 		}
 
+
+		public static IEnumerable<TSource> Call<TSource>(this IEnumerable<TSource> source, Action<TSource> fn)
+			=> source.Where(a => { fn(a); return true; });
+
+
 		public static void ExecuteFast<TSource>(this IEnumerable<TSource> source, Action<TSource> fn)
 		{
 			foreach (var i in source)
 				fn(i);
-	}
+		}
 
 		public static IEnumerable<TSource> Execute<TSource>(this IEnumerable<TSource> source, Action<TSource> fn)
 		{

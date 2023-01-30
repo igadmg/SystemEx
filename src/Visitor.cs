@@ -1,10 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 namespace SystemEx
 {
-	public interface IAccept<TVisitor>
+	class Acceptor<T> : IAccept<T>
 	{
-		void Accept(TVisitor visitor);
+		private readonly T v;
+
+		public Acceptor(T v)
+		{
+			this.v = v;
+		}
+
+		public void Accept(IVisit<T> visitor)
+		{
+			visitor.Visit(v);
+		}
+
+		public void Accept(Action<T> visitor)
+		{
+			visitor(v);
+		}
+	}
+
+
+	public interface IAccept<T>
+	{
+		public static IAccept<T> Accept(T v) => new Acceptor<T>(v);
+
+		void Accept(IVisit<T> visitor);
+		void Accept(Action<T> visitor);
 	}
 
 	public interface IVisit<T>
