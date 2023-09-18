@@ -2,7 +2,7 @@
 	<Import Project="$(SolutionDir)\Common.props" Condition="Exists('$(SolutionDir)\Common.props')" />
 
 	<PropertyGroup>
-		<TargetFrameworks>net50;net60</TargetFrameworks>
+		<TargetFrameworks>net50;net60;net70</TargetFrameworks>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>systemex.snk</AssemblyOriginatorKeyFile>
 		<Version>4.3.1</Version>

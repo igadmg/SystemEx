@@ -5,6 +5,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace SystemEx
 {
+#if false
 	public class BinaryStructStream : IDisposable
 	{
 		MemoryStream stream;
@@ -63,4 +64,5 @@ namespace SystemEx
 			return stream.ToArray();
 		}
 	}
+#endif
 }
