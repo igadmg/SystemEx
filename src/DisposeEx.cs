@@ -94,7 +94,7 @@ namespace SystemEx
 				}
 				else
 				{
-#if UNITY
+#if UNITY || UNITY_64
 					UnityEngine.Debug.LogWarning($"Don't know how to dispose field: {field.FieldType.Name} {o.GetType().Name}.{field.Name}");
 #endif
 				}

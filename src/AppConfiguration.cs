@@ -1,6 +1,11 @@
 ﻿using System;
 using System.IO;
+#if USE_TEXT_JSON
 using System.Text.Json;
+#endif
+#if UNITY || UNITY_64
+using Newtonsoft.Json;
+#endif
 
 namespace SystemEx
 {
@@ -30,7 +35,12 @@ namespace SystemEx
 			var filepath = Path.Combine(path, name + _ext_);
 			if (File.Exists(filepath))
 			{
+#if USE_TEXT_JSON
 				configuration = JsonSerializer.Deserialize<T>(File.ReadAllText(filepath));
+#endif
+#if UNITY || UNITY_64
+				configuration = JsonConvert.DeserializeObject<T>(File.ReadAllText(filepath));
+#endif
 				return true;
 			}
 
@@ -49,7 +59,12 @@ namespace SystemEx
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
 
+#if USE_TEXT_JSON
 			File.WriteAllText(Path.Combine(path, name + _ext_), JsonSerializer.Serialize(configuration));
+#endif
+#if UNITY || UNITY_64
+			File.WriteAllText(Path.Combine(path, name + _ext_), JsonConvert.SerializeObject(configuration));
+#endif
 			return configuration;
 		}
 	}

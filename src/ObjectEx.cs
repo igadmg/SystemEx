@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace SystemEx
-{
+namespace SystemEx {
 	public static class ObjectEx
 	{
-#if UNITY
+#if UNITY || UNITY_64
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsNull<T>(this T self)
 		{
