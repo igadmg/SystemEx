@@ -203,13 +203,35 @@ namespace SystemEx
 			=> Encoding.UTF8.GetBytes(str);
 
 		public static string[] ToPath(this string str)
-			=> str.Split('/', '\'');
+			=> str.Split('/', '\\');
 
 		public static string FromPath(this string[] path)
 			=> path.Join('/');
 
+		public static string FromPath(this ArraySegment<string> path)
+			=> path.Join('/');
+
+		public static string SimplifyPath(this string str) {
+			return str.ToPath().SimplifyPath().FromPath();
+		}
+
+		public static string[] SimplifyPath(this string[] path) {
+			var rpath = path.ToList();
+			for (int i = 0; i < rpath.Count; i++) {
+				if (rpath[i] == ".") rpath.RemoveAt(i--);
+				if (rpath[i] == ".." && i > 0 && rpath[i - 1] != "..") {
+					rpath.RemoveRange(i - 1, 2);
+					i -= 2;
+				}
+			}
+			return rpath.ToArray();
+		}
+
 		public static bool IsEmptyPath(this string[] path)
 			=> path.Length == 0 || path.All(s => s.IsNullOrWhiteSpace());
+
+		public static bool IsEmptyPath(this ArraySegment<string> path)
+			=> path.Count == 0 || path.All(s => s.IsNullOrWhiteSpace());
 
 		public static int SkipWhiteSpace(this string str, int index = 0)
 		{
