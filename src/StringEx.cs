@@ -218,8 +218,9 @@ namespace SystemEx
 		public static string[] SimplifyPath(this string[] path) {
 			var rpath = path.ToList();
 			for (int i = 0; i < rpath.Count; i++) {
-				if (rpath[i] == ".") rpath.RemoveAt(i--);
-				if (rpath[i] == ".." && i > 0 && rpath[i - 1] != "..") {
+				if (rpath[i].IsNullOrEmpty() && i == 0) rpath.RemoveAt(i--);
+				else if (rpath[i] == ".") rpath.RemoveAt(i--);
+				else if (rpath[i] == ".." && i > 0 && rpath[i - 1] != "..") {
 					rpath.RemoveRange(i - 1, 2);
 					i -= 2;
 				}
