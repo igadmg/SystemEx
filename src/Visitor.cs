@@ -25,8 +25,6 @@ namespace SystemEx
 
 	public interface IAccept<T>
 	{
-		public static IAccept<T> Accept(T v) => new Acceptor<T>(v);
-
 		void Accept(IVisit<T> visitor);
 		void Accept(Action<T> visitor);
 	}
@@ -38,6 +36,8 @@ namespace SystemEx
 
 	public static class VisitEx
 	{
+		public static IAccept<T> Accept<T>(T v) => new Acceptor<T>(v);
+
 		/*
 		public static void Accept<T>(this IEnumerable<T> e, IVisit<T> visitor)
 			where T : IAccept<T>
